@@ -1,0 +1,12 @@
+[project]
+name = "trivia-countdown"
+version = "0.1.0"
+description = "Generate trivia countdown videos from a source video and CSV questions."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "Pillow>=10.0.0",
+]
+
+[tool.uv]
+package = false
