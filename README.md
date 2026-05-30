@@ -12,13 +12,15 @@ uv sync
 
 ## Trivia CSV Format
 
-The trivia file must be a CSV with these columns:
+The trivia file must be a CSV that includes these columns:
 
 ```csv
 question,answer_1,answer_2,answer_3,answer_4,correct_answer
 ```
 
 `correct_answer` must be an integer from `1` to `4`, corresponding to `answer_1` through `answer_4`.
+
+Additional columns are allowed and ignored. For example, a `difficulty` column will not affect parsing.
 
 ## Usage
 

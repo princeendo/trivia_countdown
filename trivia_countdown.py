@@ -4,12 +4,12 @@
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import random
 import shutil
 import subprocess
 import sys
+import pandas as pd
 from dataclasses import dataclass
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -175,16 +175,24 @@ def validate_input_paths(video_file: Path, trivia_file: Path) -> None:
 
 
 def load_trivia(path: Path) -> list[TriviaQuestion]:
-    with path.open("r", newline="", encoding="utf-8-sig") as file:
-        reader = csv.DictReader(file)
-        if reader.fieldnames is None:
-            raise ValueError("Trivia CSV is empty")
+    try:
+        dataframe = pd.read_csv(path, encoding="utf-8-sig", dtype=str)
+    except pd.errors.EmptyDataError as exc:
+        raise ValueError("Trivia CSV is empty") from exc
 
-        missing_columns = [column for column in REQUIRED_COLUMNS if column not in reader.fieldnames]
-        if missing_columns:
-            raise ValueError(f"Trivia CSV is missing required columns: {', '.join(missing_columns)}")
+    fieldnames = list(dataframe.columns)
+    if not fieldnames:
+        raise ValueError("Trivia CSV is empty")
 
-        questions = [parse_trivia_row(row_number, row) for row_number, row in enumerate(reader, start=2)]
+    missing_columns = [column for column in REQUIRED_COLUMNS if column not in fieldnames]
+    if missing_columns:
+        raise ValueError(f"Trivia CSV is missing required columns: {', '.join(missing_columns)}")
+
+    trimmed_dataframe = dataframe[REQUIRED_COLUMNS].fillna("")
+    questions = [
+        parse_trivia_row(row_number, row)
+        for row_number, row in enumerate(trimmed_dataframe.to_dict("records"), start=2)
+    ]
 
     if not questions:
         raise ValueError("Trivia CSV does not contain any questions")
