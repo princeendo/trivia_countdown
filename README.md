@@ -41,6 +41,8 @@ uv run python trivia_countdown.py input.mp4 trivia.csv \
   --output output.mp4 \
   --duration 15.5 \
   --answer-duration 3.25 \
+  --answer-flash-duration 1.0 \
+  --answer-flash-interval 0.2 \
   --start-delay 1.0 \
   --end-early 1.0 \
   --overlay-dir sample_objects/rendered_overlays \
@@ -48,9 +50,11 @@ uv run python trivia_countdown.py input.mp4 trivia.csv \
   --seed 123
 ```
 
-`--duration`, `--answer-duration`, `--start-delay`, and `--end-early` accept any positive number, including decimals such as `0.75` or `12.5`. Values below `1.0` seconds are allowed, but the script warns because the question or answer highlight may be difficult to see.
+`--duration` and `--answer-duration` accept any positive number, including decimals such as `0.75` or `12.5`. `--answer-flash-duration`, `--answer-flash-interval`, `--start-delay`, and `--end-early` accept any nonnegative number. Values below `1.0` seconds are allowed, but the script warns when the main question or answer highlight duration may be difficult to notice.
 
-The trivia panel waits `--start-delay` seconds before showing the first question, displays each question for `--duration` seconds, then highlights the correct answer for approximately `--answer-duration` seconds. Trivia scheduling also reserves `--end-early` seconds at the end of the source video, so overlays finish before the video ends. If the source video ends before all trivia is shown, the output stops with the video. If trivia ends first, the source video continues without overlays.
+The trivia panel waits `--start-delay` seconds before showing the first question, displays each question for `--duration` seconds, then highlights the correct answer for approximately `--answer-duration` seconds. During the first `--answer-flash-duration` seconds of that answer reveal, the correct answer alternates between its normal and highlighted states every `--answer-flash-interval` seconds before ending highlighted and staying solid. Set either flash value to `0` to disable blinking. `--answer-flash-duration` cannot exceed `--answer-duration`.
+
+Trivia scheduling also reserves `--end-early` seconds at the end of the source video, so overlays finish before the video ends. If the source video ends before all trivia is shown, the output stops with the video. If trivia ends first, the source video continues without overlays.
 
 Use `--overlay-dir` to persist the generated normal and reveal PNG overlays for visual inspection. Without `--overlay-dir`, generated overlay images are temporary and deleted automatically.
 

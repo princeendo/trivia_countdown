@@ -85,16 +85,34 @@ def parse_args() -> argparse.Namespace:
         help="Approximate seconds to highlight the correct answer. Accepts decimals. Default: 3.",
     )
     parser.add_argument(
+        "--answer-flash-duration",
+        type=nonnegative_float,
+        default=1.0,
+        help=(
+            "Seconds for the answer to alternate between normal and highlighted before staying solid. "
+            "Accepts decimals. Use 0 to disable blinking. Default: 1."
+        ),
+    )
+    parser.add_argument(
+        "--answer-flash-interval",
+        type=nonnegative_float,
+        default=0.2,
+        help=(
+            "Seconds between answer flash state changes. Accepts decimals. "
+            "Use 0 to disable blinking. Default: 0.2."
+        ),
+    )
+    parser.add_argument(
         "--start-delay",
         type=nonnegative_float,
         default=5.0,
-        help="Seconds to wait before showing the first trivia overlay. Accepts decimals. Default: 1.",
+        help="Seconds to wait before showing the first trivia overlay. Accepts decimals. Default: 5.",
     )
     parser.add_argument(
         "--end-early",
         type=nonnegative_float,
         default=5.0,
-        help="Seconds before video end when trivia overlays must finish. Accepts decimals. Default: 1.",
+        help="Seconds before video end when trivia overlays must finish. Accepts decimals. Default: 5.",
     )
     parser.add_argument(
         "--overlay-dir",
@@ -502,6 +520,8 @@ def build_filter_graph(
     *,
     question_duration: float,
     answer_duration: float,
+    answer_flash_duration: float,
+    answer_flash_interval: float,
     start_delay: float,
 ) -> str:
     filters = ["[0:v]format=rgba[v0]"]
@@ -509,26 +529,52 @@ def build_filter_graph(
     overlay_input_index = 1
     output_index = 1
 
+    def add_overlay_window(start_time: float, end_time: float, *, input_index: int) -> None:
+        nonlocal current_label, output_index
+        if end_time <= start_time:
+            return
+
+        overlay_label = f"ov{input_index}"
+        next_label = f"v{output_index}"
+        filters.append(f"[{input_index}:v]format=rgba[{overlay_label}]")
+        filters.append(
+            f"[{current_label}][{overlay_label}]"
+            f"overlay=0:0:enable='between(t,{start_time:.3f},{end_time:.3f})'"
+            f"[{next_label}]"
+        )
+        current_label = next_label
+        output_index += 1
+
     for question_index, _paths in enumerate(overlay_paths):
         question_start = start_delay + question_index * (question_duration + answer_duration)
         reveal_start = question_start + question_duration
-        windows = (
-            (question_start, reveal_start),
-            (reveal_start, reveal_start + answer_duration),
-        )
+        reveal_end = reveal_start + answer_duration
+        add_overlay_window(question_start, reveal_start, input_index=overlay_input_index)
+        overlay_input_index += 1
 
-        for start_time, end_time in windows:
-            overlay_label = f"ov{overlay_input_index}"
-            next_label = f"v{output_index}"
-            filters.append(f"[{overlay_input_index}:v]format=rgba[{overlay_label}]")
-            filters.append(
-                f"[{current_label}][{overlay_label}]"
-                f"overlay=0:0:enable='between(t,{start_time:.3f},{end_time:.3f})'"
-                f"[{next_label}]"
-            )
-            current_label = next_label
-            overlay_input_index += 1
-            output_index += 1
+        flash_end = min(reveal_start + answer_flash_duration, reveal_end)
+        flash_enabled = answer_flash_duration > 0 and answer_flash_interval > 0
+        if flash_enabled and flash_end > reveal_start:
+            flash_chunk_count = max(1, int(answer_flash_duration // answer_flash_interval))
+            flash_chunk_duration = answer_flash_duration / flash_chunk_count
+            flash_start_time = reveal_start
+            chunk_index = 0
+
+            while flash_start_time < flash_end:
+                chunk_end_time = min(flash_start_time + flash_chunk_duration, flash_end)
+                use_reveal_overlay = chunk_index % 2 == 1 or chunk_end_time >= reveal_end
+                add_overlay_window(
+                    flash_start_time,
+                    chunk_end_time,
+                    input_index=overlay_input_index + int(use_reveal_overlay),
+                )
+                flash_start_time = chunk_end_time
+                chunk_index += 1
+        else:
+            flash_end = reveal_start
+
+        add_overlay_window(flash_end, reveal_end, input_index=overlay_input_index + 1)
+        overlay_input_index += 2
 
     filters.append(f"[{current_label}]format=yuv420p[vout]")
     return ";".join(filters)
@@ -542,6 +588,8 @@ def compose_video(
     video_duration: float,
     question_duration: float,
     answer_duration: float,
+    answer_flash_duration: float,
+    answer_flash_interval: float,
     start_delay: float,
 ) -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -558,6 +606,8 @@ def compose_video(
                 overlay_paths,
                 question_duration=question_duration,
                 answer_duration=answer_duration,
+                answer_flash_duration=answer_flash_duration,
+                answer_flash_interval=answer_flash_interval,
                 start_delay=start_delay,
             ),
             "-map",
@@ -601,6 +651,8 @@ def render_and_compose(
     video_duration: float,
     question_duration: float,
     answer_duration: float,
+    answer_flash_duration: float,
+    answer_flash_interval: float,
     start_delay: float,
     overlay_dir: Optional[Path],
 ) -> tuple[int, Optional[Path]]:
@@ -613,6 +665,8 @@ def render_and_compose(
             video_duration=video_duration,
             question_duration=question_duration,
             answer_duration=answer_duration,
+            answer_flash_duration=answer_flash_duration,
+            answer_flash_interval=answer_flash_interval,
             start_delay=start_delay,
         )
         return len(overlay_paths) * 2, overlay_dir
@@ -626,6 +680,8 @@ def render_and_compose(
             video_duration=video_duration,
             question_duration=question_duration,
             answer_duration=answer_duration,
+            answer_flash_duration=answer_flash_duration,
+            answer_flash_interval=answer_flash_interval,
             start_delay=start_delay,
         )
         return len(overlay_paths) * 2, None
@@ -653,6 +709,8 @@ def main() -> int:
             start_delay=args.start_delay,
             end_early=args.end_early,
         )
+        if args.answer_flash_duration > args.answer_duration:
+            raise ValueError("--answer-flash-duration cannot exceed --answer-duration")
     except (RuntimeError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -685,6 +743,8 @@ def main() -> int:
     print(f"Output video: {output}")
     print(f"Question duration: {format_seconds(args.duration)}")
     print(f"Answer highlight duration: approximately {format_seconds(args.answer_duration)}")
+    print(f"Answer flash duration: {format_seconds(args.answer_flash_duration)}")
+    print(f"Answer flash interval: {format_seconds(args.answer_flash_interval)}")
     print(f"Start delay: {format_seconds(args.start_delay)}")
     print(f"End early: {format_seconds(args.end_early)}")
     if args.randomize:
@@ -708,6 +768,8 @@ def main() -> int:
             video_duration=video_duration,
             question_duration=args.duration,
             answer_duration=args.answer_duration,
+            answer_flash_duration=args.answer_flash_duration,
+            answer_flash_interval=args.answer_flash_interval,
             start_delay=args.start_delay,
             overlay_dir=args.overlay_dir,
         )
