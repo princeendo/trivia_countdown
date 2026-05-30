@@ -74,15 +74,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, help="Seed for repeatable randomized question order.")
     parser.add_argument(
         "--duration",
-        type=positive_int,
-        default=15,
-        help="Seconds to show each question before revealing the answer. Default: 15.",
+        type=positive_float,
+        default=15.0,
+        help="Seconds to show each question before revealing the answer. Accepts decimals. Default: 15.",
     )
     parser.add_argument(
         "--answer-duration",
-        type=positive_int,
-        default=3,
-        help="Approximate seconds to highlight the correct answer. Default: 3.",
+        type=positive_float,
+        default=3.0,
+        help="Approximate seconds to highlight the correct answer. Accepts decimals. Default: 3.",
     )
     parser.add_argument(
         "--overlay-dir",
@@ -92,14 +92,18 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def positive_int(value: str) -> int:
+def positive_float(value: str) -> float:
     try:
-        parsed = int(value)
+        parsed = float(value)
     except ValueError as exc:
-        raise argparse.ArgumentTypeError(f"{value!r} is not an integer") from exc
+        raise argparse.ArgumentTypeError(f"{value!r} is not a number") from exc
     if parsed <= 0:
         raise argparse.ArgumentTypeError("value must be greater than 0")
     return parsed
+
+
+def format_seconds(value: float) -> str:
+    return f"{value:g}s"
 
 
 def default_output_path(video_file: Path) -> Path:
@@ -236,6 +240,11 @@ def order_questions(
         rng = random.Random(seed)
         rng.shuffle(ordered)
     return ordered
+
+
+def max_full_questions_for_video(video_duration: float, question_duration: float, answer_duration: float) -> int:
+    segment_duration = question_duration + answer_duration
+    return int(video_duration // segment_duration)
 
 
 def scale_rect(rect: tuple[int, int, int, int], dimensions: VideoDimensions) -> tuple[int, int, int, int]:
@@ -459,8 +468,8 @@ def render_overlays(
 def build_filter_graph(
     overlay_paths: list[tuple[Path, Path]],
     *,
-    question_duration: int,
-    answer_duration: int,
+    question_duration: float,
+    answer_duration: float,
 ) -> str:
     filters = ["[0:v]format=rgba[v0]"]
     current_label = "v0"
@@ -498,8 +507,8 @@ def compose_video(
     overlay_paths: list[tuple[Path, Path]],
     *,
     video_duration: float,
-    question_duration: int,
-    answer_duration: int,
+    question_duration: float,
+    answer_duration: float,
 ) -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
@@ -555,8 +564,8 @@ def render_and_compose(
     dimensions: VideoDimensions,
     *,
     video_duration: float,
-    question_duration: int,
-    answer_duration: int,
+    question_duration: float,
+    answer_duration: float,
     overlay_dir: Optional[Path],
 ) -> tuple[int, Optional[Path]]:
     if overlay_dir:
@@ -599,22 +608,54 @@ def main() -> int:
             randomize=args.randomize,
             seed=args.seed,
         )
+        max_questions = max_full_questions_for_video(
+            video_duration,
+            args.duration,
+            args.answer_duration,
+        )
     except (RuntimeError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
-    print(f"Validated {len(questions)} trivia question(s).")
+    if max_questions <= 0:
+        print(
+            "error: Input video is too short to show even one full trivia question",
+            file=sys.stderr,
+        )
+        return 1
+
+    if args.duration < 1.0:
+        print(
+            f"warning: Question duration {format_seconds(args.duration)} is less than 1.0s and may be hard to read.",
+            file=sys.stderr,
+        )
+    if args.answer_duration < 1.0:
+        print(
+            f"warning: Answer highlight duration {format_seconds(args.answer_duration)} is less than 1.0s and may be hard to notice.",
+            file=sys.stderr,
+        )
+
+    validated_question_count = len(questions)
+    questions = questions[:max_questions]
+
+    print(f"Validated {validated_question_count} trivia question(s).")
     print(f"Input video: {args.video_file}")
     print(f"Video dimensions: {dimensions.width}x{dimensions.height}")
     print(f"Video duration: {video_duration:.1f}s")
     print(f"Output video: {output}")
-    print(f"Question duration: {args.duration}s")
-    print(f"Answer highlight duration: approximately {args.answer_duration}s")
+    print(f"Question duration: {format_seconds(args.duration)}")
+    print(f"Answer highlight duration: approximately {format_seconds(args.answer_duration)}")
     if args.randomize:
         seed_note = f" with seed {args.seed}" if args.seed is not None else ""
         print(f"Question order: randomized{seed_note}")
     else:
         print("Question order: CSV order")
+    if len(questions) < validated_question_count:
+        print(
+            f"Using {len(questions)} of {validated_question_count} question(s) based on video length."
+        )
+    else:
+        print(f"Using all {len(questions)} question(s).")
 
     try:
         overlay_count, persisted_overlay_dir = render_and_compose(

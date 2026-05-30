@@ -39,12 +39,14 @@ Optional arguments:
 ```sh
 uv run python trivia_countdown.py input.mp4 trivia.csv \
   --output output.mp4 \
-  --duration 15 \
-  --answer-duration 3 \
+  --duration 15.5 \
+  --answer-duration 3.25 \
   --overlay-dir sample_objects/rendered_overlays \
   --random \
   --seed 123
 ```
+
+`--duration` and `--answer-duration` accept any positive number, including decimals such as `0.75` or `12.5`. Values below `1.0` seconds are allowed, but the script warns because the question or answer highlight may be difficult to see.
 
 The trivia panel displays each question for `--duration` seconds, then highlights the correct answer for approximately `--answer-duration` seconds. If the source video ends before all trivia is shown, the output stops with the video. If trivia ends first, the source video continues without overlays.
 
