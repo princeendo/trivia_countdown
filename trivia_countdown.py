@@ -85,6 +85,18 @@ def parse_args() -> argparse.Namespace:
         help="Approximate seconds to highlight the correct answer. Accepts decimals. Default: 3.",
     )
     parser.add_argument(
+        "--start-delay",
+        type=nonnegative_float,
+        default=5.0,
+        help="Seconds to wait before showing the first trivia overlay. Accepts decimals. Default: 1.",
+    )
+    parser.add_argument(
+        "--end-early",
+        type=nonnegative_float,
+        default=5.0,
+        help="Seconds before video end when trivia overlays must finish. Accepts decimals. Default: 1.",
+    )
+    parser.add_argument(
         "--overlay-dir",
         type=Path,
         help="Persist generated overlay PNGs in this directory for inspection.",
@@ -99,6 +111,16 @@ def positive_float(value: str) -> float:
         raise argparse.ArgumentTypeError(f"{value!r} is not a number") from exc
     if parsed <= 0:
         raise argparse.ArgumentTypeError("value must be greater than 0")
+    return parsed
+
+
+def nonnegative_float(value: str) -> float:
+    try:
+        parsed = float(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"{value!r} is not a number") from exc
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("value must be greater than or equal to 0")
     return parsed
 
 
@@ -242,9 +264,19 @@ def order_questions(
     return ordered
 
 
-def max_full_questions_for_video(video_duration: float, question_duration: float, answer_duration: float) -> int:
+def max_full_questions_for_video(
+    video_duration: float,
+    question_duration: float,
+    answer_duration: float,
+    *,
+    start_delay: float,
+    end_early: float,
+) -> int:
+    available_duration = video_duration - start_delay - end_early
+    if available_duration <= 0:
+        return 0
     segment_duration = question_duration + answer_duration
-    return int(video_duration // segment_duration)
+    return int(available_duration // segment_duration)
 
 
 def scale_rect(rect: tuple[int, int, int, int], dimensions: VideoDimensions) -> tuple[int, int, int, int]:
@@ -470,6 +502,7 @@ def build_filter_graph(
     *,
     question_duration: float,
     answer_duration: float,
+    start_delay: float,
 ) -> str:
     filters = ["[0:v]format=rgba[v0]"]
     current_label = "v0"
@@ -477,7 +510,7 @@ def build_filter_graph(
     output_index = 1
 
     for question_index, _paths in enumerate(overlay_paths):
-        question_start = question_index * (question_duration + answer_duration)
+        question_start = start_delay + question_index * (question_duration + answer_duration)
         reveal_start = question_start + question_duration
         windows = (
             (question_start, reveal_start),
@@ -509,6 +542,7 @@ def compose_video(
     video_duration: float,
     question_duration: float,
     answer_duration: float,
+    start_delay: float,
 ) -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
@@ -524,6 +558,7 @@ def compose_video(
                 overlay_paths,
                 question_duration=question_duration,
                 answer_duration=answer_duration,
+                start_delay=start_delay,
             ),
             "-map",
             "[vout]",
@@ -566,6 +601,7 @@ def render_and_compose(
     video_duration: float,
     question_duration: float,
     answer_duration: float,
+    start_delay: float,
     overlay_dir: Optional[Path],
 ) -> tuple[int, Optional[Path]]:
     if overlay_dir:
@@ -577,6 +613,7 @@ def render_and_compose(
             video_duration=video_duration,
             question_duration=question_duration,
             answer_duration=answer_duration,
+            start_delay=start_delay,
         )
         return len(overlay_paths) * 2, overlay_dir
 
@@ -589,6 +626,7 @@ def render_and_compose(
             video_duration=video_duration,
             question_duration=question_duration,
             answer_duration=answer_duration,
+            start_delay=start_delay,
         )
         return len(overlay_paths) * 2, None
 
@@ -612,6 +650,8 @@ def main() -> int:
             video_duration,
             args.duration,
             args.answer_duration,
+            start_delay=args.start_delay,
+            end_early=args.end_early,
         )
     except (RuntimeError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
@@ -645,6 +685,8 @@ def main() -> int:
     print(f"Output video: {output}")
     print(f"Question duration: {format_seconds(args.duration)}")
     print(f"Answer highlight duration: approximately {format_seconds(args.answer_duration)}")
+    print(f"Start delay: {format_seconds(args.start_delay)}")
+    print(f"End early: {format_seconds(args.end_early)}")
     if args.randomize:
         seed_note = f" with seed {args.seed}" if args.seed is not None else ""
         print(f"Question order: randomized{seed_note}")
@@ -666,6 +708,7 @@ def main() -> int:
             video_duration=video_duration,
             question_duration=args.duration,
             answer_duration=args.answer_duration,
+            start_delay=args.start_delay,
             overlay_dir=args.overlay_dir,
         )
     except RuntimeError as exc:
