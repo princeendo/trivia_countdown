@@ -25,7 +25,7 @@ Additional columns are allowed and ignored. For example, a `difficulty` column w
 ## Usage
 
 ```sh
-uv run python trivia_countdown.py input.mp4 trivia.csv
+uv run python make_trivia_countdown.py input.mp4 trivia.csv
 ```
 
 By default, the output path is derived from the input video name:
@@ -37,7 +37,7 @@ input_trivia_countdown.mp4
 Optional arguments:
 
 ```sh
-uv run python trivia_countdown.py input.mp4 trivia.csv \
+uv run python make_trivia_countdown.py input.mp4 trivia.csv \
   --output output.mp4 \
   --duration 10 \
   --answer-duration 2.5 \

@@ -1,5 +1,6 @@
 /.venv/
-/__pycache__/
+__pycache__/
+*.pyc
 /reference_objects/
 *_trivia_countdown.mp4
 sample_objects/rendered_overlays/
