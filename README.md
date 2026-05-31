@@ -47,15 +47,16 @@ uv run python trivia_countdown.py input.mp4 trivia.csv \
   --end-early 15 \
   --fade-in-time 0.5 \
   --fade-out-time 0.5 \
+  --mid-question-fade 0.3 \
   --overlay-dir sample_objects/rendered_overlays \
   --no-progress \
   --random \
   --seed 123
 ```
 
-`--duration` and `--answer-duration` accept any positive number, including decimals such as `0.75` or `12.5`. `--answer-flash-duration`, `--answer-flash-interval`, `--start-delay`, `--end-early`, `--fade-in-time`, and `--fade-out-time` accept any nonnegative number. Values below `1.0` seconds are allowed, but the script warns when the main question or answer highlight duration may be difficult to notice.
+`--duration` and `--answer-duration` accept any positive number, including decimals such as `0.75` or `12.5`. `--answer-flash-duration`, `--answer-flash-interval`, `--start-delay`, `--end-early`, `--fade-in-time`, `--fade-out-time`, and `--mid-question-fade` accept any nonnegative number. Values below `1.0` seconds are allowed, but the script warns when the main question or answer highlight duration may be difficult to notice.
 
-The trivia panel waits `--start-delay` seconds before showing the first question, fades in over `--fade-in-time` seconds, displays each question for `--duration` seconds, then highlights the correct answer for approximately `--answer-duration` seconds. During the first `--answer-flash-duration` seconds of that answer reveal, the correct answer alternates between its normal and highlighted states every `--answer-flash-interval` seconds before ending highlighted and staying solid. The final trivia panel fades out over `--fade-out-time` seconds. Set either flash value to `0` to disable blinking, and set either fade value to `0` to disable that fade. `--answer-flash-duration` cannot exceed `--answer-duration`.
+The trivia panel waits `--start-delay` seconds before showing the first question, fades in over `--fade-in-time` seconds, displays each question for `--duration` seconds, then highlights the correct answer for approximately `--answer-duration` seconds. During the first `--answer-flash-duration` seconds of that answer reveal, the correct answer alternates between its normal and highlighted states every `--answer-flash-interval` seconds before ending highlighted and staying solid. Between questions, the final `--mid-question-fade` seconds of the outgoing answer crossfade into the next question, preserving the total per-question timing. The final trivia panel fades out over `--fade-out-time` seconds. Set either flash value to `0` to disable blinking, and set any fade value to `0` to disable that fade. `--answer-flash-duration` and `--mid-question-fade` cannot exceed `--answer-duration`.
 
 Trivia scheduling also reserves `--end-early` seconds at the end of the source video, so overlays finish before the video ends. If the source video ends before all trivia is shown, the output stops with the video. If trivia ends first, the source video continues without overlays.
 

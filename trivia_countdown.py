@@ -32,6 +32,8 @@ REQUIRED_COLUMNS = [
     "correct_answer",
 ]
 
+TRANSITION_FPS = 30
+
 
 @dataclass(frozen=True)
 class TriviaQuestion:
@@ -60,6 +62,19 @@ class PanelLayout:
 class RenderTimings:
     overlay_seconds: float
     compose_seconds: float
+
+
+@dataclass(frozen=True)
+class TransitionFrame:
+    path: Path
+    duration: float
+
+
+@dataclass(frozen=True)
+class RenderedOverlay:
+    normal_path: Path
+    reveal_path: Path
+    transition_frames: tuple[TransitionFrame, ...] = ()
 
 
 def parse_args() -> argparse.Namespace:
@@ -133,6 +148,12 @@ def parse_args() -> argparse.Namespace:
         type=nonnegative_float,
         default=0.5,
         help="Seconds for the last trivia overlay to fade out. Accepts decimals. Use 0 to disable. Default: 0.5.",
+    )
+    parser.add_argument(
+        "--mid-question-fade",
+        type=nonnegative_float,
+        default=0.3,
+        help="Seconds to crossfade between questions. Accepts decimals. Use 0 to disable. Default: 0.3.",
     )
     parser.add_argument(
         "--overlay-dir",
@@ -586,15 +607,43 @@ def render_question_overlay(
     image.save(output_path)
 
 
+def render_transition_frames(
+    start_path: Path,
+    end_path: Path,
+    output_directory: Path,
+    transition_name: str,
+    duration: float,
+) -> tuple[TransitionFrame, ...]:
+    if duration <= 0:
+        return ()
+
+    frame_count = max(1, round(duration * TRANSITION_FPS))
+    frame_duration = duration / frame_count
+    frames: list[TransitionFrame] = []
+
+    with Image.open(start_path) as start_file, Image.open(end_path) as end_file:
+        start_image = start_file.convert("RGBA")
+        end_image = end_file.convert("RGBA")
+        for frame_index in range(1, frame_count + 1):
+            alpha = frame_index / frame_count
+            frame_path = output_directory / f"{transition_name}_{frame_index:04d}.png"
+            Image.blend(start_image, end_image, alpha).save(frame_path)
+            frames.append(TransitionFrame(frame_path, frame_duration))
+
+    return tuple(frames)
+
+
 def render_overlays(
     questions: list[TriviaQuestion],
     dimensions: VideoDimensions,
     output_directory: Path,
+    mid_question_fade: float,
     progress_callback: Optional[Callable[[int, int], None]] = None,
-) -> list[tuple[Path, Path]]:
+) -> list[RenderedOverlay]:
     output_directory.mkdir(parents=True, exist_ok=True)
-    rendered_paths: list[tuple[Path, Path]] = []
-    total_images = len(questions) * 2
+    rendered_paths: list[RenderedOverlay] = []
+    transition_frame_count = max(1, round(mid_question_fade * TRANSITION_FPS)) if mid_question_fade > 0 else 0
+    total_images = len(questions) * 2 + max(0, len(questions) - 1) * transition_frame_count
     completed_images = 0
     for index, question in enumerate(questions, start=1):
         normal_path = output_directory / f"question_{index:04d}_normal.png"
@@ -607,7 +656,29 @@ def render_overlays(
         completed_images += 1
         if progress_callback:
             progress_callback(completed_images, total_images)
-        rendered_paths.append((normal_path, reveal_path))
+
+        rendered_paths.append(RenderedOverlay(normal_path, reveal_path))
+
+    if mid_question_fade > 0:
+        overlays_with_transitions: list[RenderedOverlay] = []
+        for index, overlay in enumerate(rendered_paths):
+            transition_frames: tuple[TransitionFrame, ...] = ()
+            if index < len(rendered_paths) - 1:
+                transition_frames = render_transition_frames(
+                    overlay.reveal_path,
+                    rendered_paths[index + 1].normal_path,
+                    output_directory,
+                    f"question_{index + 1:04d}_to_{index + 2:04d}_transition",
+                    mid_question_fade,
+                )
+                completed_images += len(transition_frames)
+                if progress_callback:
+                    progress_callback(completed_images, total_images)
+            overlays_with_transitions.append(
+                RenderedOverlay(overlay.normal_path, overlay.reveal_path, transition_frames)
+            )
+        rendered_paths = overlays_with_transitions
+
     return rendered_paths
 
 
@@ -616,7 +687,7 @@ def quote_ffconcat_path(path: Path) -> str:
 
 
 def build_overlay_schedule(
-    overlay_paths: list[tuple[Path, Path]],
+    overlay_paths: list[RenderedOverlay],
     *,
     blank_overlay_path: Path,
     question_duration: float,
@@ -639,10 +710,13 @@ def build_overlay_schedule(
     if start_delay > 0:
         add_overlay_window(blank_overlay_path, start_delay)
 
-    for normal_path, reveal_path in overlay_paths:
-        add_overlay_window(normal_path, question_duration)
+    for overlay in overlay_paths:
+        add_overlay_window(overlay.normal_path, question_duration)
 
-        flash_end = min(answer_flash_duration, answer_duration)
+        transition_duration = sum(frame.duration for frame in overlay.transition_frames)
+        answer_display_duration = max(0.0, answer_duration - transition_duration)
+
+        flash_end = min(answer_flash_duration, answer_display_duration)
         flash_enabled = answer_flash_duration > 0 and answer_flash_interval > 0
         if flash_enabled and flash_end > 0:
             flash_window_duration = flash_end
@@ -653,9 +727,9 @@ def build_overlay_schedule(
 
             while flash_start_time < flash_end:
                 chunk_end_time = min(flash_start_time + flash_chunk_duration, flash_end)
-                use_reveal_overlay = chunk_index % 2 == 1 or chunk_end_time >= answer_duration
+                use_reveal_overlay = chunk_index % 2 == 1 or chunk_end_time >= answer_display_duration
                 add_overlay_window(
-                    reveal_path if use_reveal_overlay else normal_path,
+                    overlay.reveal_path if use_reveal_overlay else overlay.normal_path,
                     chunk_end_time - flash_start_time,
                 )
                 flash_start_time = chunk_end_time
@@ -663,7 +737,9 @@ def build_overlay_schedule(
         else:
             flash_end = 0.0
 
-        add_overlay_window(reveal_path, answer_duration - flash_end)
+        add_overlay_window(overlay.reveal_path, answer_display_duration - flash_end)
+        for frame in overlay.transition_frames:
+            add_overlay_window(frame.path, frame.duration)
 
     if elapsed < video_duration:
         add_overlay_window(blank_overlay_path, video_duration - elapsed)
@@ -712,7 +788,7 @@ def build_filter_graph(
 def compose_video(
     video_file: Path,
     output_file: Path,
-    overlay_paths: list[tuple[Path, Path]],
+    overlay_paths: list[RenderedOverlay],
     dimensions: VideoDimensions,
     *,
     video_duration: float,
@@ -870,6 +946,7 @@ def render_and_compose(
     start_delay: float,
     fade_in_time: float,
     fade_out_time: float,
+    mid_question_fade: float,
     overlay_dir: Optional[Path],
     progress_reporter: ProgressReporter,
 ) -> tuple[int, Optional[Path], RenderTimings]:
@@ -879,7 +956,7 @@ def render_and_compose(
         progress_reporter.update_units("Rendering overlays", completed, total, overlay_start)
 
     if overlay_dir:
-        overlay_paths = render_overlays(questions, dimensions, overlay_dir, report_overlay_progress)
+        overlay_paths = render_overlays(questions, dimensions, overlay_dir, mid_question_fade, report_overlay_progress)
         progress_reporter.complete_phase("Rendering overlays", overlay_start)
         overlay_seconds = time.monotonic() - overlay_start
 
@@ -907,10 +984,17 @@ def render_and_compose(
         )
         progress_reporter.complete_phase("Composing video", compose_start)
         compose_seconds = time.monotonic() - compose_start
-        return len(overlay_paths) * 2, overlay_dir, RenderTimings(overlay_seconds, compose_seconds)
+        overlay_count = sum(2 + len(overlay.transition_frames) for overlay in overlay_paths)
+        return overlay_count, overlay_dir, RenderTimings(overlay_seconds, compose_seconds)
 
     with TemporaryDirectory(prefix="trivia_countdown_") as temporary_directory:
-        overlay_paths = render_overlays(questions, dimensions, Path(temporary_directory), report_overlay_progress)
+        overlay_paths = render_overlays(
+            questions,
+            dimensions,
+            Path(temporary_directory),
+            mid_question_fade,
+            report_overlay_progress,
+        )
         progress_reporter.complete_phase("Rendering overlays", overlay_start)
         overlay_seconds = time.monotonic() - overlay_start
 
@@ -938,7 +1022,8 @@ def render_and_compose(
         )
         progress_reporter.complete_phase("Composing video", compose_start)
         compose_seconds = time.monotonic() - compose_start
-        return len(overlay_paths) * 2, None, RenderTimings(overlay_seconds, compose_seconds)
+        overlay_count = sum(2 + len(overlay.transition_frames) for overlay in overlay_paths)
+        return overlay_count, None, RenderTimings(overlay_seconds, compose_seconds)
 
 
 def main() -> int:
@@ -967,6 +1052,8 @@ def main() -> int:
         )
         if args.answer_flash_duration > args.answer_duration:
             raise ValueError("--answer-flash-duration cannot exceed --answer-duration")
+        if args.mid_question_fade > args.answer_duration:
+            raise ValueError("--mid-question-fade cannot exceed --answer-duration")
     except (RuntimeError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
@@ -1005,6 +1092,7 @@ def main() -> int:
     print(f"End early: {format_seconds(args.end_early)}")
     print(f"Fade in time: {format_seconds(args.fade_in_time)}")
     print(f"Fade out time: {format_seconds(args.fade_out_time)}")
+    print(f"Mid-question fade: {format_seconds(args.mid_question_fade)}")
     if args.randomize:
         seed_note = f" with seed {args.seed}" if args.seed is not None else ""
         print(f"Question order: randomized{seed_note}")
@@ -1032,6 +1120,7 @@ def main() -> int:
             start_delay=args.start_delay,
             fade_in_time=args.fade_in_time,
             fade_out_time=args.fade_out_time,
+            mid_question_fade=args.mid_question_fade,
             overlay_dir=args.overlay_dir,
             progress_reporter=progress_reporter,
         )
