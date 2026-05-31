@@ -599,68 +599,83 @@ def render_overlays(
     return rendered_paths
 
 
-def build_filter_graph(
+def quote_ffconcat_path(path: Path) -> str:
+    return str(path).replace("\\", "\\\\").replace("'", "\\'")
+
+
+def build_overlay_schedule(
     overlay_paths: list[tuple[Path, Path]],
     *,
+    blank_overlay_path: Path,
     question_duration: float,
     answer_duration: float,
     answer_flash_duration: float,
     answer_flash_interval: float,
     start_delay: float,
-) -> str:
-    filters = ["[0:v]format=rgba[v0]"]
-    current_label = "v0"
-    output_index = 1
+    video_duration: float,
+) -> list[tuple[Path, float]]:
+    schedule: list[tuple[Path, float]] = []
+    elapsed = 0.0
 
-    def add_overlay_window(start_time: float, end_time: float, *, input_index: int) -> None:
-        nonlocal current_label, output_index
-        if end_time <= start_time:
+    def add_overlay_window(path: Path, duration: float) -> None:
+        nonlocal elapsed
+        if duration <= 0:
             return
+        schedule.append((path, duration))
+        elapsed += duration
 
-        overlay_label = f"ov{input_index}"
-        next_label = f"v{output_index}"
-        filters.append(f"[{input_index}:v]format=rgba[{overlay_label}]")
-        filters.append(
-            f"[{current_label}][{overlay_label}]"
-            f"overlay=0:0:enable='between(t,{start_time:.3f},{end_time:.3f})'"
-            f"[{next_label}]"
-        )
-        current_label = next_label
-        output_index += 1
+    if start_delay > 0:
+        add_overlay_window(blank_overlay_path, start_delay)
 
-    for question_index, _paths in enumerate(overlay_paths):
-        normal_input_index = 1 + question_index * 2
-        reveal_input_index = normal_input_index + 1
-        question_start = start_delay + question_index * (question_duration + answer_duration)
-        reveal_start = question_start + question_duration
-        reveal_end = reveal_start + answer_duration
-        add_overlay_window(question_start, reveal_start, input_index=normal_input_index)
+    for normal_path, reveal_path in overlay_paths:
+        add_overlay_window(normal_path, question_duration)
 
-        flash_end = min(reveal_start + answer_flash_duration, reveal_end)
+        flash_end = min(answer_flash_duration, answer_duration)
         flash_enabled = answer_flash_duration > 0 and answer_flash_interval > 0
-        if flash_enabled and flash_end > reveal_start:
-            flash_window_duration = flash_end - reveal_start
+        if flash_enabled and flash_end > 0:
+            flash_window_duration = flash_end
             flash_chunk_count = max(1, int(flash_window_duration // answer_flash_interval))
             flash_chunk_duration = flash_window_duration / flash_chunk_count
-            flash_start_time = reveal_start
+            flash_start_time = 0.0
             chunk_index = 0
 
             while flash_start_time < flash_end:
                 chunk_end_time = min(flash_start_time + flash_chunk_duration, flash_end)
-                use_reveal_overlay = chunk_index % 2 == 1 or chunk_end_time >= reveal_end
+                use_reveal_overlay = chunk_index % 2 == 1 or chunk_end_time >= answer_duration
                 add_overlay_window(
-                    flash_start_time,
-                    chunk_end_time,
-                    input_index=reveal_input_index if use_reveal_overlay else normal_input_index,
+                    reveal_path if use_reveal_overlay else normal_path,
+                    chunk_end_time - flash_start_time,
                 )
                 flash_start_time = chunk_end_time
                 chunk_index += 1
         else:
-            flash_end = reveal_start
+            flash_end = 0.0
 
-        add_overlay_window(flash_end, reveal_end, input_index=reveal_input_index)
+        add_overlay_window(reveal_path, answer_duration - flash_end)
 
-    filters.append(f"[{current_label}]format=yuv420p[vout]")
+    if elapsed < video_duration:
+        add_overlay_window(blank_overlay_path, video_duration - elapsed)
+
+    return schedule
+
+
+def write_overlay_concat_file(schedule: list[tuple[Path, float]], concat_file: Path) -> None:
+    lines = ["ffconcat version 1.0"]
+    for path, duration in schedule:
+        lines.append(f"file '{quote_ffconcat_path(path)}'")
+        lines.append(f"duration {duration:.6f}")
+    if schedule:
+        lines.append(f"file '{quote_ffconcat_path(schedule[-1][0])}'")
+    concat_file.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def build_filter_graph() -> str:
+    filters = [
+        "[0:v]format=rgba[base]",
+        "[1:v]format=rgba[overlay]",
+        "[base][overlay]overlay=0:0:format=auto:eof_action=pass,format=yuv420p[vout]",
+    ]
+
     return ";".join(filters)
 
 
@@ -668,6 +683,7 @@ def compose_video(
     video_file: Path,
     output_file: Path,
     overlay_paths: list[tuple[Path, Path]],
+    dimensions: VideoDimensions,
     *,
     video_duration: float,
     question_duration: float,
@@ -679,96 +695,123 @@ def compose_video(
 ) -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
-    command = ["ffmpeg", "-y", "-i", str(video_file)]
-    for normal_path, reveal_path in overlay_paths:
-        command.extend(["-loop", "1", "-i", str(normal_path)])
-        command.extend(["-loop", "1", "-i", str(reveal_path)])
-
-    command.extend(
-        [
-            "-filter_complex",
-            build_filter_graph(
+    with TemporaryDirectory(prefix="trivia_countdown_compose_") as compose_directory:
+        compose_directory_path = Path(compose_directory)
+        blank_overlay_path = compose_directory_path / "blank_overlay.png"
+        Image.new(
+            "RGBA",
+            (dimensions.width, dimensions.height),
+            (0, 0, 0, 0),
+        ).save(blank_overlay_path)
+        concat_file = compose_directory_path / "overlay_timeline.ffconcat"
+        write_overlay_concat_file(
+            build_overlay_schedule(
                 overlay_paths,
+                blank_overlay_path=blank_overlay_path,
                 question_duration=question_duration,
                 answer_duration=answer_duration,
                 answer_flash_duration=answer_flash_duration,
                 answer_flash_interval=answer_flash_interval,
                 start_delay=start_delay,
+                video_duration=video_duration,
             ),
-            "-map",
-            "[vout]",
-            "-map",
-            "0:a?",
-            "-map_metadata",
+            concat_file,
+        )
+
+        command = [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(video_file),
+            "-f",
+            "concat",
+            "-safe",
             "0",
-            "-c:v",
-            "libx264",
-            "-preset",
-            "medium",
-            "-crf",
-            "18",
-            "-pix_fmt",
-            "yuv420p",
-            "-c:a",
-            "aac",
-            "-b:a",
-            "192k",
-            "-t",
-            f"{video_duration:.3f}",
-            "-progress",
-            "pipe:1",
-            "-nostats",
-            "-movflags",
-            "+faststart",
-            str(output_file),
+            "-i",
+            str(concat_file),
         ]
-    )
 
-    process = subprocess.Popen(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-    )
-    stderr_lines: list[str] = []
+        command.extend(
+            [
+                "-filter_complex",
+                build_filter_graph(),
+                "-map",
+                "[vout]",
+                "-map",
+                "0:a?",
+                "-map_metadata",
+                "0",
+                "-c:v",
+                "libx264",
+                "-preset",
+                "medium",
+                "-crf",
+                "18",
+                "-pix_fmt",
+                "yuv420p",
+                "-c:a",
+                "aac",
+                "-b:a",
+                "192k",
+                "-t",
+                f"{video_duration:.3f}",
+                "-progress",
+                "pipe:1",
+                "-nostats",
+                "-movflags",
+                "+faststart",
+                str(output_file),
+            ]
+        )
 
-    def collect_stderr() -> None:
-        assert process.stderr is not None
-        for line in process.stderr:
-            stderr_lines.append(line)
+        process = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        stderr_lines: list[str] = []
 
-    stderr_thread = threading.Thread(target=collect_stderr, daemon=True)
-    stderr_thread.start()
+        def collect_stderr() -> None:
+            assert process.stderr is not None
+            for line in process.stderr:
+                stderr_lines.append(line)
 
-    assert process.stdout is not None
-    last_reported_seconds = -1.0
-    for raw_line in process.stdout:
-        line = raw_line.strip()
-        if not line or "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        encoded_seconds: Optional[float] = None
-        if key in {"out_time_ms", "out_time_us"}:
-            try:
-                encoded_seconds = int(value) / 1_000_000
-            except ValueError:
-                encoded_seconds = None
-        elif key == "out_time":
-            encoded_seconds = parse_ffmpeg_time(value)
+        stderr_thread = threading.Thread(target=collect_stderr, daemon=True)
+        stderr_thread.start()
 
-        if (
-            encoded_seconds is not None
-            and progress_callback
-            and encoded_seconds > last_reported_seconds
-        ):
-            last_reported_seconds = encoded_seconds
-            progress_callback(min(video_duration, encoded_seconds))
+        assert process.stdout is not None
+        last_reported_seconds = -1.0
+        for raw_line in process.stdout:
+            line = raw_line.strip()
+            if not line or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            encoded_seconds: Optional[float] = None
+            if key in {"out_time_ms", "out_time_us"}:
+                try:
+                    encoded_seconds = int(value) / 1_000_000
+                except ValueError:
+                    encoded_seconds = None
+            elif key == "out_time":
+                encoded_seconds = parse_ffmpeg_time(value)
 
-    return_code = process.wait()
-    stderr_thread.join()
-    if return_code != 0:
-        message = "".join(stderr_lines).strip() or "ffmpeg failed while composing the output video"
-        raise RuntimeError(message)
+            if (
+                encoded_seconds is not None
+                and progress_callback
+                and encoded_seconds > last_reported_seconds
+            ):
+                last_reported_seconds = encoded_seconds
+                progress_callback(min(video_duration, encoded_seconds))
+
+        return_code = process.wait()
+        stderr_thread.join()
+        if return_code != 0:
+            message = (
+                "".join(stderr_lines).strip()
+                or "ffmpeg failed while composing the output video"
+            )
+            raise RuntimeError(message)
 
 
 def render_and_compose(
@@ -807,6 +850,7 @@ def render_and_compose(
             video_file,
             output_file,
             overlay_paths,
+            dimensions,
             video_duration=video_duration,
             question_duration=question_duration,
             answer_duration=answer_duration,
@@ -835,6 +879,7 @@ def render_and_compose(
             video_file,
             output_file,
             overlay_paths,
+            dimensions,
             video_duration=video_duration,
             question_duration=question_duration,
             answer_duration=answer_duration,
