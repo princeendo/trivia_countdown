@@ -526,7 +526,6 @@ def build_filter_graph(
 ) -> str:
     filters = ["[0:v]format=rgba[v0]"]
     current_label = "v0"
-    overlay_input_index = 1
     output_index = 1
 
     def add_overlay_window(start_time: float, end_time: float, *, input_index: int) -> None:
@@ -546,17 +545,19 @@ def build_filter_graph(
         output_index += 1
 
     for question_index, _paths in enumerate(overlay_paths):
+        normal_input_index = 1 + question_index * 2
+        reveal_input_index = normal_input_index + 1
         question_start = start_delay + question_index * (question_duration + answer_duration)
         reveal_start = question_start + question_duration
         reveal_end = reveal_start + answer_duration
-        add_overlay_window(question_start, reveal_start, input_index=overlay_input_index)
-        overlay_input_index += 1
+        add_overlay_window(question_start, reveal_start, input_index=normal_input_index)
 
         flash_end = min(reveal_start + answer_flash_duration, reveal_end)
         flash_enabled = answer_flash_duration > 0 and answer_flash_interval > 0
         if flash_enabled and flash_end > reveal_start:
-            flash_chunk_count = max(1, int(answer_flash_duration // answer_flash_interval))
-            flash_chunk_duration = answer_flash_duration / flash_chunk_count
+            flash_window_duration = flash_end - reveal_start
+            flash_chunk_count = max(1, int(flash_window_duration // answer_flash_interval))
+            flash_chunk_duration = flash_window_duration / flash_chunk_count
             flash_start_time = reveal_start
             chunk_index = 0
 
@@ -566,15 +567,14 @@ def build_filter_graph(
                 add_overlay_window(
                     flash_start_time,
                     chunk_end_time,
-                    input_index=overlay_input_index + int(use_reveal_overlay),
+                    input_index=reveal_input_index if use_reveal_overlay else normal_input_index,
                 )
                 flash_start_time = chunk_end_time
                 chunk_index += 1
         else:
             flash_end = reveal_start
 
-        add_overlay_window(flash_end, reveal_end, input_index=overlay_input_index + 1)
-        overlay_input_index += 2
+        add_overlay_window(flash_end, reveal_end, input_index=reveal_input_index)
 
     filters.append(f"[{current_label}]format=yuv420p[vout]")
     return ";".join(filters)
