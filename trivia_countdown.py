@@ -9,11 +9,13 @@ import random
 import shutil
 import subprocess
 import sys
+import threading
+import time
 import pandas as pd
 from dataclasses import dataclass
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Optional, Union
+from typing import Callable, Optional, Union
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -52,6 +54,12 @@ class PanelLayout:
     outline_width: int
     question_font_size: int
     answer_font_size: int
+
+
+@dataclass(frozen=True)
+class RenderTimings:
+    overlay_seconds: float
+    compose_seconds: float
 
 
 def parse_args() -> argparse.Namespace:
@@ -119,6 +127,11 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Persist generated overlay PNGs in this directory for inspection.",
     )
+    parser.add_argument(
+        "--no-progress",
+        action="store_true",
+        help="Disable live progress updates. Final timing summaries are still shown.",
+    )
     return parser.parse_args()
 
 
@@ -144,6 +157,68 @@ def nonnegative_float(value: str) -> float:
 
 def format_seconds(value: float) -> str:
     return f"{value:g}s"
+
+
+def format_duration(seconds: float) -> str:
+    seconds = max(0.0, seconds)
+    if seconds < 60:
+        return f"{seconds:.1f}s"
+
+    total_seconds = round(seconds)
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, remaining_seconds = divmod(remainder, 60)
+    if hours:
+        return f"{hours}h {minutes:02d}m {remaining_seconds:02d}s"
+    return f"{minutes}m {remaining_seconds:02d}s"
+
+
+def parse_ffmpeg_time(value: str) -> Optional[float]:
+    parts = value.split(":")
+    if len(parts) != 3:
+        return None
+    try:
+        hours = int(parts[0])
+        minutes = int(parts[1])
+        seconds = float(parts[2])
+    except ValueError:
+        return None
+    return hours * 3600 + minutes * 60 + seconds
+
+
+class ProgressReporter:
+    def __init__(self, *, enabled: bool) -> None:
+        self.enabled = enabled
+
+    def update_units(self, phase: str, completed: int, total: int, phase_start: float) -> None:
+        if total <= 0:
+            return
+        fraction = min(1.0, max(0.0, completed / total))
+        detail = f"{completed}/{total}"
+        self.update_fraction(phase, fraction, detail, phase_start)
+
+    def update_fraction(self, phase: str, fraction: float, detail: str, phase_start: float) -> None:
+        if not self.enabled:
+            return
+
+        fraction = min(1.0, max(0.0, fraction))
+        elapsed = time.monotonic() - phase_start
+        if fraction > 0:
+            remaining = elapsed * (1 - fraction) / fraction
+            remaining_text = format_duration(remaining)
+        else:
+            remaining_text = "calculating"
+
+        message = (
+            f"{phase}: {fraction * 100:5.1f}% ({detail}) "
+            f"elapsed {format_duration(elapsed)}, remaining {remaining_text}"
+        )
+        print(f"\r{message}\033[K", end="", file=sys.stderr, flush=True)
+
+    def complete_phase(self, phase: str, phase_start: float) -> None:
+        if not self.enabled:
+            return
+        elapsed = time.monotonic() - phase_start
+        print(f"\r{phase}: complete in {format_duration(elapsed)}\033[K", file=sys.stderr, flush=True)
 
 
 def default_output_path(video_file: Path) -> Path:
@@ -503,14 +578,23 @@ def render_overlays(
     questions: list[TriviaQuestion],
     dimensions: VideoDimensions,
     output_directory: Path,
+    progress_callback: Optional[Callable[[int, int], None]] = None,
 ) -> list[tuple[Path, Path]]:
     output_directory.mkdir(parents=True, exist_ok=True)
     rendered_paths: list[tuple[Path, Path]] = []
+    total_images = len(questions) * 2
+    completed_images = 0
     for index, question in enumerate(questions, start=1):
         normal_path = output_directory / f"question_{index:04d}_normal.png"
         reveal_path = output_directory / f"question_{index:04d}_reveal.png"
         render_question_overlay(question, dimensions, normal_path, reveal_answer=False)
+        completed_images += 1
+        if progress_callback:
+            progress_callback(completed_images, total_images)
         render_question_overlay(question, dimensions, reveal_path, reveal_answer=True)
+        completed_images += 1
+        if progress_callback:
+            progress_callback(completed_images, total_images)
         rendered_paths.append((normal_path, reveal_path))
     return rendered_paths
 
@@ -591,6 +675,7 @@ def compose_video(
     answer_flash_duration: float,
     answer_flash_interval: float,
     start_delay: float,
+    progress_callback: Optional[Callable[[float], None]] = None,
 ) -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
@@ -630,15 +715,59 @@ def compose_video(
             "192k",
             "-t",
             f"{video_duration:.3f}",
+            "-progress",
+            "pipe:1",
+            "-nostats",
             "-movflags",
             "+faststart",
             str(output_file),
         ]
     )
 
-    result = subprocess.run(command, capture_output=True, text=True, check=False)
-    if result.returncode != 0:
-        message = result.stderr.strip() or "ffmpeg failed while composing the output video"
+    process = subprocess.Popen(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    stderr_lines: list[str] = []
+
+    def collect_stderr() -> None:
+        assert process.stderr is not None
+        for line in process.stderr:
+            stderr_lines.append(line)
+
+    stderr_thread = threading.Thread(target=collect_stderr, daemon=True)
+    stderr_thread.start()
+
+    assert process.stdout is not None
+    last_reported_seconds = -1.0
+    for raw_line in process.stdout:
+        line = raw_line.strip()
+        if not line or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        encoded_seconds: Optional[float] = None
+        if key in {"out_time_ms", "out_time_us"}:
+            try:
+                encoded_seconds = int(value) / 1_000_000
+            except ValueError:
+                encoded_seconds = None
+        elif key == "out_time":
+            encoded_seconds = parse_ffmpeg_time(value)
+
+        if (
+            encoded_seconds is not None
+            and progress_callback
+            and encoded_seconds > last_reported_seconds
+        ):
+            last_reported_seconds = encoded_seconds
+            progress_callback(min(video_duration, encoded_seconds))
+
+    return_code = process.wait()
+    stderr_thread.join()
+    if return_code != 0:
+        message = "".join(stderr_lines).strip() or "ffmpeg failed while composing the output video"
         raise RuntimeError(message)
 
 
@@ -655,9 +784,25 @@ def render_and_compose(
     answer_flash_interval: float,
     start_delay: float,
     overlay_dir: Optional[Path],
-) -> tuple[int, Optional[Path]]:
+    progress_reporter: ProgressReporter,
+) -> tuple[int, Optional[Path], RenderTimings]:
+    overlay_start = time.monotonic()
+
+    def report_overlay_progress(completed: int, total: int) -> None:
+        progress_reporter.update_units("Rendering overlays", completed, total, overlay_start)
+
     if overlay_dir:
-        overlay_paths = render_overlays(questions, dimensions, overlay_dir)
+        overlay_paths = render_overlays(questions, dimensions, overlay_dir, report_overlay_progress)
+        progress_reporter.complete_phase("Rendering overlays", overlay_start)
+        overlay_seconds = time.monotonic() - overlay_start
+
+        compose_start = time.monotonic()
+
+        def report_compose_progress(encoded_seconds: float) -> None:
+            fraction = encoded_seconds / video_duration if video_duration > 0 else 0.0
+            detail = f"{format_duration(encoded_seconds)}/{format_duration(video_duration)}"
+            progress_reporter.update_fraction("Composing video", fraction, detail, compose_start)
+
         compose_video(
             video_file,
             output_file,
@@ -668,11 +813,24 @@ def render_and_compose(
             answer_flash_duration=answer_flash_duration,
             answer_flash_interval=answer_flash_interval,
             start_delay=start_delay,
+            progress_callback=report_compose_progress,
         )
-        return len(overlay_paths) * 2, overlay_dir
+        progress_reporter.complete_phase("Composing video", compose_start)
+        compose_seconds = time.monotonic() - compose_start
+        return len(overlay_paths) * 2, overlay_dir, RenderTimings(overlay_seconds, compose_seconds)
 
     with TemporaryDirectory(prefix="trivia_countdown_") as temporary_directory:
-        overlay_paths = render_overlays(questions, dimensions, Path(temporary_directory))
+        overlay_paths = render_overlays(questions, dimensions, Path(temporary_directory), report_overlay_progress)
+        progress_reporter.complete_phase("Rendering overlays", overlay_start)
+        overlay_seconds = time.monotonic() - overlay_start
+
+        compose_start = time.monotonic()
+
+        def report_compose_progress(encoded_seconds: float) -> None:
+            fraction = encoded_seconds / video_duration if video_duration > 0 else 0.0
+            detail = f"{format_duration(encoded_seconds)}/{format_duration(video_duration)}"
+            progress_reporter.update_fraction("Composing video", fraction, detail, compose_start)
+
         compose_video(
             video_file,
             output_file,
@@ -683,13 +841,18 @@ def render_and_compose(
             answer_flash_duration=answer_flash_duration,
             answer_flash_interval=answer_flash_interval,
             start_delay=start_delay,
+            progress_callback=report_compose_progress,
         )
-        return len(overlay_paths) * 2, None
+        progress_reporter.complete_phase("Composing video", compose_start)
+        compose_seconds = time.monotonic() - compose_start
+        return len(overlay_paths) * 2, None, RenderTimings(overlay_seconds, compose_seconds)
 
 
 def main() -> int:
+    total_start = time.monotonic()
     args = parse_args()
     output = args.output or default_output_path(args.video_file)
+    progress_reporter = ProgressReporter(enabled=not args.no_progress)
 
     try:
         validate_input_paths(args.video_file, args.trivia_file)
@@ -758,9 +921,10 @@ def main() -> int:
         )
     else:
         print(f"Using all {len(questions)} question(s).")
+    sys.stdout.flush()
 
     try:
-        overlay_count, persisted_overlay_dir = render_and_compose(
+        overlay_count, persisted_overlay_dir, timings = render_and_compose(
             args.video_file,
             output,
             questions,
@@ -772,16 +936,22 @@ def main() -> int:
             answer_flash_interval=args.answer_flash_interval,
             start_delay=args.start_delay,
             overlay_dir=args.overlay_dir,
+            progress_reporter=progress_reporter,
         )
     except RuntimeError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
     if persisted_overlay_dir:
-        print(f"Rendered {overlay_count} overlay image(s) in {persisted_overlay_dir}.")
+        print(
+            f"Rendered {overlay_count} overlay image(s) in {persisted_overlay_dir} "
+            f"in {format_duration(timings.overlay_seconds)}."
+        )
     else:
-        print(f"Rendered {overlay_count} temporary overlay image(s).")
+        print(f"Rendered {overlay_count} temporary overlay image(s) in {format_duration(timings.overlay_seconds)}.")
+    print(f"Composed video in {format_duration(timings.compose_seconds)}.")
     print(f"Created MP4: {output}")
+    print(f"Total time: {format_duration(time.monotonic() - total_start)}.")
     return 0
 
 

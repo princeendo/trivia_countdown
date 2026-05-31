@@ -46,6 +46,7 @@ uv run python trivia_countdown.py input.mp4 trivia.csv \
   --start-delay 1.0 \
   --end-early 1.0 \
   --overlay-dir sample_objects/rendered_overlays \
+  --no-progress \
   --random \
   --seed 123
 ```
@@ -57,5 +58,7 @@ The trivia panel waits `--start-delay` seconds before showing the first question
 Trivia scheduling also reserves `--end-early` seconds at the end of the source video, so overlays finish before the video ends. If the source video ends before all trivia is shown, the output stops with the video. If trivia ends first, the source video continues without overlays.
 
 Use `--overlay-dir` to persist the generated normal and reveal PNG overlays for visual inspection. Without `--overlay-dir`, generated overlay images are temporary and deleted automatically.
+
+Live progress is shown by default for overlay rendering and video composition, including each phase's percentage, elapsed time, and estimated remaining time. Use `--no-progress` to hide live in-place progress updates. Final timing summaries are still printed, including overlay render time, video composition time, and total time.
 
 The script writes an MP4 using H.264 video and AAC audio. Non-audio/video streams from the input are ignored.
