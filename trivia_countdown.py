@@ -123,6 +123,18 @@ def parse_args() -> argparse.Namespace:
         help="Seconds before video end when trivia overlays must finish. Accepts decimals. Default: 5.",
     )
     parser.add_argument(
+        "--fade-in-time",
+        type=nonnegative_float,
+        default=0.5,
+        help="Seconds for the first trivia overlay to fade in. Accepts decimals. Use 0 to disable. Default: 0.5.",
+    )
+    parser.add_argument(
+        "--fade-out-time",
+        type=nonnegative_float,
+        default=0.5,
+        help="Seconds for the last trivia overlay to fade out. Accepts decimals. Use 0 to disable. Default: 0.5.",
+    )
+    parser.add_argument(
         "--overlay-dir",
         type=Path,
         help="Persist generated overlay PNGs in this directory for inspection.",
@@ -669,10 +681,28 @@ def write_overlay_concat_file(schedule: list[tuple[Path, float]], concat_file: P
     concat_file.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def build_filter_graph() -> str:
+def build_filter_graph(
+    *,
+    fade_in_start: float,
+    fade_in_duration: float,
+    fade_out_start: float,
+    fade_out_duration: float,
+) -> str:
+    overlay_filters = ["setpts=PTS-STARTPTS", "format=rgba"]
+    if fade_in_duration > 0 or fade_out_duration > 0:
+        overlay_filters.append("fps=fps=30:start_time=0")
+    if fade_in_duration > 0:
+        overlay_filters.append(
+            f"fade=t=in:st={fade_in_start:.6f}:d={fade_in_duration:.6f}:alpha=1"
+        )
+    if fade_out_duration > 0:
+        overlay_filters.append(
+            f"fade=t=out:st={fade_out_start:.6f}:d={fade_out_duration:.6f}:alpha=1"
+        )
+
     filters = [
         "[0:v]format=rgba[base]",
-        "[1:v]format=rgba[overlay]",
+        f"[1:v]{','.join(overlay_filters)}[overlay]",
         "[base][overlay]overlay=0:0:format=auto:eof_action=pass,format=yuv420p[vout]",
     ]
 
@@ -691,9 +721,16 @@ def compose_video(
     answer_flash_duration: float,
     answer_flash_interval: float,
     start_delay: float,
+    fade_in_time: float,
+    fade_out_time: float,
     progress_callback: Optional[Callable[[float], None]] = None,
 ) -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
+    trivia_overlay_duration = len(overlay_paths) * (question_duration + answer_duration)
+    trivia_end = start_delay + trivia_overlay_duration
+    fade_in_duration = min(fade_in_time, trivia_overlay_duration)
+    fade_out_duration = min(fade_out_time, trivia_overlay_duration)
+    fade_out_start = trivia_end - fade_out_duration
 
     with TemporaryDirectory(prefix="trivia_countdown_compose_") as compose_directory:
         compose_directory_path = Path(compose_directory)
@@ -734,7 +771,12 @@ def compose_video(
         command.extend(
             [
                 "-filter_complex",
-                build_filter_graph(),
+                build_filter_graph(
+                    fade_in_start=start_delay,
+                    fade_in_duration=fade_in_duration,
+                    fade_out_start=fade_out_start,
+                    fade_out_duration=fade_out_duration,
+                ),
                 "-map",
                 "[vout]",
                 "-map",
@@ -826,6 +868,8 @@ def render_and_compose(
     answer_flash_duration: float,
     answer_flash_interval: float,
     start_delay: float,
+    fade_in_time: float,
+    fade_out_time: float,
     overlay_dir: Optional[Path],
     progress_reporter: ProgressReporter,
 ) -> tuple[int, Optional[Path], RenderTimings]:
@@ -857,6 +901,8 @@ def render_and_compose(
             answer_flash_duration=answer_flash_duration,
             answer_flash_interval=answer_flash_interval,
             start_delay=start_delay,
+            fade_in_time=fade_in_time,
+            fade_out_time=fade_out_time,
             progress_callback=report_compose_progress,
         )
         progress_reporter.complete_phase("Composing video", compose_start)
@@ -886,6 +932,8 @@ def render_and_compose(
             answer_flash_duration=answer_flash_duration,
             answer_flash_interval=answer_flash_interval,
             start_delay=start_delay,
+            fade_in_time=fade_in_time,
+            fade_out_time=fade_out_time,
             progress_callback=report_compose_progress,
         )
         progress_reporter.complete_phase("Composing video", compose_start)
@@ -955,6 +1003,8 @@ def main() -> int:
     print(f"Answer flash interval: {format_seconds(args.answer_flash_interval)}")
     print(f"Start delay: {format_seconds(args.start_delay)}")
     print(f"End early: {format_seconds(args.end_early)}")
+    print(f"Fade in time: {format_seconds(args.fade_in_time)}")
+    print(f"Fade out time: {format_seconds(args.fade_out_time)}")
     if args.randomize:
         seed_note = f" with seed {args.seed}" if args.seed is not None else ""
         print(f"Question order: randomized{seed_note}")
@@ -980,6 +1030,8 @@ def main() -> int:
             answer_flash_duration=args.answer_flash_duration,
             answer_flash_interval=args.answer_flash_interval,
             start_delay=args.start_delay,
+            fade_in_time=args.fade_in_time,
+            fade_out_time=args.fade_out_time,
             overlay_dir=args.overlay_dir,
             progress_reporter=progress_reporter,
         )
