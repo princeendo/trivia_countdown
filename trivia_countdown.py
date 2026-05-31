@@ -83,22 +83,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--duration",
         type=positive_float,
-        default=15.0,
-        help="Seconds to show each question before revealing the answer. Accepts decimals. Default: 15.",
+        default=10.0,
+        help="Seconds to show each question before revealing the answer. Accepts decimals. Default: 10.",
     )
     parser.add_argument(
         "--answer-duration",
         type=positive_float,
-        default=3.0,
-        help="Approximate seconds to highlight the correct answer. Accepts decimals. Default: 3.",
+        default=2.5,
+        help="Approximate seconds to highlight the correct answer. Accepts decimals. Default: 2.5.",
     )
     parser.add_argument(
         "--answer-flash-duration",
         type=nonnegative_float,
-        default=1.0,
+        default=1.5,
         help=(
             "Seconds for the answer to alternate between normal and highlighted before staying solid. "
-            "Accepts decimals. Use 0 to disable blinking. Default: 1."
+            "Accepts decimals. Use 0 to disable blinking. Default: 1.5."
         ),
     )
     parser.add_argument(
@@ -113,14 +113,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--start-delay",
         type=nonnegative_float,
-        default=5.0,
-        help="Seconds to wait before showing the first trivia overlay. Accepts decimals. Default: 5.",
+        default=10.0,
+        help="Seconds to wait before showing the first trivia overlay. Accepts decimals. Default: 10.",
     )
     parser.add_argument(
         "--end-early",
         type=nonnegative_float,
-        default=5.0,
-        help="Seconds before video end when trivia overlays must finish. Accepts decimals. Default: 5.",
+        default=15.0,
+        help="Seconds before video end when trivia overlays must finish. Accepts decimals. Default: 15.",
     )
     parser.add_argument(
         "--fade-in-time",

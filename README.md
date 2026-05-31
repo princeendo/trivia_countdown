@@ -39,12 +39,12 @@ Optional arguments:
 ```sh
 uv run python trivia_countdown.py input.mp4 trivia.csv \
   --output output.mp4 \
-  --duration 15.5 \
-  --answer-duration 3.25 \
-  --answer-flash-duration 1.0 \
+  --duration 10 \
+  --answer-duration 2.5 \
+  --answer-flash-duration 1.5 \
   --answer-flash-interval 0.2 \
-  --start-delay 1.0 \
-  --end-early 1.0 \
+  --start-delay 10 \
+  --end-early 15 \
   --fade-in-time 0.5 \
   --fade-out-time 0.5 \
   --overlay-dir sample_objects/rendered_overlays \
