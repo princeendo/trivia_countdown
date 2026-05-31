@@ -7,7 +7,7 @@ Generate an MP4 trivia countdown video by overlaying question and answer panels 
 This project uses `uv` for Python dependency management and requires system `ffmpeg` and `ffprobe` to be installed.
 
 ```sh
-uv sync
+. ./setup_venv.sh
 ```
 
 ## Trivia CSV Format
