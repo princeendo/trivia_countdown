@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import random
 import shutil
 import subprocess
@@ -31,9 +32,6 @@ REQUIRED_COLUMNS = [
     "answer_4",
     "correct_answer",
 ]
-
-TRANSITION_FPS = 30
-
 
 @dataclass(frozen=True)
 class TriviaQuestion:
@@ -317,6 +315,57 @@ def get_video_duration(video_file: Path) -> float:
     if duration <= 0:
         raise RuntimeError("Input video duration must be greater than zero")
     return duration
+
+
+def parse_frame_rate(value: object) -> Optional[float]:
+    if not isinstance(value, str) or not value:
+        return None
+    try:
+        if "/" in value:
+            numerator_text, denominator_text = value.split("/", 1)
+            denominator = float(denominator_text)
+            if denominator == 0:
+                return None
+            frame_rate = float(numerator_text) / denominator
+        else:
+            frame_rate = float(value)
+    except ValueError:
+        return None
+
+    if not math.isfinite(frame_rate) or frame_rate <= 0:
+        return None
+    return frame_rate
+
+
+def get_video_fps(video_file: Path) -> float:
+    command = [
+        "ffprobe",
+        "-v",
+        "error",
+        "-select_streams",
+        "v:0",
+        "-show_entries",
+        "stream=avg_frame_rate,r_frame_rate",
+        "-of",
+        "json",
+        str(video_file),
+    ]
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    if result.returncode != 0:
+        message = result.stderr.strip() or "ffprobe failed to inspect the input video FPS"
+        raise RuntimeError(message)
+
+    try:
+        stream = json.loads(result.stdout).get("streams", [])[0]
+    except (IndexError, TypeError, json.JSONDecodeError) as exc:
+        raise RuntimeError("Could not determine input video FPS") from exc
+
+    for key in ("avg_frame_rate", "r_frame_rate"):
+        frame_rate = parse_frame_rate(stream.get(key))
+        if frame_rate is not None:
+            return frame_rate
+
+    raise RuntimeError("Could not determine input video FPS")
 
 
 def validate_input_paths(video_file: Path, trivia_file: Path) -> None:
@@ -613,11 +662,12 @@ def render_transition_frames(
     output_directory: Path,
     transition_name: str,
     duration: float,
+    fps: float,
 ) -> tuple[TransitionFrame, ...]:
     if duration <= 0:
         return ()
 
-    frame_count = max(1, round(duration * TRANSITION_FPS))
+    frame_count = max(1, round(duration * fps))
     frame_duration = duration / frame_count
     frames: list[TransitionFrame] = []
 
@@ -638,11 +688,12 @@ def render_overlays(
     dimensions: VideoDimensions,
     output_directory: Path,
     mid_question_fade: float,
+    video_fps: float,
     progress_callback: Optional[Callable[[int, int], None]] = None,
 ) -> list[RenderedOverlay]:
     output_directory.mkdir(parents=True, exist_ok=True)
     rendered_paths: list[RenderedOverlay] = []
-    transition_frame_count = max(1, round(mid_question_fade * TRANSITION_FPS)) if mid_question_fade > 0 else 0
+    transition_frame_count = max(1, round(mid_question_fade * video_fps)) if mid_question_fade > 0 else 0
     total_images = len(questions) * 2 + max(0, len(questions) - 1) * transition_frame_count
     completed_images = 0
     for index, question in enumerate(questions, start=1):
@@ -670,6 +721,7 @@ def render_overlays(
                     output_directory,
                     f"question_{index + 1:04d}_to_{index + 2:04d}_transition",
                     mid_question_fade,
+                    video_fps,
                 )
                 completed_images += len(transition_frames)
                 if progress_callback:
@@ -759,6 +811,7 @@ def write_overlay_concat_file(schedule: list[tuple[Path, float]], concat_file: P
 
 def build_filter_graph(
     *,
+    video_fps: float,
     fade_in_start: float,
     fade_in_duration: float,
     fade_out_start: float,
@@ -766,7 +819,7 @@ def build_filter_graph(
 ) -> str:
     overlay_filters = ["setpts=PTS-STARTPTS", "format=rgba"]
     if fade_in_duration > 0 or fade_out_duration > 0:
-        overlay_filters.append("fps=fps=30:start_time=0")
+        overlay_filters.append(f"fps=fps={video_fps:.6f}:start_time=0")
     if fade_in_duration > 0:
         overlay_filters.append(
             f"fade=t=in:st={fade_in_start:.6f}:d={fade_in_duration:.6f}:alpha=1"
@@ -792,6 +845,7 @@ def compose_video(
     dimensions: VideoDimensions,
     *,
     video_duration: float,
+    video_fps: float,
     question_duration: float,
     answer_duration: float,
     answer_flash_duration: float,
@@ -848,6 +902,7 @@ def compose_video(
             [
                 "-filter_complex",
                 build_filter_graph(
+                    video_fps=video_fps,
                     fade_in_start=start_delay,
                     fade_in_duration=fade_in_duration,
                     fade_out_start=fade_out_start,
@@ -939,6 +994,7 @@ def render_and_compose(
     dimensions: VideoDimensions,
     *,
     video_duration: float,
+    video_fps: float,
     question_duration: float,
     answer_duration: float,
     answer_flash_duration: float,
@@ -956,7 +1012,14 @@ def render_and_compose(
         progress_reporter.update_units("Rendering overlays", completed, total, overlay_start)
 
     if overlay_dir:
-        overlay_paths = render_overlays(questions, dimensions, overlay_dir, mid_question_fade, report_overlay_progress)
+        overlay_paths = render_overlays(
+            questions,
+            dimensions,
+            overlay_dir,
+            mid_question_fade,
+            video_fps,
+            report_overlay_progress,
+        )
         progress_reporter.complete_phase("Rendering overlays", overlay_start)
         overlay_seconds = time.monotonic() - overlay_start
 
@@ -973,6 +1036,7 @@ def render_and_compose(
             overlay_paths,
             dimensions,
             video_duration=video_duration,
+            video_fps=video_fps,
             question_duration=question_duration,
             answer_duration=answer_duration,
             answer_flash_duration=answer_flash_duration,
@@ -993,6 +1057,7 @@ def render_and_compose(
             dimensions,
             Path(temporary_directory),
             mid_question_fade,
+            video_fps,
             report_overlay_progress,
         )
         progress_reporter.complete_phase("Rendering overlays", overlay_start)
@@ -1011,6 +1076,7 @@ def render_and_compose(
             overlay_paths,
             dimensions,
             video_duration=video_duration,
+            video_fps=video_fps,
             question_duration=question_duration,
             answer_duration=answer_duration,
             answer_flash_duration=answer_flash_duration,
@@ -1038,6 +1104,7 @@ def main() -> int:
         require_executable("ffprobe")
         dimensions = get_video_dimensions(args.video_file)
         video_duration = get_video_duration(args.video_file)
+        video_fps = get_video_fps(args.video_file)
         questions = order_questions(
             load_trivia(args.trivia_file),
             randomize=args.randomize,
@@ -1083,6 +1150,7 @@ def main() -> int:
     print(f"Input video: {args.video_file}")
     print(f"Video dimensions: {dimensions.width}x{dimensions.height}")
     print(f"Video duration: {video_duration:.1f}s")
+    print(f"Video FPS: {video_fps:.3f}")
     print(f"Output video: {output}")
     print(f"Question duration: {format_seconds(args.duration)}")
     print(f"Answer highlight duration: approximately {format_seconds(args.answer_duration)}")
@@ -1113,6 +1181,7 @@ def main() -> int:
             questions,
             dimensions,
             video_duration=video_duration,
+            video_fps=video_fps,
             question_duration=args.duration,
             answer_duration=args.answer_duration,
             answer_flash_duration=args.answer_flash_duration,
