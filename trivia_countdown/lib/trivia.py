@@ -2,34 +2,31 @@
 
 from __future__ import annotations
 
+import csv
 import random
 from pathlib import Path
 from typing import Optional
-
-import pandas as pd
 
 from .models import REQUIRED_COLUMNS, TriviaQuestion
 
 
 def load_trivia(path: Path) -> list[TriviaQuestion]:
-    try:
-        dataframe = pd.read_csv(path, encoding="utf-8-sig", dtype=str)
-    except pd.errors.EmptyDataError as exc:
-        raise ValueError("Trivia CSV is empty") from exc
+    with path.open("r", newline="", encoding="utf-8-sig") as trivia_file:
+        reader = csv.DictReader(trivia_file)
+        fieldnames = reader.fieldnames or []
 
-    fieldnames = list(dataframe.columns)
-    if not fieldnames:
-        raise ValueError("Trivia CSV is empty")
+        if not fieldnames:
+            raise ValueError("Trivia CSV is empty")
 
-    missing_columns = [column for column in REQUIRED_COLUMNS if column not in fieldnames]
-    if missing_columns:
-        raise ValueError(f"Trivia CSV is missing required columns: {', '.join(missing_columns)}")
+        missing_columns = [column for column in REQUIRED_COLUMNS if column not in fieldnames]
+        if missing_columns:
+            raise ValueError(f"Trivia CSV is missing required columns: {', '.join(missing_columns)}")
 
-    trimmed_dataframe = dataframe[REQUIRED_COLUMNS].fillna("")
-    questions = [
-        parse_trivia_row(row_number, row)
-        for row_number, row in enumerate(trimmed_dataframe.to_dict("records"), start=2)
-    ]
+        questions = [
+            parse_trivia_row(row_number, row)
+            for row_number, row in enumerate(reader, start=2)
+            if any((row.get(column) or "").strip() for column in fieldnames)
+        ]
 
     if not questions:
         raise ValueError("Trivia CSV does not contain any questions")
