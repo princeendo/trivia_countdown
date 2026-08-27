@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 if [ -n "${BASH_VERSION:-}" ]; then
   SCRIPT_PATH="${BASH_SOURCE[0]}"
@@ -20,17 +19,38 @@ else
   SOURCED=0
 fi
 
+# Do not change the caller's shell options when this file is sourced.
+if [ "$SOURCED" -eq 0 ]; then
+  set -euo pipefail
+fi
+
 if ! command -v uv >/dev/null 2>&1; then
   echo "Error: uv is required but was not found on PATH." >&2
   echo "Install uv, then run this script again." >&2
-  return 1 2>/dev/null || exit 1
+  if [ "$SOURCED" -eq 1 ]; then
+    return 1
+  fi
+  exit 1
 fi
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "$SCRIPT_PATH")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR"
 
-cd "$PROJECT_ROOT"
-uv sync
+if ! cd "$PROJECT_ROOT"; then
+  echo "Error: could not change to project directory: $PROJECT_ROOT" >&2
+  if [ "$SOURCED" -eq 1 ]; then
+    return 1
+  fi
+  exit 1
+fi
+
+if ! uv sync; then
+  echo "Error: uv sync failed." >&2
+  if [ "$SOURCED" -eq 1 ]; then
+    return 1
+  fi
+  exit 1
+fi
 
 if [ "$SOURCED" -eq 0 ]; then
   echo "Virtual environment is ready at $PROJECT_ROOT/.venv"
@@ -38,6 +58,9 @@ if [ "$SOURCED" -eq 0 ]; then
   echo ". ./setup_venv.sh"
 else
   # shellcheck source=/dev/null
-  . "$PROJECT_ROOT/.venv/bin/activate"
+  if ! . "$PROJECT_ROOT/.venv/bin/activate"; then
+    echo "Error: could not activate the virtual environment." >&2
+    return 1
+  fi
   echo "Virtual environment activated: $VIRTUAL_ENV"
 fi
