@@ -4,6 +4,22 @@ Run all commands in this guide from the Trivia Countdown project folder.
 
 ## Create a Video
 
+### Desktop interface
+
+Launch the desktop interface from the project folder:
+
+```sh
+uv run python make_trivia_countdown_gui.py
+```
+
+On the **Main** tab, choose a source video and trivia CSV. The output path initially defaults to `<source-name>_trivia_countdown.mp4` beside the source video, and can be changed with **Output**. The preview is a static frame extracted at the selected question's scheduled start time, composited with the normal or answer-reveal overlay; it is not video playback.
+
+The **Advanced** tab exposes the question-order, timing, flashing, fade, and retained-overlay options listed below with the same defaults as the command line. **Keep generated overlay PNGs** is off by default. When enabled, choose an optional directory or let the GUI create `<output-name>_overlays` beside the output MP4. The **Questions** tab is a read-only, scrollable view of the CSV; its correct answer cells are highlighted, selected rows have a dark outline, and selecting a row updates the Main preview. Use the mouse wheel while hovering over the table to scroll it.
+
+Select **Create Video** to validate and render. Separate overlay-generation and video-composition progress bars show their current percentage and estimated time remaining. **Cancel Render** stops the active job. The GUI asks before replacing an existing output, and a cancelled or failed render leaves the existing output unchanged.
+
+### Command line
+
 Pass the source video and trivia CSV as the two required arguments:
 
 ```sh
@@ -126,7 +142,8 @@ uv run python make_trivia_countdown.py --help
 - Source audio is included when present and encoded as AAC.
 - Non-video and non-audio streams, such as embedded subtitles, are not copied.
 - Source metadata is copied where FFmpeg supports it.
-- An existing output file at the selected path is overwritten without confirmation.
+- The command line overwrites an existing output file at the selected path without confirmation.
+- The GUI asks before replacing an existing output. A successful render is encoded to a temporary sibling file and then replaces the output.
 - Generated overlay PNGs are temporary and deleted automatically unless `--overlay-dir` is used.
 
 ---

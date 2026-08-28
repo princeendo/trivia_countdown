@@ -31,7 +31,7 @@ Which element has the chemical symbol O?,Gold,Oxygen,Silver,Iron,2
 - Additional columns are allowed and ignored.
 - Files may use UTF-8 with or without a byte order mark.
 
-If the file is invalid, the command reports the affected row and the value that needs attention.
+If the file is invalid, the command or GUI reports the affected row and the value that needs attention. In the GUI, choose the CSV on the Main tab; its rows appear in the Questions tab after validation.
 
 ## Using a Spreadsheet
 
@@ -48,7 +48,7 @@ Spreadsheet applications handle commas and quotation marks in cells when exporti
 
 Question and answer text wraps and shrinks automatically. Short, direct wording will remain easier to read, especially in answer choices. Render a small test before processing a long video when your questions contain lengthy text.
 
-Use `--overlay-dir preview_overlays` to keep the generated PNG files when you want to inspect the panel layout. See [Usage and Command Reference](03-usage-and-reference.md#output-and-question-order) for details.
+The GUI Main tab displays a static source-video frame with the selected question overlay. Select a row in the Questions tab to inspect that question, and enable the answer-reveal checkbox to verify the highlighted choice. Use `--overlay-dir preview_overlays` to keep full-resolution PNG files when you need to inspect command-line renders. See [Usage and Command Reference](03-usage-and-reference.md#output-and-question-order) for details.
 
 ## Sample File
 

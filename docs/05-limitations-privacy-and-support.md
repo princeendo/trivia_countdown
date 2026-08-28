@@ -7,7 +7,7 @@
 - The layout is intended primarily for landscape video. Portrait and unusual aspect ratios may not produce an ideal composition.
 - Text fitting is automatic, but very long wording may become too small for comfortable viewing.
 - One source video and one trivia CSV are processed per command.
-- The tool creates a finished video; it does not provide an interactive visual editor.
+- The GUI provides static frame-and-overlay previews and a read-only question inspector; it does not provide video playback, a timeline editor, or CSV editing.
 
 ## Privacy
 
@@ -23,7 +23,7 @@ Do not share private videos or trivia files when requesting help unless you are 
 
 When asking the project maintainer or community for help, provide:
 
-- The full command you ran, with sensitive paths removed if necessary
+- The full command you ran, with sensitive paths removed if necessary, or that you launched `make_trivia_countdown_gui.py`
 - The complete error message
 - Your macOS version
 - The output of `uv --version` and `ffmpeg -version`

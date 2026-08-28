@@ -8,7 +8,7 @@ Trivia Countdown runs locally on your Mac. It does not upload your video or triv
 
 ## Quick Start
 
-Trivia Countdown is currently supported on macOS. You will need a source video, [Homebrew](https://brew.sh/), and access to the Terminal application. This repository includes sample trivia questions but does not include a source video.
+Trivia Countdown is currently supported on macOS. You will need a source video, [Homebrew](https://brew.sh/), and access to the Terminal application to launch the application. This repository includes sample trivia questions but does not include a source video.
 
 1. On the [GitHub project page](https://github.com/princeendo/trivia_countdown), select **Code**, then **Download ZIP**, and extract the downloaded file.
 2. Open the extracted project folder in Terminal.
@@ -19,7 +19,17 @@ brew install uv ffmpeg
 . ./setup_venv.sh
 ```
 
-4. Replace the example path below with your source video and render the five-question sample:
+4. Launch the desktop interface:
+
+```sh
+uv run python make_trivia_countdown_gui.py
+```
+
+Choose your source video and CSV, confirm the generated output path, then select **Create Video**. The Main tab shows a static source-video frame with the selected trivia overlay and separate progress bars for panel generation and video composition. Use **Advanced** to change the command-line timing defaults and **Questions** to inspect the CSV and select the previewed question.
+
+The GUI confirms before replacing an existing file and supports cancellation. It writes a temporary MP4 and replaces the selected output only after a successful render.
+
+5. Alternatively, replace the example path below with your source video and render the five-question sample from the command line:
 
 ```sh
 uv run python make_trivia_countdown.py \

@@ -47,19 +47,25 @@ Run:
 . ./setup_venv.sh
 ```
 
-The script creates a local `.venv` environment, installs the project dependencies, and activates the environment in the current Terminal session.
+The script creates a local `.venv` environment, installs the project dependencies, and activates the environment in the current Terminal session. The desktop interface uses Python's built-in Tkinter module, which is included with the supported uv-managed Python builds.
 
 You only need to repeat this setup after downloading a new copy of the project or when its dependencies change. The documented `uv run` commands work from a new Terminal session without manually activating `.venv` again.
 
 ## 5. Verify the Installation
 
-Run:
+Run either command:
+
+```sh
+uv run python make_trivia_countdown_gui.py
+```
+
+The GUI opens a desktop window with Main, Advanced, and Questions tabs. Or verify the command-line interface with:
 
 ```sh
 uv run python make_trivia_countdown.py --help
 ```
 
-You should see the available arguments and options. If the command fails, see [Troubleshooting](04-troubleshooting.md).
+You should see the desktop window or the available command-line arguments and options. If a GUI command reports that Tkinter is unavailable, use a Python build with Tcl/Tk support. For other failures, see [Troubleshooting](04-troubleshooting.md).
 
 ## Next Step
 

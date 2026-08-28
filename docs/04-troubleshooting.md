@@ -12,6 +12,18 @@ Run `brew install uv`. If Homebrew reports that `uv` is already installed, open 
 
 Run `brew install ffmpeg`. The Homebrew FFmpeg package supplies both commands.
 
+## The Desktop Interface Does Not Open
+
+Launch it from the project folder with `uv run python make_trivia_countdown_gui.py`. If it reports that Tkinter is unavailable, use a Python installation that includes Tcl/Tk support, then run `. ./setup_venv.sh` again. The project is currently verified on macOS.
+
+## The Preview Is Unavailable or Looks Different From the Video
+
+The GUI preview is a single frame extracted by FFmpeg, not embedded video playback. Confirm that FFmpeg can read the source video and select a different question if its scheduled timestamp is close to the end of the video. The source file is never modified.
+
+## I Cancelled a Render
+
+The GUI stops rendering as soon as the active image or FFmpeg operation reaches a cancellation check. A partially encoded temporary file is removed, and an existing selected output remains unchanged. It can take a short time for FFmpeg to stop after selecting **Cancel Render**.
+
 ## `Video file does not exist` or `Trivia CSV does not exist`
 
 Confirm the path and keep it in quotation marks if any folder or filename contains spaces. Dragging the file from Finder into Terminal is a reliable way to insert its full path.

@@ -4,15 +4,18 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import shutil
 import subprocess
 import threading
+from io import BytesIO
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory, mkstemp
 from typing import Callable, Optional
 
 from PIL import Image
 
+from .cancellation import RenderCancelled, check_cancelled
 from .models import RenderedOverlay, VideoDimensions
 
 
@@ -133,6 +136,40 @@ def get_video_fps(video_file: Path) -> float:
             return frame_rate
 
     raise RuntimeError("Could not determine input video FPS")
+
+
+def extract_video_still(video_file: Path, timestamp: float) -> Image.Image:
+    """Return a PNG-decoded frame suitable for a static UI preview."""
+    if not math.isfinite(timestamp) or timestamp < 0:
+        raise ValueError("Preview timestamp must be a finite non-negative number")
+    result = subprocess.run(
+        [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-ss",
+            f"{timestamp:.3f}",
+            "-i",
+            str(video_file),
+            "-frames:v",
+            "1",
+            "-f",
+            "image2pipe",
+            "-vcodec",
+            "png",
+            "pipe:1",
+        ],
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        message = result.stderr.decode(errors="replace").strip() or "ffmpeg failed to extract a preview frame"
+        raise RuntimeError(message)
+    try:
+        with Image.open(BytesIO(result.stdout)) as frame:
+            return frame.convert("RGBA")
+    except OSError as exc:
+        raise RuntimeError("Could not decode the preview frame") from exc
 
 
 def parse_ffmpeg_time(value: str) -> Optional[float]:
@@ -268,8 +305,10 @@ def compose_video(
     fade_in_time: float,
     fade_out_time: float,
     progress_callback: Optional[Callable[[float], None]] = None,
+    cancel_check: Optional[Callable[[], bool]] = None,
 ) -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
+    check_cancelled(cancel_check)
     trivia_overlay_duration = len(overlay_paths) * (question_duration + answer_duration)
     trivia_end = start_delay + trivia_overlay_duration
     fade_in_duration = min(fade_in_time, trivia_overlay_duration)
@@ -299,6 +338,13 @@ def compose_video(
             concat_file,
         )
 
+        file_descriptor, partial_output_name = mkstemp(
+            prefix=f".{output_file.stem}.",
+            suffix=".mp4",
+            dir=output_file.parent,
+        )
+        os.close(file_descriptor)
+        partial_output = Path(partial_output_name)
         command = [
             "ffmpeg",
             "-y",
@@ -347,55 +393,75 @@ def compose_video(
                 "-nostats",
                 "-movflags",
                 "+faststart",
-                str(output_file),
+                str(partial_output),
             ]
         )
-
-        process = subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-        )
+        process: Optional[subprocess.Popen[str]] = None
+        stderr_thread: Optional[threading.Thread] = None
         stderr_lines: list[str] = []
-
-        def collect_stderr() -> None:
-            assert process.stderr is not None
-            for line in process.stderr:
-                stderr_lines.append(line)
-
-        stderr_thread = threading.Thread(target=collect_stderr, daemon=True)
-        stderr_thread.start()
-
-        assert process.stdout is not None
-        last_reported_seconds = -1.0
-        for raw_line in process.stdout:
-            line = raw_line.strip()
-            if not line or "=" not in line:
-                continue
-            key, value = line.split("=", 1)
-            encoded_seconds: Optional[float] = None
-            if key in {"out_time_ms", "out_time_us"}:
-                try:
-                    encoded_seconds = int(value) / 1_000_000
-                except ValueError:
-                    encoded_seconds = None
-            elif key == "out_time":
-                encoded_seconds = parse_ffmpeg_time(value)
-
-            if (
-                encoded_seconds is not None
-                and progress_callback
-                and encoded_seconds > last_reported_seconds
-            ):
-                last_reported_seconds = encoded_seconds
-                progress_callback(min(video_duration, encoded_seconds))
-
-        return_code = process.wait()
-        stderr_thread.join()
-        if return_code != 0:
-            message = (
-                "".join(stderr_lines).strip()
-                or "ffmpeg failed while composing the output video"
+        try:
+            process = subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
             )
-            raise RuntimeError(message)
+
+            def collect_stderr() -> None:
+                assert process is not None and process.stderr is not None
+                for line in process.stderr:
+                    stderr_lines.append(line)
+
+            stderr_thread = threading.Thread(target=collect_stderr, daemon=True)
+            stderr_thread.start()
+
+            assert process.stdout is not None
+            last_reported_seconds = -1.0
+            for raw_line in process.stdout:
+                if cancel_check and cancel_check():
+                    process.terminate()
+                    try:
+                        process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                    raise RenderCancelled("Render cancelled")
+                line = raw_line.strip()
+                if not line or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                encoded_seconds: Optional[float] = None
+                if key in {"out_time_ms", "out_time_us"}:
+                    try:
+                        encoded_seconds = int(value) / 1_000_000
+                    except ValueError:
+                        encoded_seconds = None
+                elif key == "out_time":
+                    encoded_seconds = parse_ffmpeg_time(value)
+
+                if (
+                    encoded_seconds is not None
+                    and progress_callback
+                    and encoded_seconds > last_reported_seconds
+                ):
+                    last_reported_seconds = encoded_seconds
+                    progress_callback(min(video_duration, encoded_seconds))
+
+            return_code = process.wait()
+            if return_code != 0:
+                message = "".join(stderr_lines).strip() or "ffmpeg failed while composing the output video"
+                raise RuntimeError(message)
+            partial_output.replace(output_file)
+        finally:
+            if process and process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+            if stderr_thread:
+                stderr_thread.join()
+            if process and process.stdout:
+                process.stdout.close()
+            if process and process.stderr:
+                process.stderr.close()
+            partial_output.unlink(missing_ok=True)

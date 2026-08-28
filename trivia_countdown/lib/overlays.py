@@ -7,6 +7,7 @@ from typing import Callable, Optional
 
 from PIL import Image, ImageDraw, ImageFont
 
+from .cancellation import check_cancelled
 from .models import Font, PanelLayout, RenderedOverlay, TransitionFrame, TriviaQuestion, VideoDimensions
 
 
@@ -181,6 +182,15 @@ def render_question_overlay(
     *,
     reveal_answer: bool,
 ) -> None:
+    render_question_image(question, dimensions, reveal_answer=reveal_answer).save(output_path)
+
+
+def render_question_image(
+    question: TriviaQuestion,
+    dimensions: VideoDimensions,
+    *,
+    reveal_answer: bool,
+) -> Image.Image:
     layout = build_panel_layout(dimensions)
     image = Image.new("RGBA", (dimensions.width, dimensions.height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
@@ -209,7 +219,7 @@ def render_question_overlay(
             bold=True,
         )
 
-    image.save(output_path)
+    return image
 
 
 def render_transition_frames(
@@ -219,6 +229,7 @@ def render_transition_frames(
     transition_name: str,
     duration: float,
     fps: float,
+    cancel_check: Optional[Callable[[], bool]] = None,
 ) -> tuple[TransitionFrame, ...]:
     if duration <= 0:
         return ()
@@ -231,6 +242,7 @@ def render_transition_frames(
         start_image = start_file.convert("RGBA")
         end_image = end_file.convert("RGBA")
         for frame_index in range(1, frame_count + 1):
+            check_cancelled(cancel_check)
             alpha = frame_index / frame_count
             frame_path = output_directory / f"{transition_name}_{frame_index:04d}.png"
             Image.blend(start_image, end_image, alpha).save(frame_path)
@@ -246,6 +258,7 @@ def render_overlays(
     mid_question_fade: float,
     video_fps: float,
     progress_callback: Optional[Callable[[int, int], None]] = None,
+    cancel_check: Optional[Callable[[], bool]] = None,
 ) -> list[RenderedOverlay]:
     output_directory.mkdir(parents=True, exist_ok=True)
     rendered_paths: list[RenderedOverlay] = []
@@ -253,6 +266,7 @@ def render_overlays(
     total_images = len(questions) * 2 + max(0, len(questions) - 1) * transition_frame_count
     completed_images = 0
     for index, question in enumerate(questions, start=1):
+        check_cancelled(cancel_check)
         normal_path = output_directory / f"question_{index:04d}_normal.png"
         reveal_path = output_directory / f"question_{index:04d}_reveal.png"
         render_question_overlay(question, dimensions, normal_path, reveal_answer=False)
@@ -269,6 +283,7 @@ def render_overlays(
     if mid_question_fade > 0:
         overlays_with_transitions: list[RenderedOverlay] = []
         for index, overlay in enumerate(rendered_paths):
+            check_cancelled(cancel_check)
             transition_frames: tuple[TransitionFrame, ...] = ()
             if index < len(rendered_paths) - 1:
                 transition_frames = render_transition_frames(
@@ -278,6 +293,7 @@ def render_overlays(
                     f"question_{index + 1:04d}_to_{index + 2:04d}_transition",
                     mid_question_fade,
                     video_fps,
+                    cancel_check,
                 )
                 completed_images += len(transition_frames)
                 if progress_callback:

@@ -1,1 +1,1 @@
-"""Implementation helpers for the trivia countdown CLI."""
+"""Implementation helpers for Trivia Countdown interfaces."""

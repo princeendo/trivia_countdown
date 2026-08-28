@@ -7,16 +7,15 @@ import sys
 import time
 from pathlib import Path
 
-from .lib.pipeline import render_and_compose
-from .lib.progress import ProgressReporter, format_duration, format_seconds
-from .lib.trivia import load_trivia, max_full_questions_for_video, order_questions
-from .lib.video import (
-    get_video_dimensions,
-    get_video_duration,
-    get_video_fps,
-    require_executable,
-    validate_input_paths,
+from .app import (
+    ProgressEvent,
+    RenderOptions,
+    RenderRequest,
+    default_output_path,
+    prepare_render,
+    run_render,
 )
+from .lib.progress import ProgressReporter, format_duration, format_seconds
 
 
 def parse_args() -> argparse.Namespace:
@@ -130,69 +129,40 @@ def nonnegative_float(value: str) -> float:
     return parsed
 
 
-def default_output_path(video_file: Path) -> Path:
-    return video_file.with_name(f"{video_file.stem}_trivia_countdown.mp4")
-
-
 def main() -> int:
     total_start = time.monotonic()
     args = parse_args()
     output = args.output or default_output_path(args.video_file)
     progress_reporter = ProgressReporter(enabled=not args.no_progress)
+    options = RenderOptions(
+        randomize=args.randomize,
+        seed=args.seed,
+        question_duration=args.duration,
+        answer_duration=args.answer_duration,
+        answer_flash_duration=args.answer_flash_duration,
+        answer_flash_interval=args.answer_flash_interval,
+        start_delay=args.start_delay,
+        end_early=args.end_early,
+        fade_in_time=args.fade_in_time,
+        fade_out_time=args.fade_out_time,
+        mid_question_fade=args.mid_question_fade,
+        overlay_dir=args.overlay_dir,
+    )
 
     try:
-        validate_input_paths(args.video_file, args.trivia_file)
-        require_executable("ffmpeg")
-        require_executable("ffprobe")
-        dimensions = get_video_dimensions(args.video_file)
-        video_duration = get_video_duration(args.video_file)
-        video_fps = get_video_fps(args.video_file)
-        questions = order_questions(
-            load_trivia(args.trivia_file),
-            randomize=args.randomize,
-            seed=args.seed,
-        )
-        max_questions = max_full_questions_for_video(
-            video_duration,
-            args.duration,
-            args.answer_duration,
-            start_delay=args.start_delay,
-            end_early=args.end_early,
-        )
-        if args.answer_flash_duration > args.answer_duration:
-            raise ValueError("--answer-flash-duration cannot exceed --answer-duration")
-        if args.mid_question_fade > args.answer_duration:
-            raise ValueError("--mid-question-fade cannot exceed --answer-duration")
+        prepared = prepare_render(RenderRequest(args.video_file, args.trivia_file, output, options))
     except (RuntimeError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
-    if max_questions <= 0:
-        print(
-            "error: Input video is too short to show even one full trivia question",
-            file=sys.stderr,
-        )
-        return 1
+    for warning in prepared.warnings:
+        print(f"warning: {warning}", file=sys.stderr)
 
-    if args.duration < 1.0:
-        print(
-            f"warning: Question duration {format_seconds(args.duration)} is less than 1.0s and may be hard to read.",
-            file=sys.stderr,
-        )
-    if args.answer_duration < 1.0:
-        print(
-            f"warning: Answer highlight duration {format_seconds(args.answer_duration)} is less than 1.0s and may be hard to notice.",
-            file=sys.stderr,
-        )
-
-    validated_question_count = len(questions)
-    questions = questions[:max_questions]
-
-    print(f"Validated {validated_question_count} trivia question(s).")
+    print(f"Validated {prepared.validated_question_count} trivia question(s).")
     print(f"Input video: {args.video_file}")
-    print(f"Video dimensions: {dimensions.width}x{dimensions.height}")
-    print(f"Video duration: {video_duration:.1f}s")
-    print(f"Video FPS: {video_fps:.3f}")
+    print(f"Video dimensions: {prepared.video.dimensions.width}x{prepared.video.dimensions.height}")
+    print(f"Video duration: {prepared.video.duration:.1f}s")
+    print(f"Video FPS: {prepared.video.fps:.3f}")
     print(f"Output video: {output}")
     print(f"Question duration: {format_seconds(args.duration)}")
     print(f"Answer highlight duration: approximately {format_seconds(args.answer_duration)}")
@@ -208,45 +178,40 @@ def main() -> int:
         print(f"Question order: randomized{seed_note}")
     else:
         print("Question order: CSV order")
-    if len(questions) < validated_question_count:
+    if len(prepared.questions) < prepared.validated_question_count:
         print(
-            f"Using {len(questions)} of {validated_question_count} question(s) based on video length."
+            f"Using {len(prepared.questions)} of {prepared.validated_question_count} question(s) based on video length."
         )
     else:
-        print(f"Using all {len(questions)} question(s).")
+        print(f"Using all {len(prepared.questions)} question(s).")
     sys.stdout.flush()
 
+    phase_starts: dict[str, float] = {}
+
+    def report_progress(event: ProgressEvent) -> None:
+        phase_start = phase_starts.setdefault(event.phase, time.monotonic())
+        progress_reporter.update_fraction(event.phase, event.fraction, event.detail, phase_start)
+        if event.fraction >= 1:
+            progress_reporter.complete_phase(event.phase, phase_start)
+            phase_starts.pop(event.phase, None)
+
     try:
-        overlay_count, persisted_overlay_dir, timings = render_and_compose(
-            args.video_file,
-            output,
-            questions,
-            dimensions,
-            video_duration=video_duration,
-            video_fps=video_fps,
-            question_duration=args.duration,
-            answer_duration=args.answer_duration,
-            answer_flash_duration=args.answer_flash_duration,
-            answer_flash_interval=args.answer_flash_interval,
-            start_delay=args.start_delay,
-            fade_in_time=args.fade_in_time,
-            fade_out_time=args.fade_out_time,
-            mid_question_fade=args.mid_question_fade,
-            overlay_dir=args.overlay_dir,
-            progress_reporter=progress_reporter,
-        )
+        result = run_render(prepared, progress_callback=report_progress)
     except RuntimeError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
-    if persisted_overlay_dir:
+    if result.persisted_overlay_dir:
         print(
-            f"Rendered {overlay_count} overlay image(s) in {persisted_overlay_dir} "
-            f"in {format_duration(timings.overlay_seconds)}."
+            f"Rendered {result.overlay_count} overlay image(s) in {result.persisted_overlay_dir} "
+            f"in {format_duration(result.timings.overlay_seconds)}."
         )
     else:
-        print(f"Rendered {overlay_count} temporary overlay image(s) in {format_duration(timings.overlay_seconds)}.")
-    print(f"Composed video in {format_duration(timings.compose_seconds)}.")
+        print(
+            f"Rendered {result.overlay_count} temporary overlay image(s) "
+            f"in {format_duration(result.timings.overlay_seconds)}."
+        )
+    print(f"Composed video in {format_duration(result.timings.compose_seconds)}.")
     print(f"Created MP4: {output}")
     print(f"Total time: {format_duration(time.monotonic() - total_start)}.")
     return 0
