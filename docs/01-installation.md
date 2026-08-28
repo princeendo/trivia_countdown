@@ -1,6 +1,6 @@
 # Installation
 
-The downloadable Trivia Countdown app supports Apple Silicon Macs running macOS 14 Sonoma or later. Intel Macs are not currently supported.
+The downloadable Trivia Countdown app is the recommended installation for normal users. It supports Apple Silicon Macs running macOS 14 Sonoma or later. Intel Macs are not currently supported.
 
 ## Requirements
 
@@ -11,9 +11,9 @@ The downloadable Trivia Countdown app supports Apple Silicon Macs running macOS 
 
 The DMG includes a sample trivia CSV but does not include a source video. You must provide the video that will appear behind the trivia panels.
 
-## Install the Unsigned App
+## Install the Mac App
 
-The current downloadable build is an unsigned preview. It is ad-hoc signed so it runs on Apple Silicon, but it is not signed with an Apple Developer ID or notarized by Apple. macOS therefore blocks its first launch even when the download is intact.
+The current downloadable build is an ad-hoc-signed preview. It is not signed with an Apple Developer ID or notarized by Apple, so macOS may block the first launch of a quarantined download. The ad-hoc signature does not authenticate the publisher, and notarization has not been performed.
 
 Only follow these steps for a DMG downloaded from the project's official [GitHub Releases page](https://github.com/princeendo/trivia_countdown/releases):
 
@@ -21,12 +21,13 @@ Only follow these steps for a DMG downloaded from the project's official [GitHub
 2. Optionally verify it against the release's `SHA256SUMS` file as described below.
 3. Double-click the DMG to open it.
 4. Drag **Trivia Countdown** onto the **Applications** shortcut.
-5. Eject the **Trivia Countdown** disk image.
-6. Open the Applications folder and double-click **Trivia Countdown**.
-7. When macOS blocks the app, select **Done** or close the warning.
-8. Open **System Settings > Privacy & Security**.
-9. Scroll to the Security section, find the message stating that Trivia Countdown was blocked, and select **Open Anyway**.
-10. Authenticate if macOS requests it, then confirm **Open**.
+5. If you want to try the included sample, drag **Sample Trivia Questions.csv** to your Desktop or Documents folder.
+6. Eject the **Trivia Countdown** disk image.
+7. Open the Applications folder and double-click **Trivia Countdown**.
+8. When macOS blocks the app, select **Done** or close the warning.
+9. Open **System Settings > Privacy & Security**.
+10. Scroll to the Security section, find the message stating that Trivia Countdown was blocked, and select **Open Anyway**.
+11. Authenticate if macOS requests it, then confirm **Open**.
 
 The override is saved for this copy of the app, so later launches should open normally. Do not disable Gatekeeper globally and do not run commands that remove quarantine from all downloads. These instructions use macOS's per-app security override.
 
@@ -34,7 +35,7 @@ If **Open Anyway** is missing, make sure you attempted to open the app immediate
 
 ## Verify the Download
 
-Each GitHub release includes `SHA256SUMS`. Download the DMG, matching source archive, and `SHA256SUMS`. In Terminal, change to the folder containing all three files and run:
+Each GitHub release includes `SHA256SUMS`. For a complete release verification, download the DMG, the matching `Trivia-Countdown-FFmpeg-<ffmpeg-version>-sources.tar.gz` asset, and `SHA256SUMS`. Do not use GitHub's automatically generated **Source code (zip)** or **Source code (tar.gz)** downloads; those are different files. In Terminal, change to the folder containing all three release assets and run:
 
 ```sh
 shasum -a 256 -c SHA256SUMS
@@ -56,7 +57,7 @@ The desktop window contains Main, Advanced, and Questions tabs. Choose a source 
 
 ## Install From Source
 
-Developers who want the command-line interface or want to modify the project can run it from a source checkout. This path requires Homebrew and Terminal.
+This is an advanced alternative for developers who want the command-line interface, want to modify the project, or cannot use the packaged Apple Silicon app. It requires macOS, Terminal, Homebrew, Python 3.9 or later with Tcl/Tk support, uv, and FFmpeg. Intel and non-macOS source use are not part of the tested downloadable-app workflow.
 
 1. Download or clone the repository.
 2. Open the project folder in Terminal.
@@ -66,13 +67,21 @@ Developers who want the command-line interface or want to modify the project can
 brew install uv ffmpeg
 ```
 
-4. Set up the Python environment:
+4. Set up the Python environment. The setup script creates or updates the project's `.venv`:
 
 ```sh
 . ./setup_venv.sh
 ```
 
-5. Launch the source GUI or inspect the command-line help:
+5. Confirm that the selected Python includes Tkinter:
+
+```sh
+uv run python -c 'import tkinter; print(tkinter.TkVersion)'
+```
+
+If this fails with `tkinter` or `_tkinter` unavailable, install a Python distribution with Tcl/Tk support, remove `.venv`, and repeat steps 4 and 5 so uv creates the environment with that Python.
+
+6. Launch the source GUI or inspect the command-line help:
 
 ```sh
 uv run python make_trivia_countdown_gui.py
@@ -81,7 +90,7 @@ uv run python make_trivia_countdown.py --help
 
 ## Next Step
 
-Prepare your own questions with [Preparing Trivia Questions](02-preparing-trivia.md), or use the sample from the mounted DMG or repository and continue to [Usage and Command Reference](03-usage-and-reference.md).
+Prepare your own questions with [Preparing Trivia Questions](02-preparing-trivia.md), or use the sample CSV you copied from the DMG, and continue to [Usage and Command Reference](03-usage-and-reference.md).
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## macOS Says the App Cannot Be Opened
 
-The current DMG is an unsigned preview without Apple notarization. First confirm that you downloaded it from the project's official [GitHub Releases page](https://github.com/princeendo/trivia_countdown/releases) and, if possible, verify `SHA256SUMS`.
+The current DMG is ad-hoc signed, but it is not signed with an Apple Developer ID or notarized by Apple. First confirm that you downloaded it from the project's official [GitHub Releases page](https://github.com/princeendo/trivia_countdown/releases) and, if possible, verify `SHA256SUMS`.
 
 Attempt to open the app once, then open **System Settings > Privacy & Security**. In the Security section, select **Open Anyway** beside the Trivia Countdown message and confirm **Open**. The control only appears after a blocked launch attempt. Do not disable Gatekeeper globally.
 
@@ -14,7 +14,7 @@ The current download requires an Apple Silicon Mac running macOS 14 Sonoma or la
 
 ## `brew: command not found`
 
-Homebrew is only required for a source installation. Normal DMG users should follow the [downloadable app instructions](01-installation.md#install-the-unsigned-app). Source users can install Homebrew from [brew.sh](https://brew.sh/) and then run `brew install uv ffmpeg` again.
+Homebrew is only required for a source installation. Normal DMG users should follow the [Mac app installation instructions](01-installation.md#install-the-mac-app). Source users can install Homebrew from [brew.sh](https://brew.sh/) and then run `brew install uv ffmpeg` again.
 
 ## `uv: command not found`
 
@@ -26,7 +26,7 @@ This message should only occur in a source installation because the Mac app bund
 
 ## The Desktop Interface Does Not Open
 
-DMG users should first follow the unsigned-app instructions above. Source users can launch it from the project folder with `uv run python make_trivia_countdown_gui.py`. If source mode reports that Tkinter is unavailable, use a Python installation with Tcl/Tk support and run `. ./setup_venv.sh` again.
+DMG users should first follow the [Mac app installation instructions](01-installation.md#install-the-mac-app) above. Source users can launch it from the project folder with `uv run python make_trivia_countdown_gui.py`. If source mode reports that `tkinter` or `_tkinter` is unavailable, use a Python installation with Tcl/Tk support, remove `.venv`, and run `. ./setup_venv.sh` again before retrying.
 
 ## The Preview Is Unavailable or Looks Different From the Video
 
@@ -70,9 +70,13 @@ Question and answer text wraps and shrinks automatically, but unusually long tex
 
 The complete source video is re-encoded. Long or high-resolution videos can take several minutes or more, particularly on older hardware. Closing other processor-intensive applications may help.
 
+## The App Cannot Save the Output
+
+Confirm that the output folder exists and that you have permission to write there. Choose a different output location, such as your Movies or Desktop folder, if necessary. Make sure there is enough free disk space for a newly encoded copy of the source video.
+
 ## Requesting Help
 
-If a problem is not covered above, see [Support Information](05-limitations-privacy-and-support.md#support-information) for what to include when requesting help.
+If a problem is not covered above, see [Support Information](05-limitations-privacy-and-support.md#support-information) for what to include when requesting help. You can submit a report through the project's [GitHub Issues page](https://github.com/princeendo/trivia_countdown/issues).
 
 ---
 

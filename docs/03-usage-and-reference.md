@@ -1,22 +1,26 @@
 # Usage and Command Reference
 
-The desktop instructions apply to the installed Mac app. Command-line examples are for developers using a source checkout and should be run from the Trivia Countdown project folder.
+The desktop instructions apply to the installed Mac app and are the recommended workflow for normal users. Command-line examples are for developers using a source checkout and should be run from the Trivia Countdown project folder.
+
+If you are using the Mac app, start with [Installation](01-installation.md) and [Preparing Trivia Questions](02-preparing-trivia.md). You do not need to install Python, uv, FFmpeg, or use Terminal.
 
 ## Create a Video
 
 ### Desktop interface
 
-Open **Trivia Countdown** from the Applications folder. If this is the first launch of the unsigned preview, complete the [unsigned app installation steps](01-installation.md#install-the-unsigned-app) first.
+Open **Trivia Countdown** from the Applications folder. If this is the first launch of the ad-hoc-signed preview, complete the [Mac app installation steps](01-installation.md#install-the-mac-app) first.
 
-On the **Main** tab, choose a source video and trivia CSV. The output path initially defaults to `<source-name>_trivia_countdown.mp4` beside the source video, and can be changed with **Output**. The preview is a static frame extracted at the selected question's scheduled start time, composited with the normal or answer-reveal overlay; it is not video playback.
+On the **Main** tab, choose a source video and trivia CSV. The output path initially defaults to `<source-name>_trivia_countdown.mp4` beside the source video, and can be changed with **Output**. The preview is a static frame extracted near the selected question's calculated position, composited with the normal or answer-reveal overlay; it is not video playback.
 
-The **Advanced** tab groups settings into Question Order, Overlay Output, Timing, and Reveal and Transition Effects. It exposes the same defaults as the command line. **Keep generated overlay PNGs** is off by default. When enabled, use **Browse** to select a directory, type one directly, or let the GUI create `<output-name>_overlays` beside the output MP4. The **Questions** tab is a read-only, scrollable view of the CSV; its correct answer cells are highlighted, selected rows turn light green, and selecting a row updates the Main preview. Use the mouse wheel while hovering over the table to scroll it.
+The **Advanced** tab groups settings into Question Order, Overlay Output, Timing, and Reveal and Transition Effects. It exposes the same defaults as the command line. Settings are reset to their defaults when the app is reopened. **Keep generated overlay PNGs** is off by default. When enabled, use **Browse** to select a directory, type one directly, or let the GUI create `<output-name>_overlays` beside the output MP4. The **Questions** tab is a read-only, scrollable view of all validated rows; its correct answer cells are highlighted, selected rows turn light green, and selecting a row updates the Main preview. Only the first rows that fit the video's capacity are used in the final render. Use the mouse wheel while hovering over the table to scroll it.
 
-When launched from a source checkout, the GUI also has a **CLI** tab with the exact command-line equivalent of the current selections. It includes explicit timing parameters by default. Clear **Include parameters using default values** to omit Advanced values that still match their defaults. The packaged Mac app omits this developer-only tab because DMG users do not have the source command installed.
+When launched from a source checkout, the GUI also has a **CLI** tab with the exact command-line equivalent of the current selections. It includes explicit timing parameters by default. Clear **Include parameters using default values** to omit Advanced values that still match their defaults. The packaged Mac app omits this developer-only tab because DMG users do not have the source command installed. If **Randomize question order** is enabled, use a seed to make the displayed order and final render reproducible; without one, the order may be regenerated differently when rendering.
 
-Select **Create Video** to validate and render. Separate overlay-generation and video-composition progress bars show their current percentage and estimated time remaining. **Cancel Render** stops the active job. The GUI asks before replacing an existing output, and a cancelled or failed render leaves the existing output unchanged.
+Select **Create Video** to validate and render. Separate overlay-generation and video-composition progress bars show their current percentage and estimated time remaining. **Cancel Render** stops the active job. The GUI asks before replacing an existing output, and a cancelled or failed render leaves the existing output unchanged. When rendering succeeds, the completed MP4 is at the path shown in **Output MP4**; the app reports completion in the status area.
 
 ### Command line
+
+The command line is an advanced workflow for source-checkout users. It is not required when using the packaged Mac app.
 
 Pass the source video and trivia CSV as the two required arguments:
 
