@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import math
 import os
-import shutil
 import subprocess
 import threading
 from io import BytesIO
@@ -15,13 +14,13 @@ from typing import Callable, Optional
 
 from PIL import Image
 
+from ..resources import executable_path
 from .cancellation import RenderCancelled, check_cancelled
 from .models import RenderedOverlay, VideoDimensions
 
 
 def require_executable(name: str) -> None:
-    if shutil.which(name) is None:
-        raise RuntimeError(f"Required executable not found: {name}")
+    executable_path(name)
 
 
 def validate_input_paths(video_file: Path, trivia_file: Path) -> None:
@@ -33,7 +32,7 @@ def validate_input_paths(video_file: Path, trivia_file: Path) -> None:
 
 def get_video_dimensions(video_file: Path) -> VideoDimensions:
     command = [
-        "ffprobe",
+        str(executable_path("ffprobe")),
         "-v",
         "error",
         "-select_streams",
@@ -63,7 +62,7 @@ def get_video_dimensions(video_file: Path) -> VideoDimensions:
 
 def get_video_duration(video_file: Path) -> float:
     command = [
-        "ffprobe",
+        str(executable_path("ffprobe")),
         "-v",
         "error",
         "-show_entries",
@@ -109,7 +108,7 @@ def parse_frame_rate(value: object) -> Optional[float]:
 
 def get_video_fps(video_file: Path) -> float:
     command = [
-        "ffprobe",
+        str(executable_path("ffprobe")),
         "-v",
         "error",
         "-select_streams",
@@ -144,7 +143,7 @@ def extract_video_still(video_file: Path, timestamp: float) -> Image.Image:
         raise ValueError("Preview timestamp must be a finite non-negative number")
     result = subprocess.run(
         [
-            "ffmpeg",
+            str(executable_path("ffmpeg")),
             "-v",
             "error",
             "-ss",
@@ -346,7 +345,7 @@ def compose_video(
         os.close(file_descriptor)
         partial_output = Path(partial_output_name)
         command = [
-            "ffmpeg",
+            str(executable_path("ffmpeg")),
             "-y",
             "-i",
             str(video_file),

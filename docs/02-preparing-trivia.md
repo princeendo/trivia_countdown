@@ -52,7 +52,7 @@ The GUI Main tab displays a static source-video frame with the selected question
 
 ## Sample File
 
-A complete five-question example is available at [`sample_objects/sample_of_5_trivia_questions.csv`](../sample_objects/sample_of_5_trivia_questions.csv).
+A complete five-question example is included at the top level of the mounted DMG as **Sample Trivia Questions.csv**. Source users can find the same file at [`sample_objects/sample_of_5_trivia_questions.csv`](../sample_objects/sample_of_5_trivia_questions.csv).
 
 ---
 

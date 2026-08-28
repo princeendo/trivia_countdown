@@ -9,6 +9,9 @@ import subprocess
 from tempfile import TemporaryDirectory
 import tkinter as tk
 import unittest
+from unittest.mock import patch
+
+from PIL import Image
 
 from trivia_countdown.app import (
     RenderOptions,
@@ -23,6 +26,7 @@ from trivia_countdown.lib.cancellation import CancellationToken, RenderCancelled
 from trivia_countdown.lib.models import TriviaQuestion, VideoDimensions
 from trivia_countdown.lib.overlays import build_panel_layout, render_question_image, render_overlays
 from trivia_countdown.lib.video import extract_video_still
+from trivia_countdown.resources import executable_path, resource_path
 
 
 class GuiSmokeTests(unittest.TestCase):
@@ -70,6 +74,24 @@ class RenderServiceTests(unittest.TestCase):
             default_output_path(Path("/tmp/countdown.mov")),
             Path("/tmp/countdown_trivia_countdown.mp4"),
         )
+
+    def test_source_resource_path_finds_app_icon(self) -> None:
+        icon_path = resource_path("assets", "app_icon.png")
+        self.assertTrue(icon_path.is_file())
+        with Image.open(icon_path) as icon:
+            self.assertEqual(icon.mode, "RGBA")
+            self.assertEqual(icon.getpixel((0, 0))[3], 0)
+
+    def test_frozen_executable_path_uses_bundled_binary(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            binary = root / "bin" / "ffmpeg"
+            binary.parent.mkdir()
+            binary.touch()
+            with patch("trivia_countdown.resources.sys.frozen", True, create=True), patch(
+                "trivia_countdown.resources.sys._MEIPASS", str(root), create=True
+            ):
+                self.assertEqual(executable_path("ffmpeg"), binary)
 
     def test_options_reject_nonfinite_and_invalid_cross_fields(self) -> None:
         with self.assertRaisesRegex(ValueError, "finite"):

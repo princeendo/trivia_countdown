@@ -9,3 +9,5 @@ sample_objects/sample_trivia_countdown.mp4
 .pytest_cache/
 .coverage
 htmlcov/
+/build/
+/dist/

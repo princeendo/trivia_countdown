@@ -8,28 +8,19 @@ Trivia Countdown runs locally on your Mac. It does not upload your video or triv
 
 ## Quick Start
 
-Trivia Countdown is currently supported on macOS. You will need a source video, [Homebrew](https://brew.sh/), and access to the Terminal application to launch the application. This repository includes sample trivia questions but does not include a source video.
+The downloadable app currently supports Apple Silicon Macs running macOS 14 Sonoma or later. You need a source video and a trivia CSV; the DMG includes a sample CSV but does not include a source video.
 
-1. On the [GitHub project page](https://github.com/princeendo/trivia_countdown), select **Code**, then **Download ZIP**, and extract the downloaded file.
-2. Open the extracted project folder in Terminal.
-3. Install the required tools and set up the project:
+1. Open the [GitHub Releases page](https://github.com/princeendo/trivia_countdown/releases) and download the latest `macOS-arm64.dmg` file.
+2. Open the DMG and drag **Trivia Countdown** into the **Applications** shortcut.
+3. Open **Trivia Countdown** from Applications.
 
-```sh
-brew install uv ffmpeg
-. ./setup_venv.sh
-```
+The current preview is unsigned and not notarized by Apple, so macOS blocks the first launch. After the first blocked attempt, open **System Settings > Privacy & Security**, find the message about Trivia Countdown, select **Open Anyway**, then confirm **Open**. Only use this override for a DMG downloaded from this repository's Releases page. Do not disable Gatekeeper globally. See the [Installation Guide](docs/01-installation.md) for complete steps and checksum verification.
 
-4. Launch the desktop interface:
-
-```sh
-uv run python make_trivia_countdown_gui.py
-```
-
-Choose your source video and CSV, confirm the generated output path, then select **Create Video**. The Main tab shows a static source-video frame with the selected trivia overlay and separate progress bars for panel generation and video composition. Use **Advanced** to change the command-line timing defaults, **Questions** to inspect the CSV and select the previewed question, and **CLI** to copy an equivalent command.
+Choose your source video and CSV, confirm the generated output path, then select **Create Video**. The Main tab shows a static source-video frame with the selected trivia overlay and separate progress bars for panel generation and video composition. Use **Advanced** to change timing defaults and **Questions** to inspect the CSV and select the previewed question.
 
 The GUI confirms before replacing an existing file and supports cancellation. It writes a temporary MP4 and replaces the selected output only after a successful render.
 
-5. Alternatively, replace the example path below with your source video and render the five-question sample from the command line:
+Developers can still run the GUI or command line from a source checkout. See the [source installation instructions](docs/01-installation.md#install-from-source) for Homebrew and uv setup. For example:
 
 ```sh
 uv run python make_trivia_countdown.py \
@@ -41,7 +32,7 @@ The output is created beside the source video as `countdown_trivia_countdown.mp4
 
 > **Important:** An existing output file is replaced without a confirmation prompt. Use `--output` to choose a different path when you need to preserve an earlier render.
 
-For step-by-step setup instructions and common installation problems, see the [Installation Guide](docs/01-installation.md).
+For step-by-step installation and common setup problems, see the [Installation Guide](docs/01-installation.md).
 
 ## Documentation
 
@@ -52,6 +43,7 @@ The documentation is organized as a sequence for new users:
 3. [Usage and Command Reference](docs/03-usage-and-reference.md): rendering, timing, options, and output behavior
 4. [Troubleshooting](docs/04-troubleshooting.md): solutions for common setup, input, and rendering problems
 5. [Limitations, Privacy, and Support](docs/05-limitations-privacy-and-support.md): platform scope, responsible use, and requesting help
+6. [Building and Releasing](docs/06-building-and-releasing.md): maintainer instructions for unsigned DMG artifacts and GitHub prereleases
 
 For a concise list of every command-line option, run:
 

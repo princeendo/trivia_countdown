@@ -1,22 +1,18 @@
 # Usage and Command Reference
 
-Run all commands in this guide from the Trivia Countdown project folder.
+The desktop instructions apply to the installed Mac app. Command-line examples are for developers using a source checkout and should be run from the Trivia Countdown project folder.
 
 ## Create a Video
 
 ### Desktop interface
 
-Launch the desktop interface from the project folder:
-
-```sh
-uv run python make_trivia_countdown_gui.py
-```
+Open **Trivia Countdown** from the Applications folder. If this is the first launch of the unsigned preview, complete the [unsigned app installation steps](01-installation.md#install-the-unsigned-app) first.
 
 On the **Main** tab, choose a source video and trivia CSV. The output path initially defaults to `<source-name>_trivia_countdown.mp4` beside the source video, and can be changed with **Output**. The preview is a static frame extracted at the selected question's scheduled start time, composited with the normal or answer-reveal overlay; it is not video playback.
 
 The **Advanced** tab groups settings into Question Order, Overlay Output, Timing, and Reveal and Transition Effects. It exposes the same defaults as the command line. **Keep generated overlay PNGs** is off by default. When enabled, use **Browse** to select a directory, type one directly, or let the GUI create `<output-name>_overlays` beside the output MP4. The **Questions** tab is a read-only, scrollable view of the CSV; its correct answer cells are highlighted, selected rows turn light green, and selecting a row updates the Main preview. Use the mouse wheel while hovering over the table to scroll it.
 
-The **CLI** tab provides the exact command-line equivalent of the current selections. It includes explicit timing parameters by default. Clear **Include parameters using default values** to omit Advanced values that still match their defaults. Select the clipboard button to copy the command.
+When launched from a source checkout, the GUI also has a **CLI** tab with the exact command-line equivalent of the current selections. It includes explicit timing parameters by default. Clear **Include parameters using default values** to omit Advanced values that still match their defaults. The packaged Mac app omits this developer-only tab because DMG users do not have the source command installed.
 
 Select **Create Video** to validate and render. Separate overlay-generation and video-composition progress bars show their current percentage and estimated time remaining. **Cancel Render** stops the active job. The GUI asks before replacing an existing output, and a cancelled or failed render leaves the existing output unchanged.
 

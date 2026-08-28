@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+import os
 from pathlib import Path
 from queue import Empty, Queue
 import shlex
@@ -28,6 +29,7 @@ from .lib.models import TriviaQuestion
 from .lib.overlays import render_question_image
 from .lib.progress import format_duration
 from .lib.video import extract_video_still, get_video_dimensions, get_video_duration, require_executable
+from .resources import is_frozen, resource_path
 
 
 class QuestionTable(ttk.Frame):
@@ -150,6 +152,9 @@ class TriviaCountdownApp(ttk.Frame):
         self.root.title("Trivia Countdown")
         self.root.geometry("1440x810")
         self.root.minsize(1152, 648)
+        with Image.open(resource_path("assets", "app_icon.png")) as icon:
+            self._app_icon = ImageTk.PhotoImage(icon)
+        self.root.iconphoto(True, self._app_icon)
         self.pack(fill="both", expand=True)
         self._events: Queue[tuple[str, object]] = Queue()
         self._preview_generation = 0
@@ -210,7 +215,8 @@ class TriviaCountdownApp(ttk.Frame):
         self.notebook.add(self.main_tab, text="Main")
         self.notebook.add(self.advanced_tab, text="Advanced")
         self.notebook.add(self.questions_tab, text="Questions")
-        self.notebook.add(self.cli_tab, text="CLI")
+        if not is_frozen():
+            self.notebook.add(self.cli_tab, text="CLI")
         self.notebook.bind("<<NotebookTabChanged>>", self._tab_changed)
         self._build_main_tab()
         self._build_advanced_tab()
@@ -735,5 +741,9 @@ class TriviaCountdownApp(ttk.Frame):
 def main() -> int:
     root = tk.Tk()
     TriviaCountdownApp(root)
+    if os.environ.get("TRIVIA_COUNTDOWN_SMOKE_TEST") == "1":
+        root.update_idletasks()
+        root.destroy()
+        return 0
     root.mainloop()
     return 0
