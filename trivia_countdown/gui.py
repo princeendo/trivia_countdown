@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 from pathlib import Path
 from queue import Empty, Queue
+import shlex
 from threading import Thread
 import time
 import tkinter as tk
@@ -40,6 +41,7 @@ class QuestionTable(ttk.Frame):
         self._on_select = on_select
         self._selected_index: Optional[int] = None
         self._row_widgets: list[list[tk.Label]] = []
+        self._row_colors: list[list[tuple[str, str]]] = []
         self._canvas = tk.Canvas(self, highlightthickness=0)
         vertical_scrollbar = ttk.Scrollbar(self, orient="vertical", command=self._canvas.yview)
         horizontal_scrollbar = ttk.Scrollbar(self, orient="horizontal", command=self._canvas.xview)
@@ -86,6 +88,7 @@ class QuestionTable(ttk.Frame):
         for child in self._content.winfo_children():
             child.destroy()
         self._row_widgets = []
+        self._row_colors = []
         for column, (heading, width) in enumerate(zip(self.headings, self.widths)):
             label = tk.Label(
                 self._content,
@@ -102,16 +105,19 @@ class QuestionTable(ttk.Frame):
         for row, question in enumerate(questions, start=1):
             values = (str(row), question.question, *question.answers, str(question.correct_answer))
             row_widgets: list[tk.Label] = []
+            row_colors: list[tuple[str, str]] = []
             for column, (value, width) in enumerate(zip(values, self.widths)):
                 is_correct = 2 <= column <= 5 and column - 1 == question.correct_answer
+                background = "#ffe024" if is_correct else "#ffffff"
+                foreground = "#181818" if is_correct else "#101820"
                 label = tk.Label(
                     self._content,
                     text=value,
                     anchor="w",
                     justify="left",
                     wraplength=width * 7,
-                    background="#ffe024" if is_correct else "#ffffff",
-                    foreground="#181818" if is_correct else "#101820",
+                    background=background,
+                    foreground=foreground,
                     padx=6,
                     pady=5,
                     width=width,
@@ -120,15 +126,17 @@ class QuestionTable(ttk.Frame):
                 label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
                 label.bind("<Button-1>", lambda _event, index=row - 1: self.select(index))
                 row_widgets.append(label)
+                row_colors.append((background, foreground))
             self._row_widgets.append(row_widgets)
+            self._row_colors.append(row_colors)
         self._selected_index = None
 
     def select(self, index: int) -> None:
-        for row_widgets in self._row_widgets:
-            for label in row_widgets:
-                label.configure(highlightthickness=0)
+        for row_widgets, row_colors in zip(self._row_widgets, self._row_colors):
+            for label, (background, foreground) in zip(row_widgets, row_colors):
+                label.configure(background=background, foreground=foreground, highlightthickness=0)
         for label in self._row_widgets[index]:
-            label.configure(highlightbackground="#0b2252", highlightthickness=2)
+            label.configure(background="#d9f2df", foreground="#123b23", highlightthickness=0)
         self._selected_index = index
         self._on_select(index)
 
@@ -156,9 +164,12 @@ class TriviaCountdownApp(ttk.Frame):
         self.video_path = tk.StringVar()
         self.trivia_path = tk.StringVar()
         self.output_path = tk.StringVar()
-        self.reveal_answer = tk.BooleanVar(value=False)
+        self.reveal_answer = tk.BooleanVar(value=True)
         self.status_text = tk.StringVar(value="Choose a source video and trivia CSV to begin.")
         self.preview_text = tk.StringVar(value="Preview appears after both inputs are selected.")
+        self.question_status = tk.StringVar(value="Select a row to update the preview.")
+        self.include_default_parameters = tk.BooleanVar(value=True)
+        self.cli_status = tk.StringVar(value="")
         self.overlay_progress_text = tk.StringVar(value="0%")
         self.video_progress_text = tk.StringVar(value="0%")
         self.overlay_progress_value = tk.DoubleVar(value=0.0)
@@ -168,6 +179,7 @@ class TriviaCountdownApp(ttk.Frame):
         self._build_interface()
         self.output_path.trace_add("write", self._output_changed)
         self.video_path.trace_add("write", self._video_changed)
+        self.trivia_path.trace_add("write", self._refresh_cli_command)
         self.root.after(100, self._poll_events)
 
     def _build_variables(self) -> None:
@@ -189,17 +201,21 @@ class TriviaCountdownApp(ttk.Frame):
         }
 
     def _build_interface(self) -> None:
-        notebook = ttk.Notebook(self)
-        notebook.pack(fill="both", expand=True)
-        self.main_tab = ttk.Frame(notebook, padding=12)
-        self.advanced_tab = ttk.Frame(notebook, padding=12)
-        self.questions_tab = ttk.Frame(notebook, padding=12)
-        notebook.add(self.main_tab, text="Main")
-        notebook.add(self.advanced_tab, text="Advanced")
-        notebook.add(self.questions_tab, text="Questions")
+        self.notebook = ttk.Notebook(self)
+        self.notebook.pack(fill="both", expand=True)
+        self.main_tab = ttk.Frame(self.notebook, padding=12)
+        self.advanced_tab = ttk.Frame(self.notebook, padding=12)
+        self.questions_tab = ttk.Frame(self.notebook, padding=12)
+        self.cli_tab = ttk.Frame(self.notebook, padding=12)
+        self.notebook.add(self.main_tab, text="Main")
+        self.notebook.add(self.advanced_tab, text="Advanced")
+        self.notebook.add(self.questions_tab, text="Questions")
+        self.notebook.add(self.cli_tab, text="CLI")
+        self.notebook.bind("<<NotebookTabChanged>>", self._tab_changed)
         self._build_main_tab()
         self._build_advanced_tab()
         self._build_questions_tab()
+        self._build_cli_tab()
 
     def _build_main_tab(self) -> None:
         self.main_tab.columnconfigure(1, weight=1)
@@ -215,23 +231,25 @@ class TriviaCountdownApp(ttk.Frame):
         self._path_row(controls, 0, "Source video", self.video_path, self._choose_video, "Video...")
         self._path_row(controls, 2, "Trivia CSV", self.trivia_path, self._choose_trivia, "Trivia...")
         self._path_row(controls, 4, "Output MP4", self.output_path, self._choose_output, "Output...")
-        ttk.Checkbutton(
-            controls,
-            text="Show answer reveal in preview",
-            variable=self.reveal_answer,
-            command=self._start_preview,
-        ).grid(row=6, column=0, columnspan=2, sticky="w", pady=(8, 0))
         self.create_button = ttk.Button(controls, text="Create Video", command=self._begin_render)
-        self.create_button.grid(row=7, column=0, columnspan=2, sticky="ew", pady=(14, 0))
+        self.create_button.grid(row=6, column=0, columnspan=2, sticky="ew", pady=(14, 0))
         self.cancel_button = ttk.Button(controls, text="Cancel Render", command=self._cancel_render, state="disabled")
-        self.cancel_button.grid(row=8, column=0, columnspan=2, sticky="ew", pady=(6, 0))
+        self.cancel_button.grid(row=7, column=0, columnspan=2, sticky="ew", pady=(6, 0))
         ttk.Label(controls, textvariable=self.status_text, wraplength=290, justify="left").grid(
-            row=9, column=0, columnspan=2, sticky="ew", pady=(12, 0)
+            row=8, column=0, columnspan=2, sticky="ew", pady=(12, 0)
         )
 
         self.preview_label = ttk.Label(preview, anchor="center", justify="center")
         self.preview_label.grid(row=0, column=0, sticky="nsew")
-        ttk.Label(preview, textvariable=self.preview_text, anchor="center").grid(row=1, column=0, sticky="ew", pady=(6, 0))
+        self.reveal_preview_check = ttk.Checkbutton(
+            preview,
+            text="Show answer reveal in preview",
+            variable=self.reveal_answer,
+            command=self._start_preview,
+        )
+        self.reveal_preview_check.grid(row=1, column=0, sticky="w", pady=(6, 0))
+        self.reveal_preview_check.grid_remove()
+        ttk.Label(preview, textvariable=self.preview_text, anchor="center").grid(row=2, column=0, sticky="ew", pady=(4, 0))
 
         progress = ttk.LabelFrame(self.main_tab, text="Render Progress", padding=10)
         progress.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(12, 0))
@@ -323,7 +341,7 @@ class TriviaCountdownApp(ttk.Frame):
         ttk.Label(parent, text=label).grid(row=row, column=0, sticky="w", pady=4)
         entry = ttk.Entry(parent, textvariable=self.option_values[name], width=18)
         entry.grid(row=row, column=1, sticky="w", padx=(8, 0), pady=4)
-        entry.bind("<FocusOut>", lambda _event: self._start_preview())
+        entry.bind("<FocusOut>", lambda _event: self._options_changed())
 
     def _build_questions_tab(self) -> None:
         self.questions_tab.rowconfigure(1, weight=1)
@@ -334,6 +352,36 @@ class TriviaCountdownApp(ttk.Frame):
         ).grid(row=0, column=0, sticky="w", pady=(0, 8))
         self.question_table = QuestionTable(self.questions_tab, self._question_selected)
         self.question_table.grid(row=1, column=0, sticky="nsew")
+        ttk.Label(self.questions_tab, textvariable=self.question_status, anchor="w").grid(
+            row=2, column=0, sticky="ew", pady=(8, 0)
+        )
+
+    def _build_cli_tab(self) -> None:
+        self.cli_tab.rowconfigure(2, weight=1)
+        self.cli_tab.columnconfigure(0, weight=1)
+        ttk.Label(
+            self.cli_tab,
+            text="Command line equivalent of the current GUI selections:",
+        ).grid(row=0, column=0, sticky="w")
+        controls = ttk.Frame(self.cli_tab)
+        controls.grid(row=1, column=0, sticky="ew", pady=(8, 8))
+        controls.columnconfigure(0, weight=1)
+        ttk.Checkbutton(
+            controls,
+            text="Include parameters using default values",
+            variable=self.include_default_parameters,
+            command=self._refresh_cli_command,
+        ).grid(row=0, column=0, sticky="w")
+        ttk.Button(controls, text="📋", width=3, command=self._copy_cli_command).grid(row=0, column=1, sticky="e")
+        self.cli_command_text = tk.Text(self.cli_tab, height=8, wrap="word", font=("TkFixedFont", 11))
+        self.cli_command_text.grid(row=2, column=0, sticky="nsew")
+        self.cli_command_text.configure(state="disabled")
+        ttk.Label(self.cli_tab, textvariable=self.cli_status, anchor="w").grid(row=3, column=0, sticky="ew", pady=(8, 0))
+        self._refresh_cli_command()
+
+    def _tab_changed(self, _event: tk.Event) -> None:
+        if self.notebook.select() == str(self.cli_tab):
+            self._refresh_cli_command()
 
     def _choose_video(self) -> None:
         path = filedialog.askopenfilename(title="Choose a source video")
@@ -362,15 +410,22 @@ class TriviaCountdownApp(ttk.Frame):
         expected = default_output_path(Path(self.video_path.get())) if self.video_path.get() else None
         if expected and self.output_path.get() != str(expected):
             self._output_is_automatic = False
+        self._refresh_cli_command()
 
     def _video_changed(self, *_args: object) -> None:
         if self.video_path.get() and self._output_is_automatic:
             self.output_path.set(str(default_output_path(Path(self.video_path.get()))))
+        if self.video_path.get():
+            self.reveal_preview_check.grid()
+        else:
+            self.reveal_preview_check.grid_remove()
+        self._refresh_cli_command()
 
     def _update_overlay_directory_state(self) -> None:
         state = "normal" if self.keep_overlays.get() else "disabled"
         self.overlay_directory_entry.configure(state=state)
         self.overlay_directory_button.configure(state=state)
+        self._refresh_cli_command()
 
     def _choose_overlay_directory(self) -> None:
         path = filedialog.askdirectory(title="Choose overlay PNG directory")
@@ -378,6 +433,73 @@ class TriviaCountdownApp(ttk.Frame):
             self.overlay_directory.set(path)
             self.keep_overlays.set(True)
             self._update_overlay_directory_state()
+
+    def _options_changed(self) -> None:
+        self._start_preview()
+        self._refresh_cli_command()
+
+    def _refresh_cli_command(self, *_args: object) -> None:
+        if not hasattr(self, "cli_command_text"):
+            return
+        command = self._build_cli_command()
+        self.cli_command_text.configure(state="normal")
+        self.cli_command_text.delete("1.0", "end")
+        self.cli_command_text.insert("1.0", command)
+        self.cli_command_text.configure(state="disabled")
+
+    def _build_cli_command(self) -> str:
+        video_path = self.video_path.get().strip()
+        trivia_path = self.trivia_path.get().strip()
+        output_path = self.output_path.get().strip()
+        if not video_path or not trivia_path or not output_path:
+            return "Choose a source video, trivia CSV, and output path to generate the command."
+        try:
+            options = self._render_options()
+        except ValueError as exc:
+            return f"Fix Advanced options to generate the command: {exc}"
+
+        command = [
+            "uv",
+            "run",
+            "python",
+            "make_trivia_countdown.py",
+            video_path,
+            trivia_path,
+            "--output",
+            output_path,
+        ]
+        defaults = RenderOptions()
+        if options.randomize:
+            command.append("--random")
+        if options.seed is not None:
+            command.extend(("--seed", str(options.seed)))
+        for option_name, attribute in (
+            ("--duration", "question_duration"),
+            ("--answer-duration", "answer_duration"),
+            ("--answer-flash-duration", "answer_flash_duration"),
+            ("--answer-flash-interval", "answer_flash_interval"),
+            ("--start-delay", "start_delay"),
+            ("--end-early", "end_early"),
+            ("--fade-in-time", "fade_in_time"),
+            ("--fade-out-time", "fade_out_time"),
+            ("--mid-question-fade", "mid_question_fade"),
+        ):
+            value = getattr(options, attribute)
+            if self.include_default_parameters.get() or value != getattr(defaults, attribute):
+                command.extend((option_name, f"{value:g}"))
+        if options.overlay_dir is not None:
+            command.extend(("--overlay-dir", str(options.overlay_dir)))
+        return " ".join(shlex.quote(part) for part in command)
+
+    def _copy_cli_command(self) -> None:
+        command = self._build_cli_command()
+        if command.startswith("Choose ") or command.startswith("Fix "):
+            self.cli_status.set(command)
+            return
+        self.root.clipboard_clear()
+        self.root.clipboard_append(command)
+        self.root.update()
+        self.cli_status.set("Command copied to the clipboard.")
 
     def _default_overlay_directory(self) -> Path:
         output_text = self.output_path.get().strip()
@@ -406,6 +528,7 @@ class TriviaCountdownApp(ttk.Frame):
 
     def _questions_changed(self) -> None:
         if not self.trivia_path.get():
+            self._refresh_cli_command()
             return
         try:
             self._questions = load_questions(Path(self.trivia_path.get()), self._render_options())
@@ -413,14 +536,18 @@ class TriviaCountdownApp(ttk.Frame):
             self._questions = []
             self.question_table.set_questions([])
             self.status_text.set(f"Trivia CSV error: {exc}")
+            self._refresh_cli_command()
             return
         self._selected_question = 0
         self.question_table.set_questions(self._questions)
         self.status_text.set(f"Loaded {len(self._questions)} trivia question(s).")
+        self.question_status.set("Select a row to update the preview.")
         self._start_preview()
+        self._refresh_cli_command()
 
     def _question_selected(self, index: int) -> None:
         self._selected_question = index
+        self.question_status.set(f"Preview updated to show question {index + 1}.")
         self._start_preview()
 
     def _reset_defaults(self) -> None:

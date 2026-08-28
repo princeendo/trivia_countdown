@@ -35,7 +35,20 @@ class GuiSmokeTests(unittest.TestCase):
             self.skipTest(f"Tk display unavailable: {exc}")
         try:
             root.withdraw()
-            TriviaCountdownApp(root)
+            app = TriviaCountdownApp(root)
+            app.video_path.set("/tmp/source video.mp4")
+            app.trivia_path.set("/tmp/trivia.csv")
+            command_with_defaults = app._build_cli_command()
+            self.assertIn("--duration 10", command_with_defaults)
+            self.assertIn("'/tmp/source video.mp4'", command_with_defaults)
+            app.include_default_parameters.set(False)
+            self.assertNotIn("--duration 10", app._build_cli_command())
+
+            question = TriviaQuestion("Question", ("One", "Two", "Three", "Four"), 2)
+            app.question_table.set_questions([question])
+            app.question_table.select(0)
+            self.assertEqual(app.question_status.get(), "Preview updated to show question 1.")
+            self.assertEqual(app.question_table._row_widgets[0][0].cget("background"), "#d9f2df")
         finally:
             root.destroy()
 

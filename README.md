@@ -25,7 +25,7 @@ brew install uv ffmpeg
 uv run python make_trivia_countdown_gui.py
 ```
 
-Choose your source video and CSV, confirm the generated output path, then select **Create Video**. The Main tab shows a static source-video frame with the selected trivia overlay and separate progress bars for panel generation and video composition. Use **Advanced** to change the command-line timing defaults and **Questions** to inspect the CSV and select the previewed question.
+Choose your source video and CSV, confirm the generated output path, then select **Create Video**. The Main tab shows a static source-video frame with the selected trivia overlay and separate progress bars for panel generation and video composition. Use **Advanced** to change the command-line timing defaults, **Questions** to inspect the CSV and select the previewed question, and **CLI** to copy an equivalent command.
 
 The GUI confirms before replacing an existing file and supports cancellation. It writes a temporary MP4 and replaces the selected output only after a successful render.
 
