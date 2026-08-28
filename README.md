@@ -2,6 +2,8 @@
 
 Generate an MP4 trivia countdown video by overlaying question and answer panels on top of an existing countdown video.
 
+![Animated example showing a trivia question, answer reveal, and transition to the next question](assets/trivia-demo.gif)
+
 ## Setup
 
 This project uses `uv` for Python dependency management and requires system `ffmpeg` and `ffprobe` to be installed.
