@@ -140,12 +140,13 @@ class TriviaCountdownApp(ttk.Frame):
         super().__init__(root, padding=12)
         self.root = root
         self.root.title("Trivia Countdown")
-        self.root.geometry("1280x720")
-        self.root.minsize(1024, 576)
+        self.root.geometry("1440x810")
+        self.root.minsize(1152, 648)
         self.pack(fill="both", expand=True)
         self._events: Queue[tuple[str, object]] = Queue()
         self._preview_generation = 0
         self._preview_photo: Optional[ImageTk.PhotoImage] = None
+        self._preview_image: Optional[Image.Image] = None
         self._questions: list[TriviaQuestion] = []
         self._selected_question = 0
         self._output_is_automatic = True
@@ -209,6 +210,7 @@ class TriviaCountdownApp(ttk.Frame):
         preview.grid(row=0, column=1, sticky="nsew")
         preview.columnconfigure(0, weight=1)
         preview.rowconfigure(0, weight=1)
+        preview.bind("<Configure>", self._resize_preview)
 
         self._path_row(controls, 0, "Source video", self.video_path, self._choose_video, "Video...")
         self._path_row(controls, 2, "Trivia CSV", self.trivia_path, self._choose_trivia, "Trivia...")
@@ -261,47 +263,67 @@ class TriviaCountdownApp(ttk.Frame):
         ttk.Button(parent, text=button, command=command).grid(row=row + 1, column=1, sticky="e", padx=(6, 0), pady=(2, 7))
 
     def _build_advanced_tab(self) -> None:
+        self.advanced_tab.columnconfigure(0, weight=1)
         self.advanced_tab.columnconfigure(1, weight=1)
+        question_order = ttk.LabelFrame(self.advanced_tab, text="Question Order", padding=10)
+        question_order.grid(row=0, column=0, sticky="new", padx=(0, 8), pady=(0, 8))
         ttk.Checkbutton(
-            self.advanced_tab,
+            question_order,
             text="Randomize question order",
             variable=self.randomize,
             command=self._questions_changed,
         ).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 8))
-        ttk.Label(self.advanced_tab, text="Random seed (optional)").grid(row=1, column=0, sticky="w", pady=4)
-        seed_entry = ttk.Entry(self.advanced_tab, textvariable=self.seed, width=18)
+        ttk.Label(question_order, text="Random seed (optional)").grid(row=1, column=0, sticky="w")
+        seed_entry = ttk.Entry(question_order, textvariable=self.seed, width=18)
         seed_entry.grid(row=1, column=1, sticky="w", pady=4)
         seed_entry.bind("<FocusOut>", lambda _event: self._questions_changed())
+
+        overlay_output = ttk.LabelFrame(self.advanced_tab, text="Overlay Output", padding=10)
+        overlay_output.grid(row=1, column=0, sticky="new", padx=(0, 8))
         ttk.Checkbutton(
-            self.advanced_tab,
+            overlay_output,
             text="Keep generated overlay PNGs",
             variable=self.keep_overlays,
             command=self._update_overlay_directory_state,
-        ).grid(row=2, column=0, columnspan=2, sticky="w", pady=4)
-        ttk.Label(self.advanced_tab, text="Overlay PNG directory (optional)").grid(row=3, column=0, sticky="w", pady=4)
-        self.overlay_directory_entry = ttk.Entry(self.advanced_tab, textvariable=self.overlay_directory, width=18)
-        self.overlay_directory_entry.grid(row=3, column=1, sticky="w", pady=4)
+        ).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 8))
+        ttk.Label(overlay_output, text="PNG directory (optional)").grid(row=1, column=0, sticky="w")
+        self.overlay_directory_entry = ttk.Entry(overlay_output, textvariable=self.overlay_directory, width=18)
+        self.overlay_directory_entry.grid(row=1, column=1, sticky="w", padx=(8, 6))
+        self.overlay_directory_button = ttk.Button(overlay_output, text="Browse...", command=self._choose_overlay_directory)
+        self.overlay_directory_button.grid(row=1, column=2, sticky="w")
         self._update_overlay_directory_state()
 
-        fields = (
+        timing = ttk.LabelFrame(self.advanced_tab, text="Timing", padding=10)
+        timing.grid(row=0, column=1, sticky="new", pady=(0, 8))
+        timing_fields = (
             ("question_duration", "Question duration (seconds)"),
             ("answer_duration", "Answer highlight duration (seconds)"),
-            ("answer_flash_duration", "Answer flash duration (seconds)"),
-            ("answer_flash_interval", "Answer flash interval (seconds)"),
             ("start_delay", "Start delay (seconds)"),
             ("end_early", "End early (seconds)"),
+        )
+        for row, (name, label) in enumerate(timing_fields):
+            self._option_row(timing, row, name, label)
+
+        effects = ttk.LabelFrame(self.advanced_tab, text="Reveal and Transition Effects", padding=10)
+        effects.grid(row=1, column=1, sticky="new")
+        effect_fields = (
+            ("answer_flash_duration", "Answer flash duration (seconds)"),
+            ("answer_flash_interval", "Answer flash interval (seconds)"),
             ("fade_in_time", "First panel fade in (seconds)"),
             ("fade_out_time", "Last panel fade out (seconds)"),
             ("mid_question_fade", "Question transition fade (seconds)"),
         )
-        for row, (name, label) in enumerate(fields, start=4):
-            ttk.Label(self.advanced_tab, text=label).grid(row=row, column=0, sticky="w", pady=4)
-            entry = ttk.Entry(self.advanced_tab, textvariable=self.option_values[name], width=18)
-            entry.grid(row=row, column=1, sticky="w", pady=4)
-            entry.bind("<FocusOut>", lambda _event: self._start_preview())
+        for row, (name, label) in enumerate(effect_fields):
+            self._option_row(effects, row, name, label)
         ttk.Button(self.advanced_tab, text="Reset Defaults", command=self._reset_defaults).grid(
-            row=len(fields) + 4, column=0, sticky="w", pady=(14, 0)
+            row=2, column=0, sticky="w", pady=(8, 0)
         )
+
+    def _option_row(self, parent: ttk.LabelFrame, row: int, name: str, label: str) -> None:
+        ttk.Label(parent, text=label).grid(row=row, column=0, sticky="w", pady=4)
+        entry = ttk.Entry(parent, textvariable=self.option_values[name], width=18)
+        entry.grid(row=row, column=1, sticky="w", padx=(8, 0), pady=4)
+        entry.bind("<FocusOut>", lambda _event: self._start_preview())
 
     def _build_questions_tab(self) -> None:
         self.questions_tab.rowconfigure(1, weight=1)
@@ -348,6 +370,14 @@ class TriviaCountdownApp(ttk.Frame):
     def _update_overlay_directory_state(self) -> None:
         state = "normal" if self.keep_overlays.get() else "disabled"
         self.overlay_directory_entry.configure(state=state)
+        self.overlay_directory_button.configure(state=state)
+
+    def _choose_overlay_directory(self) -> None:
+        path = filedialog.askdirectory(title="Choose overlay PNG directory")
+        if path:
+            self.overlay_directory.set(path)
+            self.keep_overlays.set(True)
+            self._update_overlay_directory_state()
 
     def _default_overlay_directory(self) -> Path:
         output_text = self.output_path.get().strip()
@@ -525,13 +555,26 @@ class TriviaCountdownApp(ttk.Frame):
         self.root.after(100, self._poll_events)
 
     def _show_preview(self, image: Image.Image, timestamp: float) -> None:
-        max_width, max_height = 850, 450
+        self._preview_image = image
+        self._display_preview()
+        self.preview_text.set(f"Question {self._selected_question + 1} at {timestamp:.1f}s")
+
+    def _resize_preview(self, _event: tk.Event) -> None:
+        self._display_preview()
+
+    def _display_preview(self) -> None:
+        if self._preview_image is None:
+            return
+        max_width = max(1, self.preview_label.winfo_width() - 10)
+        max_height = max(1, self.preview_label.winfo_height() - 10)
+        if max_width == 1 or max_height == 1:
+            return
+        image = self._preview_image
         scale = min(max_width / image.width, max_height / image.height, 1.0)
         if scale < 1.0:
             image = image.resize((round(image.width * scale), round(image.height * scale)), Image.Resampling.LANCZOS)
         self._preview_photo = ImageTk.PhotoImage(image)
         self.preview_label.configure(image=self._preview_photo, text="")
-        self.preview_text.set(f"Question {self._selected_question + 1} at {timestamp:.1f}s")
 
     def _update_progress(self, event: ProgressEvent) -> None:
         fraction = min(1.0, max(0.0, event.fraction))
