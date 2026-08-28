@@ -39,6 +39,7 @@ sample_objects/sample_of_5_trivia_questions.csv
 - Keep user-facing errors and warnings clear, actionable, and written to the appropriate stream.
 - Be careful with video-processing paths and temporary files; avoid leaving generated artifacts behind unless the user requested persisted output.
 - Do not commit generated videos, rendered overlays, `.venv`, `__pycache__`, `.DS_Store`, or files under `reference_objects/`.
+- Before finalizing any change, compare the implementation and current diff with `README.md` and every file under `docs/`. Update the documentation in the same change whenever behavior, commands, defaults, dependencies, setup steps, file paths, platform support, or user workflows have changed, and verify that links and duplicated guidance remain consistent.
 
 ## Trivia CSV Contract
 
