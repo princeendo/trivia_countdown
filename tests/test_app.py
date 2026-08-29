@@ -40,7 +40,7 @@ from trivia_countdown.resources import executable_path, resource_path
 
 class GuiSmokeTests(unittest.TestCase):
     def test_gui_constructs_when_a_tk_display_is_available(self) -> None:
-        from trivia_countdown.gui import TriviaCountdownApp
+        from trivia_countdown.gui import TriviaCountdownApp, quote_cli_argument
 
         try:
             root = tk.Tk()
@@ -49,13 +49,19 @@ class GuiSmokeTests(unittest.TestCase):
         try:
             root.withdraw()
             app = TriviaCountdownApp(root)
-            app.video_path.set("/tmp/source video.mp4")
-            app.trivia_path.set("/tmp/trivia.csv")
-            command_with_defaults = app._build_cli_command()
-            self.assertIn("--duration 10", command_with_defaults)
-            self.assertIn("'/tmp/source video.mp4'", command_with_defaults)
-            app.include_default_parameters.set(False)
-            self.assertNotIn("--duration 10", app._build_cli_command())
+            with TemporaryDirectory() as directory:
+                source_path = Path(directory) / "source video.mp4"
+                trivia_path = Path(directory) / "trivia.csv"
+                app.video_path.set(str(source_path))
+                app.trivia_path.set(str(trivia_path))
+                command_with_defaults = app._build_cli_command()
+                duration_argument = " ".join(
+                    quote_cli_argument(value) for value in ("--duration", "10")
+                )
+                self.assertIn(duration_argument, command_with_defaults)
+                self.assertIn(quote_cli_argument(str(source_path)), command_with_defaults)
+                app.include_default_parameters.set(False)
+                self.assertNotIn(duration_argument, app._build_cli_command())
 
             question = TriviaQuestion("Question", ("One", "Two", "Three", "Four"), 2)
             app.question_table.set_questions([question])
@@ -146,7 +152,7 @@ class RenderServiceTests(unittest.TestCase):
     def test_frozen_executable_path_uses_bundled_binary(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)
-            binary = root / "bin" / "ffmpeg"
+            binary = root / "bin" / ("ffmpeg.exe" if os.name == "nt" else "ffmpeg")
             binary.parent.mkdir()
             binary.touch()
             with patch("trivia_countdown.resources.sys.frozen", True, create=True), patch(
