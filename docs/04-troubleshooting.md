@@ -72,7 +72,7 @@ The complete source video is re-encoded. Long or high-resolution videos can take
 
 ## The App Cannot Save the Output
 
-Confirm that the output folder exists and that you have permission to write there. Choose a different output location, such as your Movies or Desktop folder, if necessary. Make sure there is enough free disk space for a newly encoded copy of the source video.
+The app creates missing output folders automatically. Confirm that you have permission to write to the selected location, choose a different location such as your Movies or Desktop folder if necessary, and make sure there is enough free disk space for a newly encoded copy of the source video.
 
 ## Requesting Help
 

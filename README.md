@@ -10,7 +10,7 @@ Trivia Countdown runs locally on your Mac. It does not upload your video or triv
 
 The downloadable app is the recommended way for non-technical users to create a video. It supports Apple Silicon Macs running macOS 14 Sonoma or later. You need a source video and a trivia CSV; the DMG includes a sample CSV but does not include a source video.
 
-1. Open the [GitHub Releases page](https://github.com/princeendo/trivia_countdown/releases) and download the latest `macOS-arm64.dmg` file.
+1. Open the [GitHub Releases page](https://github.com/princeendo/trivia_countdown/releases) and download the latest `Trivia-Countdown-<version>-macOS-arm64.dmg` file.
 2. Open the DMG and drag **Trivia Countdown** into the **Applications** shortcut.
 3. Before ejecting the DMG, drag **Sample Trivia Questions.csv** to your Desktop or Documents folder if you want to try the sample.
 4. Eject the disk image and open **Trivia Countdown** from Applications.

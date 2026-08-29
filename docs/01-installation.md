@@ -17,7 +17,7 @@ The current downloadable build is an ad-hoc-signed preview. It is not signed wit
 
 Only follow these steps for a DMG downloaded from the project's official [GitHub Releases page](https://github.com/princeendo/trivia_countdown/releases):
 
-1. Download the latest file ending in `macOS-arm64.dmg`.
+1. Download the latest `Trivia-Countdown-<version>-macOS-arm64.dmg` file.
 2. Optionally verify it against the release's `SHA256SUMS` file as described below.
 3. Double-click the DMG to open it.
 4. Drag **Trivia Countdown** onto the **Applications** shortcut.

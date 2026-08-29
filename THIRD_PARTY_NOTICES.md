@@ -1,7 +1,7 @@
 # Third-Party Notices
 
 Trivia Countdown includes Python, Tcl/Tk, Pillow, Pillow's native libraries,
-the PyInstaller bootloader, and executables from the FFmpeg and x264 projects.
+the PyInstaller bootloader, and FFmpeg executables built with x264 support.
 Their full license texts are included in the **Third-Party Licenses** folder in
 the DMG and in the app.
 

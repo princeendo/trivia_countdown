@@ -10,7 +10,7 @@ FFmpeg is built with `libx264`, so the bundled FFmpeg executables are GPL softwa
 
 ## Build Locally
 
-The build requires an Apple Silicon Mac, the Xcode Command Line Tools, `uv`, `git`, `make`, and `pkg-config`. CI pins the application, FFmpeg, x264, Python 3.12.10, and PyInstaller versions. Local builds use the selected compatible Python interpreter rather than enforcing the CI patch version. Compiler and filesystem metadata can still vary between runner images. Builds are repeatable from exact sources, not guaranteed byte-for-byte reproducible.
+The build requires an Apple Silicon Mac, the Xcode Command Line Tools, Python 3.11 or later, `uv`, `git`, `make`, and `pkg-config`. CI pins the application, FFmpeg, x264, Python 3.12.10, and PyInstaller versions. Local builds use the selected compatible Python interpreter rather than enforcing the CI patch version. Compiler and filesystem metadata can still vary between runner images. Builds are repeatable from exact sources, not guaranteed byte-for-byte reproducible.
 
 Build the pinned FFmpeg and x264 sources:
 
@@ -49,7 +49,7 @@ Before publishing, download the DMG through a browser and test it on a clean mac
 
 ## Build With GitHub Actions
 
-Open the repository's **Actions** tab, select **Build unsigned macOS DMG**, and choose **Run workflow**. A successful run provides a `trivia-countdown-macos-arm64` workflow artifact containing the DMG, corresponding GPL sources, and checksums. The workflow also publishes GitHub build provenance attestations. Manual runs do not create a GitHub release.
+Open the repository's **Actions** tab, select **Build unsigned macOS DMG**, and choose **Run workflow**. A successful run provides a `trivia-countdown-macos-arm64` workflow artifact containing the DMG, corresponding GPL sources, and checksums. The workflow also publishes GitHub build provenance attestations. A manual run from a branch does not create a GitHub release; one dispatched from a matching `v`-prefixed tag creates or updates that tag's draft prerelease.
 
 ## Prepare a GitHub Release
 

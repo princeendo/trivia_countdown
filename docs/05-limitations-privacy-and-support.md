@@ -37,7 +37,7 @@ Start with the [Troubleshooting Guide](04-troubleshooting.md), which covers the 
 
 Trivia Countdown is available under the [MIT License](../LICENSE). The license applies to this project's software and documentation, not to videos or other content processed with it.
 
-The downloadable app also contains separate FFmpeg and x264 executables distributed under the GNU General Public License. Their notices and the location of exact corresponding source code are documented in [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
+The downloadable app contains FFmpeg and ffprobe executables built with x264 support and distributed under the GNU General Public License. Their notices and the location of exact corresponding source code are documented in [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
 
 ---
 
