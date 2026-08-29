@@ -57,7 +57,9 @@ The desktop window contains Main, Advanced, and Questions tabs. Choose a source 
 
 ## Install From Source
 
-This is an advanced alternative for developers who want the command-line interface, want to modify the project, or cannot use the packaged Apple Silicon app. It requires macOS, Terminal, Homebrew, Python 3.9 or later with Tcl/Tk support, uv, and FFmpeg. Intel and non-macOS source use are not part of the tested downloadable-app workflow.
+This is an advanced alternative for developers who want the command-line interface, want to modify the project, or cannot use the packaged Apple Silicon app. It requires Python 3.9 or later with Tcl/Tk support, uv, and FFmpeg. The downloadable app remains Mac-only until the Windows preview passes its separate qualification process.
+
+### macOS
 
 1. Download or clone the repository.
 2. Open the project folder in Terminal.
@@ -84,6 +86,33 @@ If this fails with `tkinter` or `_tkinter` unavailable, install a Python distrib
 6. Launch the source GUI or inspect the command-line help:
 
 ```sh
+uv run python make_trivia_countdown_gui.py
+uv run python make_trivia_countdown.py --help
+```
+
+### Windows PowerShell
+
+The Windows source workflow targets Windows 10 22H2 and Windows 11 on x64 hardware. It is intended for developers while the packaged Windows preview is being qualified.
+
+1. Download or clone the repository, then open its folder in PowerShell.
+2. Install Python with Tcl/Tk support, [uv](https://docs.astral.sh/uv/getting-started/installation/), and an FFmpeg build that provides `ffmpeg.exe` and `ffprobe.exe` on `PATH`.
+3. Create the locked environment without activating it:
+
+```powershell
+uv sync --frozen
+```
+
+4. Confirm Tkinter is available:
+
+```powershell
+uv run python -c "import tkinter; print(tkinter.TkVersion)"
+```
+
+If this reports that `tkinter` or `_tkinter` is unavailable, install a Python distribution that includes Tcl/Tk, remove `.venv`, and repeat the setup command.
+
+5. Launch the source GUI or inspect the command-line help:
+
+```powershell
 uv run python make_trivia_countdown_gui.py
 uv run python make_trivia_countdown.py --help
 ```

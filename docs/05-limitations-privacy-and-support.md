@@ -2,7 +2,7 @@
 
 ## Current Limitations
 
-- The downloadable app supports Apple Silicon Macs running macOS 14 or later. Intel Macs and other operating systems are not currently supported.
+- The downloadable app supports Apple Silicon Macs running macOS 14 or later. A Windows x64 installer preview is under qualification for Windows 10 22H2 and Windows 11; it is not yet a published download.
 - The current downloadable preview is ad-hoc signed, but is not signed with an Apple Developer ID or notarized, so macOS may require its per-app **Open Anyway** override on first launch.
 - The panel colors, typography, and lower-screen layout are fixed and are not configurable from either the desktop interface or command line.
 - The layout is intended primarily for landscape video. Portrait and unusual aspect ratios may not produce an ideal composition.

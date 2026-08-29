@@ -20,9 +20,11 @@ Homebrew is only required for a source installation. Normal DMG users should fol
 
 `uv` is only required for a source installation. Run `brew install uv`. If Homebrew reports that `uv` is already installed, open a new Terminal window so its updated command path is loaded.
 
+On Windows source installations, install uv using the [official Windows instructions](https://docs.astral.sh/uv/getting-started/installation/) and open a new PowerShell window before retrying.
+
 ## `Required executable not found: ffmpeg` or `ffprobe`
 
-This message should only occur in a source installation because the Mac app bundles both tools. Source users can run `brew install ffmpeg`. If the packaged app reports a missing bundled executable, reinstall it from a verified DMG and open an issue if the problem remains.
+This message should only occur in a source installation because the Mac app bundles both tools. macOS source users can run `brew install ffmpeg`. Windows source users must install an FFmpeg build that provides `ffmpeg.exe` and `ffprobe.exe` on `PATH`, then open a new PowerShell window. If the packaged app reports a missing bundled executable, reinstall it from a verified DMG and open an issue if the problem remains.
 
 ## The Desktop Interface Does Not Open
 

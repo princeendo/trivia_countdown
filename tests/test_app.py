@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import io
 import math
 from pathlib import Path
 import shutil
@@ -24,8 +25,14 @@ from trivia_countdown.app import (
 )
 from trivia_countdown.lib.cancellation import CancellationToken, RenderCancelled
 from trivia_countdown.lib.models import TriviaQuestion, VideoDimensions
-from trivia_countdown.lib.overlays import build_panel_layout, render_question_image, render_overlays
-from trivia_countdown.lib.video import extract_video_still
+from trivia_countdown.lib.overlays import build_panel_layout, load_font, render_question_image, render_overlays
+from trivia_countdown.lib.progress import ProgressReporter
+from trivia_countdown.lib.video import (
+    extract_video_still,
+    quote_ffconcat_path,
+    windows_subprocess_kwargs,
+    write_overlay_concat_file,
+)
 from trivia_countdown.resources import executable_path, resource_path
 
 
@@ -55,6 +62,15 @@ class GuiSmokeTests(unittest.TestCase):
             self.assertEqual(app.question_table._row_widgets[0][0].cget("background"), "#d9f2df")
         finally:
             root.destroy()
+
+    def test_powershell_command_escapes_apostrophes(self) -> None:
+        from trivia_countdown.gui import quote_cli_argument
+
+        with patch("trivia_countdown.gui.sys.platform", "win32"):
+            self.assertEqual(
+                quote_cli_argument(r"C:\Trivia's\source video.mp4"),
+                "'C:\\Trivia''s\\source video.mp4'",
+            )
 
 
 CSV_CONTENT = """question,answer_1,answer_2,answer_3,answer_4,correct_answer
@@ -92,6 +108,57 @@ class RenderServiceTests(unittest.TestCase):
                 "trivia_countdown.resources.sys._MEIPASS", str(root), create=True
             ):
                 self.assertEqual(executable_path("ffmpeg"), binary)
+
+    def test_frozen_windows_executable_path_uses_exe_suffix(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            binary = root / "bin" / "ffmpeg.exe"
+            binary.parent.mkdir()
+            binary.touch()
+            with patch("trivia_countdown.resources.sys.frozen", True, create=True), patch(
+                "trivia_countdown.resources.sys._MEIPASS", str(root), create=True
+            ), patch("trivia_countdown.resources.sys.platform", "win32"):
+                self.assertEqual(executable_path("ffmpeg"), binary)
+
+    def test_bundled_fonts_load_at_requested_sizes(self) -> None:
+        regular = load_font(18)
+        bold = load_font(34, bold=True)
+        self.assertEqual(regular.size, 18)
+        self.assertEqual(bold.size, 34)
+
+    def test_concat_manifest_uses_absolute_escaped_paths(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            overlay = root / "relative overlays" / "question's.png"
+            concat_file = root / "timeline.ffconcat"
+            write_overlay_concat_file([(overlay, 1.25)], concat_file)
+            escaped_path = quote_ffconcat_path(overlay.resolve())
+            self.assertEqual(
+                concat_file.read_text(encoding="utf-8"),
+                f"ffconcat version 1.0\nfile '{escaped_path}'\nduration 1.250000\nfile '{escaped_path}'\n",
+            )
+
+    def test_concat_path_uses_ffmpeg_apostrophe_escaping(self) -> None:
+        self.assertEqual(
+            quote_ffconcat_path(Path("C:/Trivia Files/question's.png")),
+            r"C:/Trivia Files/question'\''s.png",
+        )
+
+    def test_redirected_progress_uses_newlines_without_ansi(self) -> None:
+        output = io.StringIO()
+        with patch("trivia_countdown.lib.progress.sys.stderr", output):
+            reporter = ProgressReporter(enabled=True)
+            reporter.update_fraction("Rendering overlays", 0.5, "1/2", 0.0)
+            reporter.complete_phase("Rendering overlays", 0.0)
+        self.assertNotIn("\r", output.getvalue())
+        self.assertNotIn("\033", output.getvalue())
+        self.assertEqual(len(output.getvalue().splitlines()), 2)
+
+    def test_frozen_windows_processes_hide_child_consoles(self) -> None:
+        with patch("trivia_countdown.lib.video.os.name", "nt"), patch(
+            "trivia_countdown.lib.video.is_frozen", return_value=True
+        ), patch("trivia_countdown.lib.video.subprocess.CREATE_NO_WINDOW", 0x08000000, create=True):
+            self.assertEqual(windows_subprocess_kwargs(), {"creationflags": 0x08000000})
 
     def test_options_reject_nonfinite_and_invalid_cross_fields(self) -> None:
         with self.assertRaisesRegex(ValueError, "finite"):

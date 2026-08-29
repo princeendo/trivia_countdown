@@ -1,6 +1,6 @@
 # Usage and Command Reference
 
-The desktop instructions apply to the installed Mac app and are the recommended workflow for normal users. Command-line examples are for developers using a source checkout and should be run from the Trivia Countdown project folder.
+The desktop instructions apply to the installed Mac app and are the recommended workflow for normal users. Command-line examples are for developers using a source checkout and should be run from the Trivia Countdown project folder. On Windows, run source commands in PowerShell.
 
 If you are using the Mac app, start with [Installation](01-installation.md) and [Preparing Trivia Questions](02-preparing-trivia.md). You do not need to install Python, uv, FFmpeg, or use Terminal.
 
@@ -31,6 +31,12 @@ uv run python make_trivia_countdown.py \
 ```
 
 Keep paths in quotation marks when a file or folder name contains spaces. On macOS, you can drag a file from Finder into Terminal to insert its full path.
+
+In PowerShell, use single quotes around paths. A single quote within a path is represented by two single quotes:
+
+```powershell
+uv run python make_trivia_countdown.py 'C:\Videos\Trivia''s Source.mp4' 'C:\Trivia\questions.csv'
+```
 
 The command validates the inputs, reports how many questions fit, renders the trivia panels, and composes the final video. By default, the output is created beside the source video as `<source-name>_trivia_countdown.mp4`.
 

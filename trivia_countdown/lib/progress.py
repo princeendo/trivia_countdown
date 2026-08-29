@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 import time
 
@@ -50,10 +51,28 @@ class ProgressReporter:
             f"{phase}: {fraction * 100:5.1f}% ({detail}) "
             f"elapsed {format_duration(elapsed)}, remaining {remaining_text}"
         )
-        print(f"\r{message}\033[K", end="", file=sys.stderr, flush=True)
+        if self._is_interactive():
+            suffix = "\033[K" if self._supports_ansi() else ""
+            print(f"\r{message}{suffix}", end="", file=sys.stderr, flush=True)
+        else:
+            print(message, file=sys.stderr, flush=True)
 
     def complete_phase(self, phase: str, phase_start: float) -> None:
         if not self.enabled:
             return
         elapsed = time.monotonic() - phase_start
-        print(f"\r{phase}: complete in {format_duration(elapsed)}\033[K", file=sys.stderr, flush=True)
+        suffix = "\033[K" if self._supports_ansi() else ""
+        prefix = "\r" if self._is_interactive() else ""
+        print(f"{prefix}{phase}: complete in {format_duration(elapsed)}{suffix}", file=sys.stderr, flush=True)
+
+    @staticmethod
+    def _is_interactive() -> bool:
+        return bool(getattr(sys.stderr, "isatty", lambda: False)())
+
+    @staticmethod
+    def _supports_ansi() -> bool:
+        if not ProgressReporter._is_interactive():
+            return False
+        if os.name != "nt":
+            return True
+        return bool(os.environ.get("ANSICON") or os.environ.get("WT_SESSION") or os.environ.get("ConEmuANSI") == "ON")

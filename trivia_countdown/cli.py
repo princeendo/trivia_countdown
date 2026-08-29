@@ -151,7 +151,7 @@ def main() -> int:
 
     try:
         prepared = prepare_render(RenderRequest(args.video_file, args.trivia_file, output, options))
-    except (RuntimeError, ValueError) as exc:
+    except (OSError, RuntimeError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
@@ -197,7 +197,7 @@ def main() -> int:
 
     try:
         result = run_render(prepared, progress_callback=report_progress)
-    except RuntimeError as exc:
+    except (OSError, RuntimeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 

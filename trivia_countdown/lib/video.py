@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import locale
 import math
 import os
 import subprocess
@@ -14,13 +15,27 @@ from typing import Callable, Optional
 
 from PIL import Image
 
-from ..resources import executable_path
+from ..resources import executable_path, is_frozen
 from .cancellation import RenderCancelled, check_cancelled
 from .models import RenderedOverlay, VideoDimensions
 
 
 def require_executable(name: str) -> None:
     executable_path(name)
+
+
+def windows_subprocess_kwargs() -> dict[str, int]:
+    if os.name == "nt" and is_frozen():
+        return {"creationflags": subprocess.CREATE_NO_WINDOW}
+    return {}
+
+
+def text_subprocess_kwargs() -> dict[str, object]:
+    return {
+        "encoding": locale.getpreferredencoding(False),
+        "errors": "replace",
+        **windows_subprocess_kwargs(),
+    }
 
 
 def validate_input_paths(video_file: Path, trivia_file: Path) -> None:
@@ -43,7 +58,13 @@ def get_video_dimensions(video_file: Path) -> VideoDimensions:
         "json",
         str(video_file),
     ]
-    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    result = subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        check=False,
+        **text_subprocess_kwargs(),
+    )
     if result.returncode != 0:
         message = result.stderr.strip() or "ffprobe failed to inspect the input video"
         raise RuntimeError(message)
@@ -71,7 +92,13 @@ def get_video_duration(video_file: Path) -> float:
         "default=noprint_wrappers=1:nokey=1",
         str(video_file),
     ]
-    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    result = subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        check=False,
+        **text_subprocess_kwargs(),
+    )
     if result.returncode != 0:
         message = result.stderr.strip() or "ffprobe failed to inspect the input video duration"
         raise RuntimeError(message)
@@ -119,7 +146,13 @@ def get_video_fps(video_file: Path) -> float:
         "json",
         str(video_file),
     ]
-    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    result = subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        check=False,
+        **text_subprocess_kwargs(),
+    )
     if result.returncode != 0:
         message = result.stderr.strip() or "ffprobe failed to inspect the input video FPS"
         raise RuntimeError(message)
@@ -160,9 +193,11 @@ def extract_video_still(video_file: Path, timestamp: float) -> Image.Image:
         ],
         capture_output=True,
         check=False,
+        **windows_subprocess_kwargs(),
     )
     if result.returncode != 0:
-        message = result.stderr.decode(errors="replace").strip() or "ffmpeg failed to extract a preview frame"
+        message = result.stderr.decode(locale.getpreferredencoding(False), errors="replace").strip()
+        message = message or "ffmpeg failed to extract a preview frame"
         raise RuntimeError(message)
     try:
         with Image.open(BytesIO(result.stdout)) as frame:
@@ -185,7 +220,7 @@ def parse_ffmpeg_time(value: str) -> Optional[float]:
 
 
 def quote_ffconcat_path(path: Path) -> str:
-    return str(path).replace("\\", "\\\\").replace("'", "\\'")
+    return path.as_posix().replace("'", r"'\''")
 
 
 def build_overlay_schedule(
@@ -252,10 +287,10 @@ def build_overlay_schedule(
 def write_overlay_concat_file(schedule: list[tuple[Path, float]], concat_file: Path) -> None:
     lines = ["ffconcat version 1.0"]
     for path, duration in schedule:
-        lines.append(f"file '{quote_ffconcat_path(path)}'")
+        lines.append(f"file '{quote_ffconcat_path(path.resolve())}'")
         lines.append(f"duration {duration:.6f}")
     if schedule:
-        lines.append(f"file '{quote_ffconcat_path(schedule[-1][0])}'")
+        lines.append(f"file '{quote_ffconcat_path(schedule[-1][0].resolve())}'")
     concat_file.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -404,6 +439,7 @@ def compose_video(
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
+                **text_subprocess_kwargs(),
             )
 
             def collect_stderr() -> None:
@@ -449,7 +485,12 @@ def compose_video(
             if return_code != 0:
                 message = "".join(stderr_lines).strip() or "ffmpeg failed while composing the output video"
                 raise RuntimeError(message)
-            partial_output.replace(output_file)
+            try:
+                partial_output.replace(output_file)
+            except PermissionError as exc:
+                raise RuntimeError(
+                    f"Could not replace output file {output_file}. Close any application using the file and try again."
+                ) from exc
         finally:
             if process and process.poll() is None:
                 process.terminate()
@@ -463,4 +504,7 @@ def compose_video(
                 process.stdout.close()
             if process and process.stderr:
                 process.stderr.close()
-            partial_output.unlink(missing_ok=True)
+            try:
+                partial_output.unlink(missing_ok=True)
+            except OSError:
+                pass

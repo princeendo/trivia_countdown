@@ -10,13 +10,19 @@ The CLI entry point is `make_trivia_countdown.py`. The main implementation lives
 
 - Python `>=3.9` is required.
 - Dependency management uses `uv`.
-- System executables `ffmpeg` and `ffprobe` must be installed and available on `PATH`.
+- Source-mode executables `ffmpeg` and `ffprobe` must be installed and available on `PATH`.
 - Runtime Python dependencies are declared in `pyproject.toml` and mirrored in `requirements.txt`.
 
-Set up the environment with:
+On macOS or Linux, set up the environment with:
 
 ```sh
 . ./setup_venv.sh
+```
+
+On Windows PowerShell, run commands directly without activating an environment:
+
+```powershell
+uv sync --frozen
 ```
 
 Run the CLI with:
@@ -56,11 +62,19 @@ question,answer_1,answer_2,answer_3,answer_4,correct_answer
 Use lightweight checks first:
 
 ```sh
-uv run python -m py_compile make_trivia_countdown.py trivia_countdown/*.py trivia_countdown/lib/*.py
+uv run python -m compileall -q make_trivia_countdown.py make_trivia_countdown_gui.py trivia_countdown
 uv run python make_trivia_countdown.py --help
 ```
 
 When changing CSV parsing, argument validation, scheduling, rendering, or composition behavior, run a targeted CLI command with a sample CSV and a known local video if one is available. Full video renders can be slow and require `ffmpeg`/`ffprobe`, so avoid running them unnecessarily.
+
+For a Windows package build, use a Windows x64 system with Inno Setup 7.1.0 and run:
+
+```powershell
+.\scripts\build_windows_installer.ps1
+```
+
+Do not publish the resulting installer until the required FFmpeg corresponding-source archive and clean-machine qualification are complete.
 
 Before finalizing changes, run:
 

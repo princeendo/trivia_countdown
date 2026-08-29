@@ -4,7 +4,7 @@ Create an MP4 trivia countdown by placing question and answer panels over an exi
 
 ![Animated example showing a trivia question, answer reveal, and transition to the next question](assets/trivia-demo.gif)
 
-Trivia Countdown runs locally on your Mac. It does not upload your video or trivia questions, and it does not modify the source video.
+The currently downloadable app runs locally on your Mac. It does not upload your video or trivia questions, and it does not modify the source video.
 
 ## Quick Start: Mac App
 
@@ -23,7 +23,7 @@ The Main tab shows a static source-video frame with the selected trivia overlay 
 
 ## For Developers
 
-Developers can run the GUI or command line from a source checkout. This advanced path requires Homebrew, Terminal, Python with Tcl/Tk support, uv, and FFmpeg. See the [source installation instructions](docs/01-installation.md#install-from-source).
+Developers can run the GUI or command line from a source checkout on macOS or Windows. This advanced path requires Python with Tcl/Tk support, uv, and FFmpeg. See the [source installation instructions](docs/01-installation.md#install-from-source).
 
 The source GUI includes a **CLI** tab that generates the equivalent command. The packaged app does not include this developer-only tab.
 

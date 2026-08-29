@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 from queue import Empty, Queue
 import shlex
+import sys
 from threading import Thread
 import time
 import tkinter as tk
@@ -30,6 +31,12 @@ from .lib.overlays import render_question_image
 from .lib.progress import format_duration
 from .lib.video import extract_video_still, get_video_dimensions, get_video_duration, require_executable
 from .resources import is_frozen, resource_path
+
+
+def quote_cli_argument(value: str) -> str:
+    if sys.platform == "win32":
+        return "'" + value.replace("'", "''") + "'"
+    return shlex.quote(value)
 
 
 class QuestionTable(ttk.Frame):
@@ -495,7 +502,7 @@ class TriviaCountdownApp(ttk.Frame):
                 command.extend((option_name, f"{value:g}"))
         if options.overlay_dir is not None:
             command.extend(("--overlay-dir", str(options.overlay_dir)))
-        return " ".join(shlex.quote(part) for part in command)
+        return " ".join(quote_cli_argument(part) for part in command)
 
     def _copy_cli_command(self) -> None:
         command = self._build_cli_command()

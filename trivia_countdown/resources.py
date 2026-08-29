@@ -21,10 +21,13 @@ def resource_path(*parts: str) -> Path:
 
 def executable_path(name: str) -> Path:
     if is_frozen():
-        bundled = resource_path("bin", name)
+        bundled_name = name
+        if sys.platform == "win32" and not name.lower().endswith(".exe"):
+            bundled_name = f"{name}.exe"
+        bundled = resource_path("bin", bundled_name)
         if bundled.is_file():
             return bundled
-        raise RuntimeError(f"Required bundled executable not found: {name}")
+        raise RuntimeError(f"Required bundled executable not found: {bundled_name}")
 
     installed = shutil.which(name)
     if installed is None:

@@ -1,9 +1,9 @@
 # Third-Party Notices
 
 Trivia Countdown includes Python, Tcl/Tk, Pillow, Pillow's native libraries,
-the PyInstaller bootloader, and FFmpeg executables built with x264 support.
-Their full license texts are included in the **Third-Party Licenses** folder in
-the DMG and in the app.
+the PyInstaller bootloader, Noto Sans fonts, and FFmpeg executables built with
+x264 support. Their full license texts are included in the **Third-Party
+Licenses** folder in released applications.
 
 ## Python, Tcl/Tk, and Pillow
 
@@ -13,7 +13,17 @@ the DMG and in the app.
 - PyInstaller: https://pyinstaller.org/
 
 Pillow's distributed license file also contains the notices for native image
-libraries shipped in its macOS wheel.
+libraries shipped in its platform-specific wheel.
+
+## Noto Sans
+
+The application bundles Noto Sans Regular and Bold from the Noto Fonts
+`v20201206-phase3` revision `20bc5918912503bc1537a407a694738c33c048aa`.
+The fonts are distributed under the SIL Open Font License 1.1. The exact font
+hashes and license text are in [`assets/fonts/`](assets/fonts/).
+
+- Noto Fonts: https://github.com/notofonts/noto-fonts
+- SIL Open Font License 1.1: https://openfontlicense.org/
 
 ## FFmpeg and x264
 

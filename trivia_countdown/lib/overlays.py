@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Callable, Optional
 
 from PIL import Image, ImageDraw, ImageFont
 
+from ..resources import resource_path
 from .cancellation import check_cancelled
 from .models import Font, PanelLayout, RenderedOverlay, TransitionFrame, TriviaQuestion, VideoDimensions
 
@@ -58,18 +58,12 @@ def build_panel_layout(dimensions: VideoDimensions) -> PanelLayout:
 
 
 def load_font(size: int, *, bold: bool = False) -> Font:
-    candidates = [
-        "/System/Library/Fonts/Supplemental/Arial Bold.ttf" if bold else "/System/Library/Fonts/Supplemental/Arial.ttf",
-        "/System/Library/Fonts/Supplemental/Helvetica Bold.ttf" if bold else "/System/Library/Fonts/Helvetica.ttc",
-        "/Library/Fonts/Arial Bold.ttf" if bold else "/Library/Fonts/Arial.ttf",
-    ]
-    for candidate in candidates:
-        if Path(candidate).is_file():
-            try:
-                return ImageFont.truetype(candidate, size=size)
-            except OSError:
-                continue
-    return ImageFont.load_default()
+    filename = "NotoSans-Bold.ttf" if bold else "NotoSans-Regular.ttf"
+    font_path = resource_path("assets", "fonts", filename)
+    try:
+        return ImageFont.truetype(font_path, size=size)
+    except OSError as exc:
+        raise RuntimeError(f"Could not load bundled font: {font_path}") from exc
 
 
 def text_size(draw: ImageDraw.ImageDraw, text: str, font: Font) -> tuple[int, int]:
