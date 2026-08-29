@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import io
 import math
-from pathlib import Path
+import os
+from pathlib import Path, PureWindowsPath
 import shutil
 import subprocess
 from tempfile import TemporaryDirectory
@@ -24,10 +25,11 @@ from trivia_countdown.app import (
     validate_options,
 )
 from trivia_countdown.lib.cancellation import CancellationToken, RenderCancelled
-from trivia_countdown.lib.models import TriviaQuestion, VideoDimensions
+from trivia_countdown.lib.models import RenderedOverlay, TriviaQuestion, VideoDimensions
 from trivia_countdown.lib.overlays import build_panel_layout, load_font, render_question_image, render_overlays
 from trivia_countdown.lib.progress import ProgressReporter
 from trivia_countdown.lib.video import (
+    compose_video,
     extract_video_still,
     quote_ffconcat_path,
     windows_subprocess_kwargs,
@@ -79,11 +81,54 @@ Which element has the symbol O?,Gold,Oxygen,Silver,Iron,2
 """
 
 
+class FakeFfmpegProcess:
+    def __init__(self, return_code: int, stderr: str = "") -> None:
+        self.return_code = return_code
+        self.stdout = io.StringIO()
+        self.stderr = io.StringIO(stderr)
+
+    def poll(self) -> int:
+        return self.return_code
+
+    def wait(self, timeout: object = None) -> int:
+        return self.return_code
+
+    def terminate(self) -> None:
+        pass
+
+    def kill(self) -> None:
+        pass
+
+
 class RenderServiceTests(unittest.TestCase):
     def write_csv(self, directory: Path) -> Path:
         path = directory / "trivia.csv"
         path.write_text(CSV_CONTENT, encoding="utf-8")
         return path
+
+    def compose_test_video(self, root: Path, output: Path, process: FakeFfmpegProcess) -> None:
+        normal = root / "normal.png"
+        reveal = root / "reveal.png"
+        Image.new("RGBA", (16, 16)).save(normal)
+        Image.new("RGBA", (16, 16)).save(reveal)
+        with patch("trivia_countdown.lib.video.executable_path", return_value=Path("ffmpeg")), patch(
+            "trivia_countdown.lib.video.subprocess.Popen", return_value=process
+        ):
+            compose_video(
+                root / "source.mp4",
+                output,
+                [RenderedOverlay(normal, reveal)],
+                VideoDimensions(16, 16),
+                video_duration=1,
+                video_fps=30,
+                question_duration=0.5,
+                answer_duration=0.5,
+                answer_flash_duration=0,
+                answer_flash_interval=0,
+                start_delay=0,
+                fade_in_time=0,
+                fade_out_time=0,
+            )
 
     def test_default_output_path(self) -> None:
         self.assertEqual(
@@ -143,6 +188,37 @@ class RenderServiceTests(unittest.TestCase):
             quote_ffconcat_path(Path("C:/Trivia Files/question's.png")),
             r"C:/Trivia Files/question'\''s.png",
         )
+
+    def test_concat_path_preserves_windows_unc_paths(self) -> None:
+        self.assertEqual(
+            quote_ffconcat_path(PureWindowsPath(r"\\server\Trivia Files\question's.png")),
+            r"//server/Trivia Files/question'\''s.png",
+        )
+
+    def test_failed_composition_preserves_existing_output(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "result.mp4"
+            output.write_bytes(b"existing output")
+
+            with self.assertRaises(RuntimeError):
+                self.compose_test_video(root, output, FakeFfmpegProcess(1, "ffmpeg test failure\n"))
+
+            self.assertEqual(output.read_bytes(), b"existing output")
+            self.assertEqual(list(root.glob(".result.*.mp4")), [])
+
+    def test_composition_reports_locked_output_and_preserves_existing_file(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "result.mp4"
+            output.write_bytes(b"existing output")
+
+            with patch("trivia_countdown.lib.video.Path.replace", side_effect=PermissionError):
+                with self.assertRaisesRegex(RuntimeError, "Close any application using the file"):
+                    self.compose_test_video(root, output, FakeFfmpegProcess(0))
+
+            self.assertEqual(output.read_bytes(), b"existing output")
+            self.assertEqual(list(root.glob(".result.*.mp4")), [])
 
     def test_redirected_progress_uses_newlines_without_ansi(self) -> None:
         output = io.StringIO()
@@ -204,6 +280,25 @@ class RenderServiceTests(unittest.TestCase):
 
 @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg and ffprobe are required")
 class VideoIntegrationTests(unittest.TestCase):
+    def create_source_video(self, source: Path) -> None:
+        subprocess.run(
+            [
+                "ffmpeg",
+                "-y",
+                "-f",
+                "lavfi",
+                "-i",
+                "color=c=blue:s=160x90:d=2",
+                "-c:v",
+                "libx264",
+                "-pix_fmt",
+                "yuv420p",
+                str(source),
+            ],
+            capture_output=True,
+            check=True,
+        )
+
     def test_preview_and_short_render(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)
@@ -211,23 +306,7 @@ class VideoIntegrationTests(unittest.TestCase):
             trivia = root / "trivia.csv"
             output = root / "result.mp4"
             trivia.write_text(CSV_CONTENT, encoding="utf-8")
-            subprocess.run(
-                [
-                    "ffmpeg",
-                    "-y",
-                    "-f",
-                    "lavfi",
-                    "-i",
-                    "color=c=blue:s=160x90:d=2",
-                    "-c:v",
-                    "libx264",
-                    "-pix_fmt",
-                    "yuv420p",
-                    str(source),
-                ],
-                capture_output=True,
-                check=True,
-            )
+            self.create_source_video(source)
             frame = extract_video_still(source, 0.5)
             self.assertEqual(frame.size, (160, 90))
             request = RenderRequest(
@@ -253,6 +332,94 @@ class VideoIntegrationTests(unittest.TestCase):
             self.assertGreater(output.stat().st_size, 0)
             self.assertGreater(result.overlay_count, 0)
             self.assertTrue(any(event.phase == "Composing video" for event in progress))
+
+    def test_special_paths_render_with_relative_overlay_directory(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory) / "spaces unicode-cafe-\u00e9's"
+            root.mkdir()
+            source = root / "source video's.mp4"
+            trivia = root / "trivia questions.csv"
+            output = root / "output video's.mp4"
+            trivia.write_text(CSV_CONTENT, encoding="utf-8")
+            self.create_source_video(source)
+
+            previous_directory = Path.cwd()
+            try:
+                os.chdir(root)
+                request = RenderRequest(
+                    source,
+                    trivia,
+                    output,
+                    RenderOptions(
+                        question_duration=0.5,
+                        answer_duration=0.3,
+                        answer_flash_duration=0,
+                        answer_flash_interval=0,
+                        start_delay=0,
+                        end_early=0,
+                        fade_in_time=0,
+                        fade_out_time=0,
+                        mid_question_fade=0,
+                        overlay_dir=Path("relative overlays cafe-\u00e9's"),
+                    ),
+                )
+                run_render(prepare_render(request))
+            finally:
+                os.chdir(previous_directory)
+
+            self.assertTrue(output.is_file())
+            self.assertGreater(output.stat().st_size, 0)
+            self.assertTrue(list(root.glob("relative overlays cafe-\u00e9's/*.png")))
+
+    @unittest.skipUnless(os.name == "nt", "Windows-only path qualification")
+    def test_configured_unc_path_render(self) -> None:
+        unc_root_text = os.environ.get("TRIVIA_COUNTDOWN_UNC_TEST_ROOT")
+        if not unc_root_text:
+            self.skipTest("Set TRIVIA_COUNTDOWN_UNC_TEST_ROOT to a writable UNC directory")
+        if not unc_root_text.startswith("\\\\"):
+            self.skipTest("TRIVIA_COUNTDOWN_UNC_TEST_ROOT must be a UNC path")
+        self._render_configured_path_case(Path(unc_root_text), "UNC")
+
+    @unittest.skipUnless(os.name == "nt", "Windows-only path qualification")
+    def test_configured_long_path_render(self) -> None:
+        long_path_root = os.environ.get("TRIVIA_COUNTDOWN_LONG_PATH_TEST_ROOT")
+        if not long_path_root:
+            self.skipTest("Set TRIVIA_COUNTDOWN_LONG_PATH_TEST_ROOT on a long-path-enabled system")
+        with TemporaryDirectory(prefix="trivia_countdown_path_test_", dir=long_path_root) as directory:
+            root = Path(directory)
+            while len(str(root)) < 270:
+                root /= "long-path-segment"
+                root.mkdir()
+            self._render_configured_path_case(root, "long path")
+
+    def _render_configured_path_case(self, root: Path, label: str) -> None:
+        root.mkdir(parents=True, exist_ok=True)
+        with TemporaryDirectory(prefix="trivia_countdown_path_test_", dir=root) as directory:
+            case_root = Path(directory)
+            source = case_root / f"{label} source.mp4"
+            trivia = case_root / "trivia.csv"
+            output = case_root / f"{label} output.mp4"
+            trivia.write_text(CSV_CONTENT, encoding="utf-8")
+            self.create_source_video(source)
+            request = RenderRequest(
+                source,
+                trivia,
+                output,
+                RenderOptions(
+                    question_duration=0.5,
+                    answer_duration=0.3,
+                    answer_flash_duration=0,
+                    answer_flash_interval=0,
+                    start_delay=0,
+                    end_early=0,
+                    fade_in_time=0,
+                    fade_out_time=0,
+                    mid_question_fade=0,
+                ),
+            )
+            run_render(prepare_render(request))
+            self.assertTrue(output.is_file())
+            self.assertGreater(output.stat().st_size, 0)
 
 
 if __name__ == "__main__":

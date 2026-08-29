@@ -116,7 +116,7 @@ test is not sufficient.
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | WIN-301 | Remove Unix-only assumptions from unit tests | `P1` | `IN_REVIEW` | None | WIN-101, WIN-108 | Tests use portable temporary paths and assert platform-appropriate executable and command behavior. | Unit suite passes on Windows and macOS. |
-| WIN-302 | Add a Windows path and filesystem test matrix | `P0` | `IN_PROGRESS` | BLK-005 | WIN-103, WIN-109 | Tests cover spaces, Unicode, apostrophes, relative paths, drive-letter paths, supported UNC paths, long paths, locked outputs, and overwrite safety. | Unit and FFmpeg integration suite on Windows. |
+| WIN-302 | Add a Windows path and filesystem test matrix | `P0` | `IN_REVIEW` | BLK-005 | WIN-103, WIN-109 | Tests cover spaces, Unicode, apostrophes, relative paths, drive-letter paths, supported UNC paths, long paths, locked outputs, and overwrite safety. | Unit and FFmpeg integration suite on Windows. |
 | WIN-303 | Add Windows source CI | `P0` | `IN_REVIEW` | None | WIN-203, WIN-301 | A pinned `windows-latest` job installs with `uv`, compiles sources, runs tests, and checks CLI help; failures block release packaging. | Successful GitHub Actions run. |
 | WIN-304 | Qualify GUI layout and DPI behavior | `P1` | `BLOCKED` | BLK-004 | WIN-102, WIN-104 | Main workflows remain usable at 100%, 125%, 150%, and 200% display scaling; preview and progress controls are visible; icon rendering is acceptable. | Manual Windows 10/11 GUI checklist with recorded results. |
 | WIN-305 | Preserve macOS behavior during the port | `P0` | `READY` | None | All runtime changes | Existing macOS source tests and package workflow continue to pass; Windows conditionals do not replace macOS behavior. | Existing macOS CI and targeted regression tests. |
@@ -235,8 +235,8 @@ The Windows preview is complete when:
 | Open or in-progress decisions | 2 |
 | Open or accepted blockers | 4 |
 | `READY` tasks | 2 |
-| `IN_PROGRESS` tasks | 1 |
-| `IN_REVIEW` tasks | 20 |
+| `IN_PROGRESS` tasks | 0 |
+| `IN_REVIEW` tasks | 21 |
 | `BLOCKED` tasks | 8 |
 | `DEFERRED` tasks | 1 |
 | `VERIFIED` implementation tasks | 0 |
