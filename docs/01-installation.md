@@ -57,7 +57,7 @@ The desktop window contains Main, Advanced, and Questions tabs. Choose a source 
 
 ## Install From Source
 
-This is an advanced alternative for developers who want the command-line interface, want to modify the project, or cannot use the packaged Apple Silicon app. It requires Python 3.9 or later with Tcl/Tk support, uv, and FFmpeg. The downloadable app remains Mac-only until the Windows preview passes its separate qualification process.
+This is an advanced alternative for developers who want the command-line interface, want to modify the project, or cannot use the packaged Apple Silicon app. The repository's `.python-version` pins uv to Python 3.12. It also requires Tcl/Tk support and FFmpeg; macOS source GUI use requires Tcl/Tk 8.6 or later. The downloadable app remains Mac-only until the Windows preview passes its separate qualification process.
 
 ### macOS
 
@@ -69,19 +69,19 @@ This is an advanced alternative for developers who want the command-line interfa
 brew install uv ffmpeg
 ```
 
-4. Set up the Python environment. The setup script creates or updates the project's `.venv`:
+4. Set up the Python environment. The setup script creates or updates the project's `.venv` with the Python version in `.python-version`:
 
 ```sh
 . ./setup_venv.sh
 ```
 
-5. Confirm that the selected Python includes Tkinter:
+5. Confirm that the selected Python includes Tcl/Tk 8.6 or later:
 
 ```sh
 uv run python -c 'import tkinter; print(tkinter.TkVersion)'
 ```
 
-If this fails with `tkinter` or `_tkinter` unavailable, install a Python distribution with Tcl/Tk support, remove `.venv`, and repeat steps 4 and 5 so uv creates the environment with that Python.
+The command should print `8.6` or a newer version. If setup reports an unavailable or older Tcl/Tk version, remove `.venv`, install a current Python distribution with Tcl/Tk 8.6 or later, and repeat steps 4 and 5.
 
 6. Launch the source GUI or inspect the command-line help:
 
@@ -95,7 +95,7 @@ uv run python make_trivia_countdown.py --help
 The Windows source workflow targets Windows 10 22H2 and Windows 11 on x64 hardware. It is intended for developers while the packaged Windows preview is being qualified.
 
 1. Download or clone the repository, then open its folder in PowerShell.
-2. Install Python with Tcl/Tk support, [uv](https://docs.astral.sh/uv/getting-started/installation/), and an FFmpeg build that provides `ffmpeg.exe` and `ffprobe.exe` on `PATH`.
+2. Install Python with Tcl/Tk support, [uv](https://docs.astral.sh/uv/getting-started/installation/), and an FFmpeg build that provides `ffmpeg.exe` and `ffprobe.exe` on `PATH`. The repository's `.python-version` selects Python 3.12 for uv commands.
 3. Create the locked environment without activating it:
 
 ```powershell

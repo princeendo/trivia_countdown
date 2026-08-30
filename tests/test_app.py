@@ -39,6 +39,19 @@ from trivia_countdown.resources import executable_path, resource_path
 
 
 class GuiSmokeTests(unittest.TestCase):
+    def test_macos_rejects_unsupported_tk(self) -> None:
+        from trivia_countdown.gui import validate_tk_runtime
+
+        with patch("trivia_countdown.gui.sys.platform", "darwin"), patch("trivia_countdown.gui.tk.TkVersion", 8.5):
+            with self.assertRaisesRegex(RuntimeError, "Tcl/Tk 8.6 or later"):
+                validate_tk_runtime()
+
+    def test_supported_tk_is_accepted(self) -> None:
+        from trivia_countdown.gui import validate_tk_runtime
+
+        with patch("trivia_countdown.gui.sys.platform", "darwin"), patch("trivia_countdown.gui.tk.TkVersion", 8.6):
+            validate_tk_runtime()
+
     def test_gui_constructs_when_a_tk_display_is_available(self) -> None:
         from trivia_countdown.gui import TriviaCountdownApp, quote_cli_argument
 

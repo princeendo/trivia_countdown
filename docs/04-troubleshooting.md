@@ -28,7 +28,9 @@ This message should only occur in a source installation because the Mac app bund
 
 ## The Desktop Interface Does Not Open
 
-DMG users should first follow the [Mac app installation instructions](01-installation.md#install-the-mac-app) above. Source users can launch it from the project folder with `uv run python make_trivia_countdown_gui.py`. If source mode reports that `tkinter` or `_tkinter` is unavailable, use a Python installation with Tcl/Tk support, remove `.venv`, and run `. ./setup_venv.sh` again before retrying.
+DMG users should first follow the [Mac app installation instructions](01-installation.md#install-the-mac-app) above. Source users can launch it from the project folder with `uv run python make_trivia_countdown_gui.py`.
+
+If a macOS source launch opens a blank or black window, it is using an unsupported Tcl/Tk runtime. Run `. ./setup_venv.sh` to recreate the environment with the repository's Python 3.12 pin, then confirm `uv run python -c 'import tkinter; print(tkinter.TkVersion)'` prints `8.6` or newer. If setup reports that Tkinter is unavailable or too old, install a current Python distribution with Tcl/Tk 8.6 or later, remove `.venv`, and run the setup command again.
 
 ## The Preview Is Unavailable or Looks Different From the Video
 

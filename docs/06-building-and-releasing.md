@@ -10,7 +10,7 @@ FFmpeg is built with `libx264`, so the bundled FFmpeg executables are GPL softwa
 
 ## Build the macOS App Locally
 
-The build requires an Apple Silicon Mac, the Xcode Command Line Tools, Python 3.11 or later, `uv`, `git`, `make`, and `pkg-config`. CI pins the application, FFmpeg, x264, Python 3.12.10, and PyInstaller versions. Local builds use the selected compatible Python interpreter rather than enforcing the CI patch version. Compiler and filesystem metadata can still vary between runner images. Builds are repeatable from exact sources, not guaranteed byte-for-byte reproducible.
+The build requires an Apple Silicon Mac, the Xcode Command Line Tools, `uv`, `git`, `make`, and `pkg-config`. The repository's `.python-version` selects Python 3.12 for local uv commands; CI pins the application, FFmpeg, x264, Python 3.12.10, and PyInstaller versions. Compiler and filesystem metadata can still vary between runner images. Builds are repeatable from exact sources, not guaranteed byte-for-byte reproducible.
 
 Build the pinned FFmpeg and x264 sources:
 

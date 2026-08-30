@@ -39,6 +39,15 @@ def quote_cli_argument(value: str) -> str:
     return shlex.quote(value)
 
 
+def validate_tk_runtime() -> None:
+    """Reject the macOS system Tk 8.5 runtime, which cannot render this GUI reliably."""
+    if sys.platform == "darwin" and tk.TkVersion < 8.6:
+        raise RuntimeError(
+            f"Tcl/Tk 8.6 or later is required on macOS; found {tk.TkVersion}. "
+            "Run . ./setup_venv.sh to recreate the environment with the project's Python version."
+        )
+
+
 class QuestionTable(ttk.Frame):
     """Scrollable question grid with an individually highlighted correct answer."""
 
@@ -746,7 +755,12 @@ class TriviaCountdownApp(ttk.Frame):
 
 
 def main() -> int:
-    root = tk.Tk()
+    try:
+        validate_tk_runtime()
+        root = tk.Tk()
+    except (RuntimeError, tk.TclError) as exc:
+        print(f"error: Could not start the desktop interface: {exc}", file=sys.stderr)
+        return 1
     TriviaCountdownApp(root)
     if os.environ.get("TRIVIA_COUNTDOWN_SMOKE_TEST") == "1":
         root.update_idletasks()

@@ -23,7 +23,7 @@ The Main tab shows a static source-video frame with the selected trivia overlay 
 
 ## For Developers
 
-Developers can run the GUI or command line from a source checkout on macOS or Windows. This advanced path requires Python with Tcl/Tk support, uv, and FFmpeg. See the [source installation instructions](docs/01-installation.md#install-from-source).
+Developers can run the GUI or command line from a source checkout on macOS or Windows. The repository pins its uv environment to Python 3.12; this advanced path also requires Tcl/Tk support and FFmpeg. See the [source installation instructions](docs/01-installation.md#install-from-source).
 
 The source GUI includes a **CLI** tab that generates the equivalent command. The packaged app does not include this developer-only tab.
 

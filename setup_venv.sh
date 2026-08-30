@@ -44,8 +44,29 @@ if ! cd "$PROJECT_ROOT"; then
   exit 1
 fi
 
-if ! uv sync; then
+if ! read -r PYTHON_VERSION < "$PROJECT_ROOT/.python-version" || [ -z "$PYTHON_VERSION" ]; then
+  echo "Error: could not read the required Python version from .python-version." >&2
+  if [ "$SOURCED" -eq 1 ]; then
+    return 1
+  fi
+  exit 1
+fi
+
+if ! uv sync --python "$PYTHON_VERSION"; then
   echo "Error: uv sync failed." >&2
+  if [ "$SOURCED" -eq 1 ]; then
+    return 1
+  fi
+  exit 1
+fi
+
+if [ "$(uname -s)" = "Darwin" ] && ! uv run python -c '
+import tkinter as tk
+if tk.TkVersion < 8.6:
+    raise SystemExit(f"error: Tcl/Tk 8.6 or later is required on macOS; found {tk.TkVersion}.")
+print(f"Tcl/Tk {tk.TkVersion}")
+'; then
+  echo "Error: create the environment with a current Python/Tcl-Tk installation, then run this script again." >&2
   if [ "$SOURCED" -eq 1 ]; then
     return 1
   fi
