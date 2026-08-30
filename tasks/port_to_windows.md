@@ -119,7 +119,15 @@ test is not sufficient.
 | WIN-302 | Add a Windows path and filesystem test matrix | `P0` | `IN_REVIEW` | BLK-005 | WIN-103, WIN-109 | Tests cover spaces, Unicode, apostrophes, relative paths, drive-letter paths, supported UNC paths, long paths, locked outputs, and overwrite safety. | Unit and FFmpeg integration suite on Windows. |
 | WIN-303 | Add Windows source CI | `P0` | `IN_REVIEW` | None | WIN-203, WIN-301 | A pinned `windows-latest` job installs with `uv`, compiles sources, runs tests, and checks CLI help; failures block release packaging. | Successful GitHub Actions run. |
 | WIN-304 | Qualify GUI layout and DPI behavior | `P1` | `BLOCKED` | BLK-004 | WIN-102, WIN-104 | Main workflows remain usable at 100%, 125%, 150%, and 200% display scaling; preview and progress controls are visible; icon rendering is acceptable. | Manual Windows 10/11 GUI checklist with recorded results. |
-| WIN-305 | Preserve macOS behavior during the port | `P0` | `READY` | None | All runtime changes | Existing macOS source tests and package workflow continue to pass; Windows conditionals do not replace macOS behavior. | Existing macOS CI and targeted regression tests. |
+| WIN-305 | Preserve macOS behavior during the port | `P0` | `IN_REVIEW` | None | All runtime changes | Existing macOS source tests and package workflow continue to pass; Windows conditionals do not replace macOS behavior. | Existing macOS CI and targeted regression tests. |
+
+### WIN-305 macOS Verification Evidence
+
+- 2026-08-29 on Apple Silicon macOS: `uv run python -m compileall -q make_trivia_countdown.py make_trivia_countdown_gui.py trivia_countdown`, `uv run python -m unittest tests.test_app` (22 passed, 2 Windows-only tests skipped), and `uv run python make_trivia_countdown.py --help` passed.
+- 2026-08-29 on Apple Silicon macOS: rebuilt pinned FFmpeg n8.0.1/x264 with `scripts/build_ffmpeg_macos.sh`, then built `Trivia-Countdown-0.1.0-macOS-arm64.dmg` with `scripts/build_macos_dmg.sh`.
+- 2026-08-29 on Apple Silicon macOS: the app signature and DMG verified, and the bundled `ffmpeg` and `ffprobe` binaries reported FFmpeg n8.0.1 with `--enable-libx264`.
+
+This task remains `IN_REVIEW`: the tracker requires Windows evidence before an implementation task may be marked `VERIFIED`.
 
 ## Phase 4: Dependencies and Packaging
 
@@ -234,9 +242,9 @@ The Windows preview is complete when:
 | Confirmed decisions | 9 |
 | Open or in-progress decisions | 2 |
 | Open or accepted blockers | 4 |
-| `READY` tasks | 2 |
+| `READY` tasks | 1 |
 | `IN_PROGRESS` tasks | 0 |
-| `IN_REVIEW` tasks | 21 |
+| `IN_REVIEW` tasks | 22 |
 | `BLOCKED` tasks | 8 |
 | `DEFERRED` tasks | 1 |
 | `VERIFIED` implementation tasks | 0 |
