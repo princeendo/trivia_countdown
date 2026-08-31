@@ -164,7 +164,7 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | WIN-501 | Build the EXE installer | `P0` | `IN_REVIEW` | None | DEC-101, WIN-402, WIN-403, WIN-404 | Installer uses per-user installation unless elevation is justified, creates expected shortcuts, includes notices, supports clean uninstall, and has deterministic artifact naming. | Install, upgrade, and uninstall tests on a live supported Windows system. |
-| WIN-502 | Add Windows package CI | `P0` | `IN_REVIEW` | None | WIN-303, WIN-401, WIN-405, WIN-501 | A pinned Windows runner builds the application and installer, verifies hashes and bundled tools, smoke-tests the result, and uploads the complete artifact set. | Successful workflow artifact build. |
+| WIN-502 | Add Windows package CI | `P0` | `VERIFIED` | None | WIN-303, WIN-401, WIN-405, WIN-501 | A pinned Windows runner builds the application and installer, verifies hashes and bundled tools, smoke-tests the result, and uploads the complete artifact set. | Successful workflow artifact build. |
 | WIN-503 | Add checksums and build provenance | `P1` | `BLOCKED` | BLK-001 | WIN-502 | Release output includes SHA-256 checksums and GitHub build provenance for the installer and corresponding source archive. | Checksum verification and `gh attestation verify`. |
 | WIN-504 | Qualify the unsigned preview by live installation | `P0` | `IN_REVIEW` | None | WIN-501, WIN-502, WIN-503 | Installer, first launch, render, output playback, upgrade, and uninstall pass on a separate live Windows 10 22H2 or Windows 11 x64 system. | Signed-off live-installation checklist. |
 | WIN-505 | Publish an unsigned Windows prerelease | `P0` | `READY` | None | WIN-504, WIN-601 | Draft prerelease includes installer, checksums, FFmpeg corresponding source, provenance, release notes, support caveats, and accurate SmartScreen guidance. | Download artifacts through a browser and repeat the live-installation smoke test. |
@@ -181,6 +181,19 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
   The bundled `bin` directory contained only the two executables, with no DLLs.
 - The bundled tools created a 12,378-byte MP4 with `libx264` video and AAC
   audio. The bundled `ffprobe` confirmed H.264 video and AAC audio streams.
+
+### WIN-502 Windows Verification Evidence
+
+- 2026-08-31: GitHub Actions [Build unsigned Windows installer run 33351542983](https://github.com/princeendo/trivia_countdown/actions/runs/33351542983)
+  passed on the pinned `windows-2022` runner at commit
+  `0548ad765ca2459686ba9192468c22417db6d182`.
+- The job installed hash-verified Inno Setup 7.1.0, built the PyInstaller GUI
+  and installer, ran packaged GUI smoke mode plus bundled `ffmpeg.exe` and
+  `ffprobe.exe`, verified the SHA-256 checksum, attested both release
+  artifacts, and uploaded the `trivia-countdown-windows-x64` artifact.
+- The downloaded installer SHA-256 matched
+  `Trivia-Countdown-0.1.0-Windows-x64-SHA256SUMS.txt`, and
+  `gh attestation verify` passed for the installer and checksum file.
 
 ## Phase 6: Documentation
 
@@ -277,10 +290,10 @@ The Windows preview is complete when:
 | Open or accepted blockers | 2 |
 | `READY` tasks | 1 |
 | `IN_PROGRESS` tasks | 0 |
-| `IN_REVIEW` tasks | 24 |
+| `IN_REVIEW` tasks | 23 |
 | `BLOCKED` tasks | 3 |
 | `DEFERRED` tasks | 1 |
-| `VERIFIED` implementation tasks | 3 |
+| `VERIFIED` implementation tasks | 4 |
 
 Update this summary whenever task statuses change. Do not mark implementation
 tasks `VERIFIED` until their listed Windows verification has passed.
