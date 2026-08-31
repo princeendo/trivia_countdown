@@ -116,7 +116,7 @@ test is not sufficient.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | WIN-301 | Remove Unix-only assumptions from unit tests | `P1` | `IN_REVIEW` | None | WIN-101, WIN-108 | Tests use portable temporary paths and assert platform-appropriate executable and command behavior. | Unit suite passes on Windows and macOS. |
 | WIN-302 | Add a Windows path and filesystem test matrix | `P0` | `VERIFIED` | None | WIN-103, WIN-109 | Tests cover spaces, Unicode, apostrophes, relative paths, drive-letter paths, supported UNC paths, long paths, locked outputs, and overwrite safety. | Unit and FFmpeg integration suite on Windows. |
-| WIN-303 | Add Windows source CI | `P0` | `IN_REVIEW` | None | WIN-203, WIN-301 | A pinned `windows-2022` job installs with `uv`, compiles sources, runs tests, and checks CLI help; failures block release packaging. | Successful GitHub Actions run. |
+| WIN-303 | Add Windows source CI | `P0` | `VERIFIED` | None | WIN-203, WIN-301 | A pinned `windows-2022` job installs with `uv`, compiles sources, runs tests, and checks CLI help; failures block release packaging. | Successful GitHub Actions run. |
 | WIN-304 | Qualify GUI layout and DPI behavior | `P1` | `IN_REVIEW` | None | WIN-102, WIN-104 | Main workflows remain usable at 100%, 125%, 150%, and 200% display scaling; preview and progress controls are visible; icon rendering is acceptable. | Manual live-system GUI checklist with recorded results. |
 | WIN-305 | Preserve macOS behavior during the port | `P0` | `IN_REVIEW` | None | All runtime changes | Existing macOS source tests and package workflow continue to pass; Windows conditionals do not replace macOS behavior. | Existing macOS CI and targeted regression tests. |
 
@@ -141,6 +141,13 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
   `\\localhost\C$\Users\white\AppData\Local\Temp\trivia-countdown-win302`.
   The long-path render used `C:\trivia-countdown-win302` with Windows long paths
   enabled and generated paths longer than 260 characters.
+
+### WIN-303 Windows Verification Evidence
+
+- 2026-08-31: GitHub Actions [Windows source checks run 33350479536](https://github.com/princeendo/trivia_countdown/actions/runs/33350479536)
+  passed on the pinned `windows-2022` runner at commit `26d73fe9289099f474ee614ebb68c06e846b30b8`.
+- The `source-checks` job completed `uv sync --frozen`, source compilation,
+  `tests.test_app`, and `make_trivia_countdown.py --help` successfully.
 
 ## Phase 4: Dependencies and Packaging
 
@@ -258,10 +265,10 @@ The Windows preview is complete when:
 | Open or accepted blockers | 2 |
 | `READY` tasks | 1 |
 | `IN_PROGRESS` tasks | 0 |
-| `IN_REVIEW` tasks | 26 |
+| `IN_REVIEW` tasks | 25 |
 | `BLOCKED` tasks | 3 |
 | `DEFERRED` tasks | 1 |
-| `VERIFIED` implementation tasks | 1 |
+| `VERIFIED` implementation tasks | 2 |
 
 Update this summary whenever task statuses change. Do not mark implementation
 tasks `VERIFIED` until their listed Windows verification has passed.
