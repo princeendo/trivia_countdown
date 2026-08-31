@@ -87,9 +87,19 @@ The build downloads and SHA-256-verifies the pinned FFmpeg archive, creates the 
 - `Trivia-Countdown-<version>-Windows-x64-Setup.exe`
 - `Trivia-Countdown-<version>-Windows-x64-SHA256SUMS.txt`
 
-The **Build unsigned Windows installer** workflow repeats the build, checks the bundled GUI smoke mode and both FFmpeg executables, verifies the checksum, and publishes GitHub build provenance. Its Inno Setup installer hash is published in the immutable [Inno Setup 7.1.0 release](https://github.com/jrsoftware/issrc/releases/tag/is-7_1_0).
+The **Build unsigned Windows installer** workflow first runs the Windows source checks, then repeats the build, checks the bundled GUI smoke mode and both FFmpeg executables, verifies the checksum, and publishes GitHub build provenance. The GUI smoke mode starts the packaged application and exits immediately after its interface has been constructed; it verifies that the frozen application can find its bundled runtime resources. The icon check is a manual confirmation that the installed application and shortcut show the packaged icon in Explorer and on the taskbar. Its Inno Setup installer hash is published in the immutable [Inno Setup 7.1.0 release](https://github.com/jrsoftware/issrc/releases/tag/is-7_1_0).
 
-Do not publish a Windows installer yet. The pinned static GPL FFmpeg build requires a reviewed corresponding-source archive for FFmpeg, x264, and every other GPL-covered static component, and the complete installer workflow still requires clean Windows 10 and Windows 11 qualification. When a preview is published, document Microsoft Defender SmartScreen accurately: it may warn because the installer is unsigned and has little reputation. Direct users to verify the release checksum and provenance; never advise disabling SmartScreen or Windows security controls.
+### Verify the Windows path matrix
+
+Before qualifying the source render path, run the WIN-302 verifier from a Windows PowerShell session in the repository root. Supply a writable UNC share and a writable local directory on a system with Windows long paths enabled:
+
+```powershell
+.\scripts\verify_win302.ps1 -UncTestRoot '\\server\share\trivia-countdown-win302' -LongPathTestRoot 'C:\trivia-countdown-win302'
+```
+
+The script fetches the pinned FFmpeg build, requires all configured path tests to execute rather than skip, and writes a timestamped report under `build\verification\`. Retain that report with the Windows version and test-root details as WIN-302 verification evidence.
+
+Before publishing, attach the corresponding-source archive for FFmpeg, x264, and every other GPL-covered static component. Then install the release candidate on a separate live Windows 10 22H2 or Windows 11 x64 system and complete the install, launch, render, playback, upgrade, uninstall, and icon checks. VM images and pristine-system qualification are not required. Document Microsoft Defender SmartScreen accurately: it may warn because the installer is unsigned and has little reputation. Direct users to verify the release checksum and provenance; never advise disabling SmartScreen or Windows security controls.
 
 ## Future Signed Releases
 

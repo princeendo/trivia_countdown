@@ -29,6 +29,14 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Run source checks
+        shell: pwsh
+        run: |
+          uv sync --frozen
+          uv run python -m compileall -q make_trivia_countdown.py make_trivia_countdown_gui.py trivia_countdown
+          uv run python -m unittest tests.test_app
+          uv run python make_trivia_countdown.py --help
+
       - name: Validate release version
         if: startsWith(github.ref, 'refs/tags/')
         shell: pwsh

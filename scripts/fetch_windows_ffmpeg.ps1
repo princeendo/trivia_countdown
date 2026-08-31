@@ -52,7 +52,7 @@ Copy-Item -LiteralPath (Join-Path $packageDirectory.FullName "LICENSE") -Destina
 & (Join-Path $Destination "bin\ffmpeg.exe") -hide_banner -version
 & (Join-Path $Destination "bin\ffprobe.exe") -hide_banner -version
 $encoders = & (Join-Path $Destination "bin\ffmpeg.exe") -hide_banner -encoders 2>&1
-if ($encoders -notmatch "libx264" -or $encoders -notmatch "aac") {
+if (-not ($encoders -match "libx264") -or -not ($encoders -match "aac")) {
     throw "The pinned FFmpeg build does not provide the required libx264 and AAC encoders."
 }
 

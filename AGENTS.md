@@ -74,7 +74,7 @@ For a Windows package build, use a Windows x64 system with Inno Setup 7.1.0 and 
 .\scripts\build_windows_installer.ps1
 ```
 
-Do not publish the resulting installer until the required FFmpeg corresponding-source archive and clean-machine qualification are complete.
+Do not publish the resulting installer until the required FFmpeg corresponding-source archive is attached and the installer has passed the approved live-system qualification.
 
 Before finalizing changes, run:
 
