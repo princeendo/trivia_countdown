@@ -153,7 +153,7 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| WIN-401 | Acquire and verify pinned FFmpeg binaries | `P0` | `IN_REVIEW` | None | DEC-102 | `ffmpeg.exe` and `ffprobe.exe` are x64, pinned, hash-verified, free of unexpected runtime DLL dependencies, and provide `libx264` and AAC support. | Version/configuration checks and a real render. |
+| WIN-401 | Acquire and verify pinned FFmpeg binaries | `P0` | `VERIFIED` | None | DEC-102 | `ffmpeg.exe` and `ffprobe.exe` are x64, pinned, hash-verified, free of unexpected runtime DLL dependencies, and provide `libx264` and AAC support. | Version/configuration checks and a real render. |
 | WIN-402 | Package third-party licenses and corresponding sources | `P0` | `BLOCKED` | BLK-001 | WIN-102, WIN-401 | Installer includes applicable Python, Tcl/Tk, Pillow, PyInstaller, font, FFmpeg, and x264 notices; matching FFmpeg/x264 source is published with the release when required. | License review and installed-file inspection. |
 | WIN-403 | Create a Windows PyInstaller specification | `P0` | `IN_REVIEW` | None | WIN-101, WIN-102, WIN-401 | Build produces a windowed x64 GUI application containing Python, Tcl/Tk, Pillow, fonts, licenses, `ffmpeg.exe`, and `ffprobe.exe`; the app runs without system Python or FFmpeg. | PyInstaller build and frozen smoke test. |
 | WIN-404 | Create a Windows application icon | `P2` | `IN_REVIEW` | None | None | A multi-resolution `.ico` derived from `assets/app_icon.png` is embedded in the executable and installer. | Explorer, taskbar, and installed shortcut inspection. |
@@ -169,6 +169,18 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
 | WIN-504 | Qualify the unsigned preview by live installation | `P0` | `IN_REVIEW` | None | WIN-501, WIN-502, WIN-503 | Installer, first launch, render, output playback, upgrade, and uninstall pass on a separate live Windows 10 22H2 or Windows 11 x64 system. | Signed-off live-installation checklist. |
 | WIN-505 | Publish an unsigned Windows prerelease | `P0` | `READY` | None | WIN-504, WIN-601 | Draft prerelease includes installer, checksums, FFmpeg corresponding source, provenance, release notes, support caveats, and accurate SmartScreen guidance. | Download artifacts through a browser and repeat the live-installation smoke test. |
 | WIN-506 | Define the signed-release follow-up | `P2` | `DEFERRED` | BLK-006 | Preview feedback | Document certificate ownership, secret storage, timestamping, signing order, and verification before promoting Windows builds beyond preview status. | Approved signing design and verified signed artifact. |
+
+### WIN-401 Windows Verification Evidence
+
+- 2026-08-30 on Windows 11 Pro x64 (build 26200):
+  `scripts/fetch_windows_ffmpeg.ps1 -Force` verified the pinned Gyan FFmpeg
+  9.0.1 Essentials archive hash, then verified `ffmpeg.exe` and `ffprobe.exe`
+  hashes and their x64 PE machine type (`0x8664`). Cached executables receive
+  the same hash and architecture checks before reuse.
+- `ffmpeg -version` and `ffprobe -version` reported the pinned static build.
+  The bundled `bin` directory contained only the two executables, with no DLLs.
+- The bundled tools created a 12,378-byte MP4 with `libx264` video and AAC
+  audio. The bundled `ffprobe` confirmed H.264 video and AAC audio streams.
 
 ## Phase 6: Documentation
 
@@ -265,10 +277,10 @@ The Windows preview is complete when:
 | Open or accepted blockers | 2 |
 | `READY` tasks | 1 |
 | `IN_PROGRESS` tasks | 0 |
-| `IN_REVIEW` tasks | 25 |
+| `IN_REVIEW` tasks | 24 |
 | `BLOCKED` tasks | 3 |
 | `DEFERRED` tasks | 1 |
-| `VERIFIED` implementation tasks | 2 |
+| `VERIFIED` implementation tasks | 3 |
 
 Update this summary whenever task statuses change. Do not mark implementation
 tasks `VERIFIED` until their listed Windows verification has passed.
