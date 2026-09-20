@@ -22,7 +22,7 @@ def split_csv(input_file: Path, row_count: int) -> None:
     if total_rows == 0:
         raise ValueError("CSV file contains only a header row")
 
-    file_count = max(1, total_rows // row_count)
+    file_count = (total_rows + row_count - 1) // row_count
 
     output_dir = input_file.parent
     stem = input_file.stem
@@ -31,10 +31,7 @@ def split_csv(input_file: Path, row_count: int) -> None:
     for i in range(file_count):
         start = i * row_count
 
-        if i == file_count - 1:
-            chunk = rows[start:]
-        else:
-            chunk = rows[start:start + row_count]
+        chunk = rows[start:start + row_count]
 
         output_file = output_dir / f"{stem}_part_{i + 1:03d}{suffix}"
 
@@ -48,7 +45,10 @@ def split_csv(input_file: Path, row_count: int) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Split a CSV into multiple files by row count, preserving the header."
+        description=(
+            "Split a CSV into files with at most the requested number of data rows, "
+            "preserving the header. The last file may contain fewer rows."
+        )
     )
     parser.add_argument("csv_file", type=Path)
     parser.add_argument("row_count", type=int)

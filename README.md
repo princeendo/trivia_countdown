@@ -53,6 +53,10 @@ For a concise list of every command-line option, source users can run:
 uv run python make_trivia_countdown.py --help
 ```
 
+## Sample Trivia
+
+The source checkout includes a [master Bible and church-trivia collection](sample_objects/master_trivia.csv), [23-question sets](sample_objects/sets/), and a separate remainder file. The collection includes 100 new questions reviewed against the original batches. See the [sample collection guide](sample_objects/README.md) for counts, source references, and usage.
+
 ## License
 
 Trivia Countdown is available under the [MIT License](LICENSE). The license applies to this project's software and documentation, not to videos or other content processed with it.

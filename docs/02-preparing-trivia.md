@@ -52,9 +52,18 @@ The GUI Main tab displays a static source-video frame with the selected question
 
 If **Randomize question order** is enabled, provide a random seed when you need the Questions tab, preview, and final render to use the same order. Without a seed, the order can be regenerated separately and may differ between the preview and the completed video. Use `--overlay-dir preview_overlays` to keep full-resolution PNG files when you need to inspect command-line renders. See [Usage and Command Reference](03-usage-and-reference.md#output-and-question-order) for details.
 
-## Sample File
+## Sample Files
 
 A complete five-question example is included at the top level of the mounted DMG as **Sample Trivia Questions.csv**. Source users can find the same file at [`sample_objects/sample_of_5_trivia_questions.csv`](../sample_objects/sample_of_5_trivia_questions.csv).
+
+The source checkout also includes a curated Bible and church-trivia collection:
+
+- [`sample_objects/master_trivia.csv`](../sample_objects/master_trivia.csv): 895 questions, including 100 new additions reviewed against the original batches.
+- [`sample_objects/sets/`](../sample_objects/sets/): 38 numbered files containing exactly 23 questions each, plus [`trivia_remainder.csv`](../sample_objects/sets/trivia_remainder.csv) with the remaining 21 questions.
+
+These files exclude unrelated general and space trivia, consolidate repeated facts, and retain the optional `difficulty` column as editorial metadata. The numbered sets mix topics and progress from easier to harder questions. With the default timings, a video needs to be at least 312.5 seconds long to show all 23 questions in a set.
+
+See the [sample collection guide](../sample_objects/README.md) for the folder layout, archived originals, audit tables, and the source-mode CSV splitting command. The generic splitter now caps every part at the requested number of data rows and puts any leftovers in a smaller final part.
 
 ---
 

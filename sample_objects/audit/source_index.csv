@@ -1,0 +1,1280 @@
+source_file,source_row,question,status,master_row,notes
+archive/sample_batch_02.csv,2,Which church father is known for his work Against Heresies?,retained,360,
+archive/sample_batch_02.csv,3,Which Old Testament prophet was a contemporary of Haggai?,retained,667,
+archive/sample_batch_02.csv,4,Who succeeded Moses as leader of Israel?,retained,877,
+archive/sample_batch_02.csv,5,Which council condemned Arius?,retained,891,
+archive/sample_batch_02.csv,6,What was the name of Ruth's mother-in-law?,retained,347,
+archive/sample_batch_02.csv,7,Which king ordered the rebuilding of the Temple after the exile?,retained_clarified,704,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,8,Who wrote the majority of the New Testament epistles?,retained_clarified,371,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,9,Which church father translated the Bible into Latin (the Vulgate)?,retained_clarified,82,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,10,Which tribe settled on the western side of the Sea of Galilee?,retained,599,
+archive/sample_batch_02.csv,11,Who was the father of John the Baptist?,retained,29,
+archive/sample_batch_02.csv,12,What was the first plague in Egypt?,retained,647,
+archive/sample_batch_02.csv,13,Which king was known for discovering the Book of the Law during Temple repairs?,retained_clarified,124,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,14,Who preached the sermon at Pentecost?,retained,279,
+archive/sample_batch_02.csv,15,Which church father wrote The City of God?,retained,728,
+archive/sample_batch_02.csv,16,Who was the judge that defeated Midian with 300 men?,retained,744,
+archive/sample_batch_02.csv,17,Which book immediately follows Joshua?,retained,370,
+archive/sample_batch_02.csv,18,What was the name of Abraham's nephew?,retained,465,
+archive/sample_batch_02.csv,19,Which apostle was known as the beloved disciple?,retained_clarified,398,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,20,Who was the first Christian martyr?,retained,121,
+archive/sample_batch_02.csv,21,"Which church father famously said ""Our hearts are restless until they rest in You""?",retained,547,
+archive/sample_batch_02.csv,22,What city was Jonah sent to preach against?,retained,718,
+archive/sample_batch_02.csv,23,Which king built the first Temple in Jerusalem?,retained,555,
+archive/sample_batch_02.csv,24,Who interpreted Pharaoh's dreams?,retained,326,
+archive/sample_batch_02.csv,25,Which epistle is addressed to a runaway slave's master?,retained,661,
+archive/sample_batch_02.csv,26,Who was the mother of Samuel?,retained,464,
+archive/sample_batch_02.csv,27,"Which church father was known as the ""Golden-Mouthed"" preacher?",retained_clarified,22,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,28,Who was thrown into a den of lions?,retained,855,
+archive/sample_batch_02.csv,29,What was Paul's occupation?,retained,768,
+archive/sample_batch_02.csv,30,Which prophet confronted David after his sin with Bathsheba?,retained,444,
+archive/sample_batch_02.csv,31,Who wrote the Book of Revelation?,retained_clarified,282,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,32,Which council affirmed the full deity of the Holy Spirit?,retained,507,
+archive/sample_batch_02.csv,33,Who was Esther's cousin and guardian?,retained,151,
+archive/sample_batch_02.csv,34,Which king's feast featured handwriting on the wall?,retained,657,
+archive/sample_batch_02.csv,35,Who climbed a sycamore tree to see Jesus?,retained,623,
+archive/sample_batch_02.csv,36,Which apostle doubted the resurrection until he saw Jesus?,retained,440,
+archive/sample_batch_02.csv,37,Who was the father of King David?,retained,26,
+archive/sample_batch_02.csv,38,Which church father was a disciple of the Apostle John according to tradition?,retained,666,
+archive/sample_batch_02.csv,39,Who rebuilt the walls of Jerusalem?,retained,467,
+archive/sample_batch_02.csv,40,Which prophet married Gomer?,retained,266,
+archive/sample_batch_02.csv,41,What island did Paul visit after being shipwrecked?,retained,81,
+archive/sample_batch_02.csv,42,Which king humbled himself after living like an animal?,retained,409,
+archive/sample_batch_02.csv,43,Who was the Roman governor who sentenced Jesus to crucifixion?,retained,209,
+archive/sample_batch_02.csv,44,Which church father opposed Pelagius?,retained,298,
+archive/sample_batch_02.csv,45,Who was the first king of Israel?,retained,462,
+archive/sample_batch_02.csv,46,Which prophet saw a valley of dry bones?,retained,242,
+archive/sample_batch_02.csv,47,Who accompanied Paul and Silas out of Philippi after the jail miracle?,excluded_ambiguous,,Acts 16:40 does not identify a companion leaving Philippi with Paul and Silas.
+archive/sample_batch_02.csv,48,Which book records the rebuilding of the Temple after exile?,retained_clarified,726,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,49,Who anointed Saul as king?,retained,812,
+archive/sample_batch_02.csv,50,Which church father was bishop of Hippo?,retained,132,
+archive/sample_batch_02.csv,51,Who was Boaz's wife?,retained,717,
+archive/sample_batch_02.csv,52,Which king sought wisdom above riches?,retained,764,
+archive/sample_batch_02.csv,53,Who was the mother of John the Baptist?,retained,788,
+archive/sample_batch_02.csv,54,Which apostle was a tax collector?,retained,488,
+archive/sample_batch_02.csv,55,Who taught Apollos more accurately?,retained,250,
+archive/sample_batch_02.csv,56,Which prophet challenged Baal's prophets on Mount Carmel?,retained,355,
+archive/sample_batch_02.csv,57,What was the name of Isaac's wife?,retained,52,
+archive/sample_batch_02.csv,58,Which church father wrote On the Incarnation?,retained,893,
+archive/sample_batch_02.csv,59,Who carried Jesus' cross?,retained,629,
+archive/sample_batch_02.csv,60,Which king was struck with leprosy for entering the Temple improperly?,retained,734,
+archive/sample_batch_02.csv,61,Who was the high priest when Samuel was a child?,retained,268,
+archive/sample_batch_02.csv,62,Which prophet foretold the Messiah's birth in Bethlehem?,retained,735,
+archive/sample_batch_02.csv,63,Who restored Saul's sight after Damascus?,retained,591,
+archive/sample_batch_02.csv,64,Which church father was martyred in Smyrna?,retained,872,
+archive/sample_batch_02.csv,65,Who hid the spies in Jericho?,retained,792,
+archive/sample_batch_02.csv,66,Which apostle preached to the Ethiopian eunuch?,retained_clarified,405,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,67,Who was Jacob's oldest son?,retained,818,
+archive/sample_batch_02.csv,68,Which book contains the Hall of Faith?,duplicate_fact,888,Same tested fact as: Which chapter is often called the 'faith chapter'?
+archive/sample_batch_02.csv,69,Who was known as the weeping prophet?,retained,13,
+archive/sample_batch_02.csv,70,Which church father defended the Trinity against Arianism?,retained_clarified,641,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,71,Who succeeded Elijah?,retained,168,
+archive/sample_batch_02.csv,72,What was the name of Moses' sister?,retained,73,
+archive/sample_batch_02.csv,73,Which king issued the decree allowing Jews to return from Babylon?,duplicate_fact,704,Same tested fact as: Which king ordered the rebuilding of the Temple after the exile?
+archive/sample_batch_02.csv,74,Who wrote most of Proverbs?,retained_clarified,626,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,75,Which apostle was exiled to Patmos?,retained_clarified,469,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,76,Who was Abraham's first son?,retained,374,
+archive/sample_batch_02.csv,77,Which church father authored the Confessions?,retained,18,
+archive/sample_batch_02.csv,78,Who raised Eutychus after he fell from a window?,retained,131,
+archive/sample_batch_02.csv,79,Which king celebrated a notable Passover revival in Judah?,retained_clarified,251,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,80,Who was the father of John Mark?,retained,160,
+archive/sample_batch_02.csv,81,Which prophet interpreted Nebuchadnezzar's dreams?,retained,57,
+archive/sample_batch_02.csv,82,Who was Lydia?,retained,404,
+archive/sample_batch_02.csv,83,Which church father taught Gregory Nazianzen and Basil?,excluded_ambiguous,,Vague teacher attribution with a none-of-these answer; no clear historical referent.
+archive/sample_batch_02.csv,84,Who was David's closest friend among Saul's family?,retained,559,
+archive/sample_batch_02.csv,85,Which New Testament book is addressed to Theophilus?,retained_clarified,890,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,86,Who was the judge who made a rash vow concerning his daughter?,retained,683,
+archive/sample_batch_02.csv,87,Which council produced the definition of Christ's two natures?,retained,415,
+archive/sample_batch_02.csv,88,Who was the mother of King Lemuel according to Proverbs 31?,retained_clarified,873,See clarifications.csv for original and final wording.
+archive/sample_batch_02.csv,89,Which apostle brought Nathanael to Jesus?,retained,43,
+archive/sample_batch_02.csv,90,Who was the Roman centurion converted in Acts 10?,retained,122,
+archive/sample_batch_02_part_001.csv,2,Which church father is known for his work Against Heresies?,duplicate_prompt,360,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,3,Which Old Testament prophet was a contemporary of Haggai?,duplicate_prompt,667,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,4,Who succeeded Moses as leader of Israel?,duplicate_prompt,877,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,5,Which council condemned Arius?,duplicate_prompt,891,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,6,What was the name of Ruth's mother-in-law?,duplicate_prompt,347,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,7,Which king ordered the rebuilding of the Temple after the exile?,duplicate_prompt,704,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,8,Who wrote the majority of the New Testament epistles?,duplicate_prompt,371,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,9,Which church father translated the Bible into Latin (the Vulgate)?,duplicate_prompt,82,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,10,Which tribe settled on the western side of the Sea of Galilee?,duplicate_prompt,599,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,11,Who was the father of John the Baptist?,duplicate_prompt,29,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,12,What was the first plague in Egypt?,duplicate_prompt,647,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,13,Which king was known for discovering the Book of the Law during Temple repairs?,duplicate_prompt,124,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,14,Who preached the sermon at Pentecost?,duplicate_prompt,279,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,15,Which church father wrote The City of God?,duplicate_prompt,728,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,16,Who was the judge that defeated Midian with 300 men?,duplicate_prompt,744,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,17,Which book immediately follows Joshua?,duplicate_prompt,370,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,18,What was the name of Abraham's nephew?,duplicate_prompt,465,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,19,Which apostle was known as the beloved disciple?,duplicate_prompt,398,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,20,Who was the first Christian martyr?,duplicate_prompt,121,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,21,"Which church father famously said ""Our hearts are restless until they rest in You""?",duplicate_prompt,547,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,22,What city was Jonah sent to preach against?,duplicate_prompt,718,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_001.csv,23,Which king built the first Temple in Jerusalem?,duplicate_prompt,555,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,2,Who interpreted Pharaoh's dreams?,duplicate_prompt,326,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,3,Which epistle is addressed to a runaway slave's master?,duplicate_prompt,661,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,4,Who was the mother of Samuel?,duplicate_prompt,464,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,5,"Which church father was known as the ""Golden-Mouthed"" preacher?",duplicate_prompt,22,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,6,Who was thrown into a den of lions?,duplicate_prompt,855,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,7,What was Paul's occupation?,duplicate_prompt,768,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,8,Which prophet confronted David after his sin with Bathsheba?,duplicate_prompt,444,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,9,Who wrote the Book of Revelation?,duplicate_prompt,282,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,10,Which council affirmed the full deity of the Holy Spirit?,duplicate_prompt,507,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,11,Who was Esther's cousin and guardian?,duplicate_prompt,151,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,12,Which king's feast featured handwriting on the wall?,duplicate_prompt,657,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,13,Who climbed a sycamore tree to see Jesus?,duplicate_prompt,623,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,14,Which apostle doubted the resurrection until he saw Jesus?,duplicate_prompt,440,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,15,Who was the father of King David?,duplicate_prompt,26,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,16,Which church father was a disciple of the Apostle John according to tradition?,duplicate_prompt,666,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,17,Who rebuilt the walls of Jerusalem?,duplicate_prompt,467,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,18,Which prophet married Gomer?,duplicate_prompt,266,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,19,What island did Paul visit after being shipwrecked?,duplicate_prompt,81,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,20,Which king humbled himself after living like an animal?,duplicate_prompt,409,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,21,Who was the Roman governor who sentenced Jesus to crucifixion?,duplicate_prompt,209,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,22,Which church father opposed Pelagius?,duplicate_prompt,298,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_002.csv,23,Who was the first king of Israel?,duplicate_prompt,462,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,2,Which prophet saw a valley of dry bones?,duplicate_prompt,242,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,3,Who accompanied Paul and Silas out of Philippi after the jail miracle?,excluded_ambiguous,,Acts 16:40 does not identify a companion leaving Philippi with Paul and Silas.
+archive/sample_batch_02_part_003.csv,4,Which book records the rebuilding of the Temple after exile?,duplicate_prompt,726,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,5,Who anointed Saul as king?,duplicate_prompt,812,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,6,Which church father was bishop of Hippo?,duplicate_prompt,132,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,7,Who was Boaz's wife?,duplicate_prompt,717,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,8,Which king sought wisdom above riches?,duplicate_prompt,764,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,9,Who was the mother of John the Baptist?,duplicate_prompt,788,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,10,Which apostle was a tax collector?,duplicate_prompt,488,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,11,Who taught Apollos more accurately?,duplicate_prompt,250,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,12,Which prophet challenged Baal's prophets on Mount Carmel?,duplicate_prompt,355,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,13,What was the name of Isaac's wife?,duplicate_prompt,52,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,14,Which church father wrote On the Incarnation?,duplicate_prompt,893,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,15,Who carried Jesus' cross?,duplicate_prompt,629,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,16,Which king was struck with leprosy for entering the Temple improperly?,duplicate_prompt,734,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,17,Who was the high priest when Samuel was a child?,duplicate_prompt,268,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,18,Which prophet foretold the Messiah's birth in Bethlehem?,duplicate_prompt,735,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,19,Who restored Saul's sight after Damascus?,duplicate_prompt,591,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,20,Which church father was martyred in Smyrna?,duplicate_prompt,872,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,21,Who hid the spies in Jericho?,duplicate_prompt,792,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,22,Which apostle preached to the Ethiopian eunuch?,duplicate_prompt,405,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_003.csv,23,Who was Jacob's oldest son?,duplicate_prompt,818,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,2,Which book contains the Hall of Faith?,duplicate_fact,888,Same tested fact as: Which chapter is often called the 'faith chapter'?
+archive/sample_batch_02_part_004.csv,3,Who was known as the weeping prophet?,duplicate_prompt,13,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,4,Which church father defended the Trinity against Arianism?,duplicate_prompt,641,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,5,Who succeeded Elijah?,duplicate_prompt,168,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,6,What was the name of Moses' sister?,duplicate_prompt,73,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,7,Which king issued the decree allowing Jews to return from Babylon?,duplicate_fact,704,Same tested fact as: Which king ordered the rebuilding of the Temple after the exile?
+archive/sample_batch_02_part_004.csv,8,Who wrote most of Proverbs?,duplicate_prompt,626,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,9,Which apostle was exiled to Patmos?,duplicate_prompt,469,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,10,Who was Abraham's first son?,duplicate_prompt,374,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,11,Which church father authored the Confessions?,duplicate_prompt,18,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,12,Who raised Eutychus after he fell from a window?,duplicate_prompt,131,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,13,Which king celebrated a notable Passover revival in Judah?,duplicate_prompt,251,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,14,Who was the father of John Mark?,duplicate_prompt,160,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,15,Which prophet interpreted Nebuchadnezzar's dreams?,duplicate_prompt,57,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,16,Who was Lydia?,duplicate_prompt,404,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,17,Which church father taught Gregory Nazianzen and Basil?,excluded_ambiguous,,Vague teacher attribution with a none-of-these answer; no clear historical referent.
+archive/sample_batch_02_part_004.csv,18,Who was David's closest friend among Saul's family?,duplicate_prompt,559,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,19,Which New Testament book is addressed to Theophilus?,duplicate_prompt,890,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,20,Who was the judge who made a rash vow concerning his daughter?,duplicate_prompt,683,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,21,Which council produced the definition of Christ's two natures?,duplicate_prompt,415,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,22,Who was the mother of King Lemuel according to Proverbs 31?,duplicate_prompt,873,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,23,Which apostle brought Nathanael to Jesus?,duplicate_prompt,43,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_02_part_004.csv,24,Who was the Roman centurion converted in Acts 10?,duplicate_prompt,122,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,2,Who led Israel into Canaan after Moses died?,duplicate_fact,877,Same tested fact as: Who succeeded Moses as leader of Israel?
+archive/sample_batch_03.csv,3,Which city did Israel march around before its walls fell?,retained,831,
+archive/sample_batch_03.csv,4,Who was the mother of Samuel?,duplicate_prompt,464,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,5,Which Gospel begins with 'In the beginning was the Word'?,retained,166,
+archive/sample_batch_03.csv,6,Who interpreted Pharaoh's dreams in Egypt?,duplicate_fact,326,Same tested fact as: Who interpreted Pharaoh's dreams?
+archive/sample_batch_03.csv,7,Which king built the first Temple in Jerusalem?,duplicate_prompt,555,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,8,Who was swallowed by a great fish?,retained,442,
+archive/sample_batch_03.csv,9,Which apostle was a tax collector before following Jesus?,duplicate_fact,488,Same tested fact as: Which apostle was a tax collector?
+archive/sample_batch_03.csv,10,Who denied Jesus three times?,retained,761,
+archive/sample_batch_03.csv,11,Which book comes immediately after Deuteronomy?,retained,7,
+archive/sample_batch_03.csv,12,Who was Abraham's wife?,retained,349,
+archive/sample_batch_03.csv,13,Which prophet confronted David after his sin with Bathsheba?,duplicate_prompt,444,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,14,Who was the first king of Israel?,duplicate_prompt,462,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,15,What was the name of Moses' brother?,retained,255,
+archive/sample_batch_03.csv,16,Which disciple doubted until he saw the risen Jesus?,duplicate_fact,440,Same tested fact as: Which apostle doubted the resurrection until he saw Jesus?
+archive/sample_batch_03.csv,17,Who was thrown into the lions' den?,duplicate_fact,855,Same tested fact as: Who was thrown into a den of lions?
+archive/sample_batch_03.csv,18,Which woman hid the Israelite spies in Jericho?,duplicate_fact,792,Same tested fact as: Who hid the spies in Jericho?
+archive/sample_batch_03.csv,19,Who was Boaz's wife?,duplicate_prompt,717,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,20,Which king asked God for wisdom?,duplicate_fact,764,Same tested fact as: Which king sought wisdom above riches?
+archive/sample_batch_03.csv,21,Who baptized Jesus?,retained,600,
+archive/sample_batch_03.csv,22,Which apostle preached at Pentecost?,duplicate_fact,279,Same tested fact as: Who preached the sermon at Pentecost?
+archive/sample_batch_03.csv,23,Who was the father of John the Baptist?,duplicate_prompt,29,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,24,Who was the mother of John the Baptist?,duplicate_prompt,788,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,25,Which prophet challenged the prophets of Baal on Mount Carmel?,duplicate_fact,355,Same tested fact as: Which prophet challenged Baal's prophets on Mount Carmel?
+archive/sample_batch_03.csv,26,Who succeeded Elijah as prophet?,duplicate_fact,168,Same tested fact as: Who succeeded Elijah?
+archive/sample_batch_03.csv,27,Which king found the Book of the Law during Temple repairs?,duplicate_fact,124,Same tested fact as: Which king was known for discovering the Book of the Law during Temple repairs?
+archive/sample_batch_03.csv,28,Who rebuilt Jerusalem's walls after the exile?,duplicate_fact,467,Same tested fact as: Who rebuilt the walls of Jerusalem?
+archive/sample_batch_03.csv,29,Which book records the rebuilding of the Temple after the exile?,duplicate_fact,726,Same tested fact as: Which book records the rebuilding of the Temple after exile?
+archive/sample_batch_03.csv,30,Who was Esther's cousin and guardian?,duplicate_prompt,151,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,31,Which king's feast featured writing on the wall?,duplicate_fact,657,Same tested fact as: Which king's feast featured handwriting on the wall?
+archive/sample_batch_03.csv,32,Who interpreted Nebuchadnezzar's dreams?,duplicate_fact,57,Same tested fact as: Which prophet interpreted Nebuchadnezzar's dreams?
+archive/sample_batch_03.csv,33,Which prophet saw a valley of dry bones?,duplicate_prompt,242,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,34,Which prophet married Gomer?,duplicate_prompt,266,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,35,Which prophet foretold the Messiah's birth in Bethlehem?,duplicate_prompt,735,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,36,Who was the Roman governor at Jesus' trial?,duplicate_fact,209,Same tested fact as: Who was the Roman governor who sentenced Jesus to crucifixion?
+archive/sample_batch_03.csv,37,Who carried Jesus' cross?,duplicate_prompt,629,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,38,Which island received Paul after his shipwreck?,duplicate_fact,81,Same tested fact as: What island did Paul visit after being shipwrecked?
+archive/sample_batch_03.csv,39,Who instructed the Ethiopian eunuch?,duplicate_fact,405,Same tested fact as: Which apostle preached to the Ethiopian eunuch?
+archive/sample_batch_03.csv,40,Which apostle was exiled to Patmos?,duplicate_prompt,469,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,41,Who was the first Christian martyr?,duplicate_prompt,121,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,42,Which apostle was a tentmaker by trade?,duplicate_fact,768,Same tested fact as: What was Paul's occupation?
+archive/sample_batch_03.csv,43,Who restored Saul's sight after Damascus?,duplicate_prompt,591,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,44,Which woman opened her home to Paul in Philippi?,retained,239,
+archive/sample_batch_03.csv,45,Which book contains the fruit of the Spirit?,retained,6,
+archive/sample_batch_03.csv,46,Which New Testament book is addressed to a runaway slave's master?,duplicate_fact,661,Same tested fact as: Which epistle is addressed to a runaway slave's master?
+archive/sample_batch_03.csv,47,Who taught Apollos more accurately?,duplicate_prompt,250,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,48,Who was Timothy's mother?,retained,203,
+archive/sample_batch_03.csv,49,Who was Timothy's grandmother?,retained,634,
+archive/sample_batch_03.csv,50,Which New Testament book is addressed to Theophilus?,duplicate_prompt,890,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,51,Who was the Roman centurion converted in Acts 10?,duplicate_prompt,122,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,52,Which judge defeated Midian with 300 men?,duplicate_fact,744,Same tested fact as: Who was the judge that defeated Midian with 300 men?
+archive/sample_batch_03.csv,53,Which judge made a rash vow concerning his daughter?,duplicate_fact,683,Same tested fact as: Who was the judge who made a rash vow concerning his daughter?
+archive/sample_batch_03.csv,54,Who killed Sisera?,retained,503,
+archive/sample_batch_03.csv,55,Which judge was left-handed and killed Eglon?,retained,21,
+archive/sample_batch_03.csv,56,Who was the high priest when Samuel was a child?,duplicate_prompt,268,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,57,Who was David's closest friend among Saul's family?,duplicate_prompt,559,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,58,Who was the father of King David?,duplicate_prompt,26,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,59,Which tribe supplied Israel's first king?,retained,660,
+archive/sample_batch_03.csv,60,Which king was struck with leprosy for unlawful Temple actions?,duplicate_fact,734,Same tested fact as: Which king was struck with leprosy for entering the Temple improperly?
+archive/sample_batch_03.csv,61,Which king humbled himself after being driven from men?,duplicate_fact,409,Same tested fact as: Which king humbled himself after living like an animal?
+archive/sample_batch_03.csv,62,Which king issued the decree allowing Jews to return from exile?,duplicate_fact,704,Same tested fact as: Which king ordered the rebuilding of the Temple after the exile?
+archive/sample_batch_03.csv,63,Who was Jacob's oldest son?,duplicate_prompt,818,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,64,Who was Jacob's only daughter named in Genesis?,retained,725,
+archive/sample_batch_03.csv,65,Who was Abraham's nephew?,duplicate_fact,465,Same tested fact as: What was the name of Abraham's nephew?
+archive/sample_batch_03.csv,66,Who was Abraham's first son?,duplicate_prompt,374,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,67,What was the name of Isaac's wife?,duplicate_prompt,52,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,68,Who was the father of Methuselah?,retained,67,
+archive/sample_batch_03.csv,69,Who was the king of Salem who blessed Abraham?,retained,216,
+archive/sample_batch_03.csv,70,Which book contains the Song of Moses after crossing the Red Sea?,retained,353,
+archive/sample_batch_03.csv,71,Which plague was the first plague in Egypt?,duplicate_fact,647,Same tested fact as: What was the first plague in Egypt?
+archive/sample_batch_03.csv,72,What river was Naaman told to wash in?,retained,682,
+archive/sample_batch_03.csv,73,Which prophet rebuked Amaziah the priest of Bethel?,retained,457,
+archive/sample_batch_03.csv,74,Which prophet was instructed to buy a linen belt and hide it near the Euphrates?,retained,47,
+archive/sample_batch_03.csv,75,Which prophet spoke of the suffering servant?,retained,545,
+archive/sample_batch_03.csv,76,"Who said, 'Here am I; send me'?",retained,191,
+archive/sample_batch_03.csv,77,Which prophet was taken captive in the second deportation to Babylon?,retained,756,
+archive/sample_batch_03.csv,78,Who served as cupbearer to Artaxerxes?,retained,847,
+archive/sample_batch_03.csv,79,Who led the first return from exile under Cyrus?,retained,528,
+archive/sample_batch_03.csv,80,Who was the father of John Mark?,duplicate_prompt,160,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,81,Who accompanied Barnabas to Cyprus after separating from Paul?,retained,357,
+archive/sample_batch_03.csv,82,Who accompanied Paul on his second missionary journey after the dispute with Barnabas?,retained,609,
+archive/sample_batch_03.csv,83,Who raised Eutychus after he fell from a window?,duplicate_prompt,131,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,84,Which apostle brought Nathanael to Jesus?,duplicate_prompt,43,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,85,Which disciple cut off the servant's ear?,retained,424,
+archive/sample_batch_03.csv,86,What was the servant's name whose ear Peter cut off?,retained,344,
+archive/sample_batch_03.csv,87,Which Gospel was written by a physician?,retained_clarified,582,See clarifications.csv for original and final wording.
+archive/sample_batch_03.csv,88,What was Lydia's trade?,duplicate_fact,404,Same tested fact as: Who was Lydia?
+archive/sample_batch_03.csv,89,Which couple lied about the sale price of their land in Acts?,retained,819,
+archive/sample_batch_03.csv,90,Which man wanted to buy the power to give the Holy Spirit?,retained_clarified,158,See clarifications.csv for original and final wording.
+archive/sample_batch_03.csv,91,Which silversmith stirred up opposition to Paul in Ephesus?,retained,552,
+archive/sample_batch_03.csv,92,Which ruler heard Paul's defense with Bernice?,retained,642,
+archive/sample_batch_03.csv,93,Which proconsul dismissed charges against Paul in Corinth?,retained,596,
+archive/sample_batch_03.csv,94,Which book contains the Hall of Faith?,duplicate_fact,888,Same tested fact as: Which chapter is often called the 'faith chapter'?
+archive/sample_batch_03.csv,95,Which epistle emphasizes that faith without works is dead?,retained,656,
+archive/sample_batch_03.csv,96,Which book says all Scripture is breathed out by God?,retained,608,
+archive/sample_batch_03.csv,97,Which church was told it had abandoned its first love in Revelation?,retained,41,
+archive/sample_batch_03.csv,98,Which church in Revelation was lukewarm?,retained,175,
+archive/sample_batch_03.csv,99,Which Old Testament book never directly names God?,retained_clarified,524,See clarifications.csv for original and final wording.
+archive/sample_batch_03.csv,100,Which short prophetic book is addressed against Edom?,retained,616,
+archive/sample_batch_03.csv,101,Which prophet warned Nineveh after Jonah's time?,retained,665,
+archive/sample_batch_03.csv,102,Which book records Balaam's donkey speaking?,retained,379,
+archive/sample_batch_03.csv,103,Which priestly family line did John the Baptist's father belong to?,retained_clarified,783,See clarifications.csv for original and final wording.
+archive/sample_batch_03.csv,104,Which high priest questioned Jesus before He was sent to Pilate?,retained_clarified,797,See clarifications.csv for original and final wording.
+archive/sample_batch_03.csv,105,Who buried Jesus in his own new tomb?,retained,30,
+archive/sample_batch_03.csv,106,Who visited Jesus by night in John 3?,retained,418,
+archive/sample_batch_03.csv,107,Who was the teacher of the law who advised caution toward the apostles in Acts 5?,retained,181,
+archive/sample_batch_03.csv,108,Which prophet's bones revived a dead man when the body touched them?,retained,227,
+archive/sample_batch_03.csv,109,Which king consulted the medium at Endor?,retained,543,
+archive/sample_batch_03.csv,110,Which queen visited Solomon?,retained,674,
+archive/sample_batch_03.csv,111,Which king's wife was Jezebel?,retained,860,
+archive/sample_batch_03.csv,112,Who killed Goliath?,retained,695,
+archive/sample_batch_03.csv,113,Who was Moses' sister?,duplicate_fact,73,Same tested fact as: What was the name of Moses' sister?
+archive/sample_batch_03.csv,114,Which prophetess found in 2 Kings authenticated the Book of the Law?,retained,732,
+archive/sample_batch_03.csv,115,Which prophetess recognized the infant Jesus in the Temple?,retained,681,
+archive/sample_batch_03.csv,116,Which church father wrote Against Heresies?,duplicate_fact,360,Same tested fact as: Which church father is known for his work Against Heresies?
+archive/sample_batch_03.csv,117,Which church father translated the Bible into Latin in the Vulgate tradition?,duplicate_fact,82,Same tested fact as: Which church father translated the Bible into Latin (the Vulgate)?
+archive/sample_batch_03.csv,118,Which church father wrote The City of God?,duplicate_prompt,728,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,119,Which church father was known as the 'Golden-Mouthed' preacher?,duplicate_prompt,22,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,120,Which church father wrote On the Incarnation?,duplicate_prompt,893,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,121,Which church father was bishop of Hippo?,duplicate_prompt,132,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,122,Which church father was a disciple of the apostle John according to early tradition?,duplicate_fact,666,Same tested fact as: Which church father was a disciple of the Apostle John according to tradition?
+archive/sample_batch_03.csv,123,Which church father was martyred in Smyrna?,duplicate_prompt,872,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,124,Which church father is associated with the Hexapla?,retained,162,
+archive/sample_batch_03.csv,125,Which church historian wrote Ecclesiastical History?,retained_clarified,779,See clarifications.csv for original and final wording.
+archive/sample_batch_03.csv,126,Which apologist wrote First Apology?,retained,829,
+archive/sample_batch_03.csv,127,"Which Latin theologian asked, 'What has Athens to do with Jerusalem?'",retained,484,
+archive/sample_batch_03.csv,128,Which bishop of Milan was influential in Augustine's conversion?,retained,68,
+archive/sample_batch_03.csv,129,Which church father authored Confessions?,duplicate_fact,18,Same tested fact as: Which church father authored the Confessions?
+archive/sample_batch_03.csv,130,Which church father opposed Pelagius?,duplicate_prompt,298,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,131,Which church father defended Nicene orthodoxy against Arianism?,duplicate_fact,641,Same tested fact as: Which church father defended the Trinity against Arianism?
+archive/sample_batch_03.csv,132,Which early Christian writing begins with a greeting from the church of Rome to the church of Corinth?,retained,323,
+archive/sample_batch_03.csv,133,Which early Christian manual begins by describing the Two Ways?,retained,276,
+archive/sample_batch_03.csv,134,Which church father wrote letters on the way to martyrdom in Rome around the early second century?,retained,760,
+archive/sample_batch_03.csv,135,Which council condemned Arius?,duplicate_prompt,891,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03.csv,136,Which council affirmed the full deity of the Holy Spirit in the Nicene-Constantinopolitan Creed?,duplicate_fact,507,Same tested fact as: Which council affirmed the full deity of the Holy Spirit?
+archive/sample_batch_03.csv,137,Which council condemned Nestorius?,retained,70,
+archive/sample_batch_03.csv,138,Which council produced the Definition concerning Christ's two natures?,duplicate_fact,415,Same tested fact as: Which council produced the definition of Christ's two natures?
+archive/sample_batch_03.csv,139,Which council addressed Pelagianism and grace in the West?,retained_clarified,737,See clarifications.csv for original and final wording.
+archive/sample_batch_03.csv,140,Which creed begins with 'I believe in God the Father Almighty'?,retained,652,
+archive/sample_batch_03.csv,141,"Which creed is especially associated with detailed Trinitarian language and the phrase 'not three Gods, but one God'?",retained,621,
+archive/sample_batch_03.csv,142,Which Reformer posted the Ninety-Five Theses?,retained_clarified,538,See clarifications.csv for original and final wording.
+archive/sample_batch_03.csv,143,Which Reformer is strongly associated with Geneva?,retained,380,
+archive/sample_batch_03.csv,144,Which English reformer helped shape the Book of Common Prayer?,retained,38,
+archive/sample_batch_03.csv,145,Who translated much of the Bible into English before being executed in 1536?,retained,753,
+archive/sample_batch_03.csv,146,Which missionary is known for work in Burma and an English-Burmese dictionary?,retained,757,
+archive/sample_batch_03.csv,147,Which missionary is often called the father of modern missions?,retained,688,
+archive/sample_batch_03.csv,148,Which missionary founded the China Inland Mission?,retained,781,
+archive/sample_batch_03.csv,149,Which evangelist preached the sermon 'Sinners in the Hands of an Angry God'?,retained,663,
+archive/sample_batch_03.csv,150,Which hymn writer wrote 'And Can It Be'?,retained,432,
+archive/sample_batch_03.csv,151,Which hymn writer wrote 'Amazing Grace'?,retained,771,
+archive/sample_batch_03.csv,152,Which theologian wrote Institutes of the Christian Religion?,retained,820,
+archive/sample_batch_03.csv,153,Which confession is associated with the English Reformed tradition and was completed in 1646?,retained,592,
+archive/sample_batch_03.csv,154,Which confession is a Lutheran confession presented in 1530?,retained,364,
+archive/sample_batch_03.csv,155,Which term refers to the list of books recognized as Scripture?,retained,605,
+archive/sample_batch_03.csv,156,Which term means 'God-breathed' in reference to Scripture?,retained,214,
+archive/sample_batch_03.csv,157,Which doctrine teaches that Christ is fully God and fully man?,retained,478,
+archive/sample_batch_03.csv,158,Which term describes God's creating all things out of nothing?,retained,645,
+archive/sample_batch_03.csv,159,Which Latin phrase means 'Scripture alone'?,retained,589,
+archive/sample_batch_03.csv,160,Which Latin phrase means 'by faith alone'?,retained,475,
+archive/sample_batch_03.csv,161,Which Greek term is commonly translated 'gospel'?,retained,410,
+archive/sample_batch_03.csv,162,Which Greek term is commonly translated 'church' or 'assembly'?,retained,109,
+archive/sample_batch_03.csv,163,Which Hebrew word is often rendered 'peace' and carries the idea of wholeness?,retained,494,
+archive/sample_batch_03.csv,164,Which Hebrew term is often used for covenant loyalty or steadfast love?,retained,320,
+archive/sample_batch_03.csv,165,Which doctrine concerns God's final judgment and the last things?,retained,385,
+archive/sample_batch_03.csv,166,Which doctrine concerns salvation?,retained,86,
+archive/sample_batch_03_part_001.csv,2,Who led Israel into Canaan after Moses died?,duplicate_fact,877,Same tested fact as: Who succeeded Moses as leader of Israel?
+archive/sample_batch_03_part_001.csv,3,Which city did Israel march around before its walls fell?,duplicate_prompt,831,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,4,Who was the mother of Samuel?,duplicate_prompt,464,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,5,Which Gospel begins with 'In the beginning was the Word'?,duplicate_prompt,166,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,6,Who interpreted Pharaoh's dreams in Egypt?,duplicate_fact,326,Same tested fact as: Who interpreted Pharaoh's dreams?
+archive/sample_batch_03_part_001.csv,7,Which king built the first Temple in Jerusalem?,duplicate_prompt,555,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,8,Who was swallowed by a great fish?,duplicate_prompt,442,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,9,Which apostle was a tax collector before following Jesus?,duplicate_fact,488,Same tested fact as: Which apostle was a tax collector?
+archive/sample_batch_03_part_001.csv,10,Who denied Jesus three times?,duplicate_prompt,761,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,11,Which book comes immediately after Deuteronomy?,duplicate_prompt,7,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,12,Who was Abraham's wife?,duplicate_prompt,349,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,13,Which prophet confronted David after his sin with Bathsheba?,duplicate_prompt,444,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,14,Who was the first king of Israel?,duplicate_prompt,462,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,15,What was the name of Moses' brother?,duplicate_prompt,255,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,16,Which disciple doubted until he saw the risen Jesus?,duplicate_fact,440,Same tested fact as: Which apostle doubted the resurrection until he saw Jesus?
+archive/sample_batch_03_part_001.csv,17,Who was thrown into the lions' den?,duplicate_fact,855,Same tested fact as: Who was thrown into a den of lions?
+archive/sample_batch_03_part_001.csv,18,Which woman hid the Israelite spies in Jericho?,duplicate_fact,792,Same tested fact as: Who hid the spies in Jericho?
+archive/sample_batch_03_part_001.csv,19,Who was Boaz's wife?,duplicate_prompt,717,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,20,Which king asked God for wisdom?,duplicate_fact,764,Same tested fact as: Which king sought wisdom above riches?
+archive/sample_batch_03_part_001.csv,21,Who baptized Jesus?,duplicate_prompt,600,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,22,Which apostle preached at Pentecost?,duplicate_fact,279,Same tested fact as: Who preached the sermon at Pentecost?
+archive/sample_batch_03_part_001.csv,23,Who was the father of John the Baptist?,duplicate_prompt,29,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_001.csv,24,Who was the mother of John the Baptist?,duplicate_prompt,788,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,2,Which prophet challenged the prophets of Baal on Mount Carmel?,duplicate_fact,355,Same tested fact as: Which prophet challenged Baal's prophets on Mount Carmel?
+archive/sample_batch_03_part_002.csv,3,Who succeeded Elijah as prophet?,duplicate_fact,168,Same tested fact as: Who succeeded Elijah?
+archive/sample_batch_03_part_002.csv,4,Which king found the Book of the Law during Temple repairs?,duplicate_fact,124,Same tested fact as: Which king was known for discovering the Book of the Law during Temple repairs?
+archive/sample_batch_03_part_002.csv,5,Who rebuilt Jerusalem's walls after the exile?,duplicate_fact,467,Same tested fact as: Who rebuilt the walls of Jerusalem?
+archive/sample_batch_03_part_002.csv,6,Which book records the rebuilding of the Temple after the exile?,duplicate_fact,726,Same tested fact as: Which book records the rebuilding of the Temple after exile?
+archive/sample_batch_03_part_002.csv,7,Who was Esther's cousin and guardian?,duplicate_prompt,151,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,8,Which king's feast featured writing on the wall?,duplicate_fact,657,Same tested fact as: Which king's feast featured handwriting on the wall?
+archive/sample_batch_03_part_002.csv,9,Who interpreted Nebuchadnezzar's dreams?,duplicate_fact,57,Same tested fact as: Which prophet interpreted Nebuchadnezzar's dreams?
+archive/sample_batch_03_part_002.csv,10,Which prophet saw a valley of dry bones?,duplicate_prompt,242,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,11,Which prophet married Gomer?,duplicate_prompt,266,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,12,Which prophet foretold the Messiah's birth in Bethlehem?,duplicate_prompt,735,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,13,Who was the Roman governor at Jesus' trial?,duplicate_fact,209,Same tested fact as: Who was the Roman governor who sentenced Jesus to crucifixion?
+archive/sample_batch_03_part_002.csv,14,Who carried Jesus' cross?,duplicate_prompt,629,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,15,Which island received Paul after his shipwreck?,duplicate_fact,81,Same tested fact as: What island did Paul visit after being shipwrecked?
+archive/sample_batch_03_part_002.csv,16,Who instructed the Ethiopian eunuch?,duplicate_fact,405,Same tested fact as: Which apostle preached to the Ethiopian eunuch?
+archive/sample_batch_03_part_002.csv,17,Which apostle was exiled to Patmos?,duplicate_prompt,469,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,18,Who was the first Christian martyr?,duplicate_prompt,121,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,19,Which apostle was a tentmaker by trade?,duplicate_fact,768,Same tested fact as: What was Paul's occupation?
+archive/sample_batch_03_part_002.csv,20,Who restored Saul's sight after Damascus?,duplicate_prompt,591,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,21,Which woman opened her home to Paul in Philippi?,duplicate_prompt,239,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,22,Which book contains the fruit of the Spirit?,duplicate_prompt,6,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_002.csv,23,Which New Testament book is addressed to a runaway slave's master?,duplicate_fact,661,Same tested fact as: Which epistle is addressed to a runaway slave's master?
+archive/sample_batch_03_part_002.csv,24,Who taught Apollos more accurately?,duplicate_prompt,250,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,2,Who was Timothy's mother?,duplicate_prompt,203,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,3,Who was Timothy's grandmother?,duplicate_prompt,634,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,4,Which New Testament book is addressed to Theophilus?,duplicate_prompt,890,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,5,Who was the Roman centurion converted in Acts 10?,duplicate_prompt,122,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,6,Which judge defeated Midian with 300 men?,duplicate_fact,744,Same tested fact as: Who was the judge that defeated Midian with 300 men?
+archive/sample_batch_03_part_003.csv,7,Which judge made a rash vow concerning his daughter?,duplicate_fact,683,Same tested fact as: Who was the judge who made a rash vow concerning his daughter?
+archive/sample_batch_03_part_003.csv,8,Who killed Sisera?,duplicate_prompt,503,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,9,Which judge was left-handed and killed Eglon?,duplicate_prompt,21,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,10,Who was the high priest when Samuel was a child?,duplicate_prompt,268,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,11,Who was David's closest friend among Saul's family?,duplicate_prompt,559,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,12,Who was the father of King David?,duplicate_prompt,26,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,13,Which tribe supplied Israel's first king?,duplicate_prompt,660,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,14,Which king was struck with leprosy for unlawful Temple actions?,duplicate_fact,734,Same tested fact as: Which king was struck with leprosy for entering the Temple improperly?
+archive/sample_batch_03_part_003.csv,15,Which king humbled himself after being driven from men?,duplicate_fact,409,Same tested fact as: Which king humbled himself after living like an animal?
+archive/sample_batch_03_part_003.csv,16,Which king issued the decree allowing Jews to return from exile?,duplicate_fact,704,Same tested fact as: Which king ordered the rebuilding of the Temple after the exile?
+archive/sample_batch_03_part_003.csv,17,Who was Jacob's oldest son?,duplicate_prompt,818,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,18,Who was Jacob's only daughter named in Genesis?,duplicate_prompt,725,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,19,Who was Abraham's nephew?,duplicate_fact,465,Same tested fact as: What was the name of Abraham's nephew?
+archive/sample_batch_03_part_003.csv,20,Who was Abraham's first son?,duplicate_prompt,374,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,21,What was the name of Isaac's wife?,duplicate_prompt,52,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,22,Who was the father of Methuselah?,duplicate_prompt,67,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,23,Who was the king of Salem who blessed Abraham?,duplicate_prompt,216,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_003.csv,24,Which book contains the Song of Moses after crossing the Red Sea?,duplicate_prompt,353,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,2,Which plague was the first plague in Egypt?,duplicate_fact,647,Same tested fact as: What was the first plague in Egypt?
+archive/sample_batch_03_part_004.csv,3,What river was Naaman told to wash in?,duplicate_prompt,682,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,4,Which prophet rebuked Amaziah the priest of Bethel?,duplicate_prompt,457,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,5,Which prophet was instructed to buy a linen belt and hide it near the Euphrates?,duplicate_prompt,47,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,6,Which prophet spoke of the suffering servant?,duplicate_prompt,545,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,7,"Who said, 'Here am I; send me'?",duplicate_prompt,191,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,8,Which prophet was taken captive in the second deportation to Babylon?,duplicate_prompt,756,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,9,Who served as cupbearer to Artaxerxes?,duplicate_prompt,847,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,10,Who led the first return from exile under Cyrus?,duplicate_prompt,528,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,11,Who was the father of John Mark?,duplicate_prompt,160,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,12,Who accompanied Barnabas to Cyprus after separating from Paul?,duplicate_prompt,357,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,13,Who accompanied Paul on his second missionary journey after the dispute with Barnabas?,duplicate_prompt,609,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,14,Who raised Eutychus after he fell from a window?,duplicate_prompt,131,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,15,Which apostle brought Nathanael to Jesus?,duplicate_prompt,43,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,16,Which disciple cut off the servant's ear?,duplicate_prompt,424,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,17,What was the servant's name whose ear Peter cut off?,duplicate_prompt,344,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,18,Which Gospel was written by a physician?,duplicate_prompt,582,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,19,What was Lydia's trade?,duplicate_fact,404,Same tested fact as: Who was Lydia?
+archive/sample_batch_03_part_004.csv,20,Which couple lied about the sale price of their land in Acts?,duplicate_prompt,819,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,21,Which man wanted to buy the power to give the Holy Spirit?,duplicate_prompt,158,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,22,Which silversmith stirred up opposition to Paul in Ephesus?,duplicate_prompt,552,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,23,Which ruler heard Paul's defense with Bernice?,duplicate_prompt,642,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_004.csv,24,Which proconsul dismissed charges against Paul in Corinth?,duplicate_prompt,596,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,2,Which book contains the Hall of Faith?,duplicate_fact,888,Same tested fact as: Which chapter is often called the 'faith chapter'?
+archive/sample_batch_03_part_005.csv,3,Which epistle emphasizes that faith without works is dead?,duplicate_prompt,656,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,4,Which book says all Scripture is breathed out by God?,duplicate_prompt,608,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,5,Which church was told it had abandoned its first love in Revelation?,duplicate_prompt,41,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,6,Which church in Revelation was lukewarm?,duplicate_prompt,175,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,7,Which Old Testament book never directly names God?,duplicate_prompt,524,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,8,Which short prophetic book is addressed against Edom?,duplicate_prompt,616,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,9,Which prophet warned Nineveh after Jonah's time?,duplicate_prompt,665,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,10,Which book records Balaam's donkey speaking?,duplicate_prompt,379,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,11,Which priestly family line did John the Baptist's father belong to?,duplicate_prompt,783,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,12,Which high priest questioned Jesus before He was sent to Pilate?,duplicate_prompt,797,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,13,Who buried Jesus in his own new tomb?,duplicate_prompt,30,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,14,Who visited Jesus by night in John 3?,duplicate_prompt,418,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,15,Who was the teacher of the law who advised caution toward the apostles in Acts 5?,duplicate_prompt,181,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,16,Which prophet's bones revived a dead man when the body touched them?,duplicate_prompt,227,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,17,Which king consulted the medium at Endor?,duplicate_prompt,543,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,18,Which queen visited Solomon?,duplicate_prompt,674,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,19,Which king's wife was Jezebel?,duplicate_prompt,860,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,20,Who killed Goliath?,duplicate_prompt,695,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,21,Who was Moses' sister?,duplicate_fact,73,Same tested fact as: What was the name of Moses' sister?
+archive/sample_batch_03_part_005.csv,22,Which prophetess found in 2 Kings authenticated the Book of the Law?,duplicate_prompt,732,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,23,Which prophetess recognized the infant Jesus in the Temple?,duplicate_prompt,681,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_005.csv,24,Which church father wrote Against Heresies?,duplicate_fact,360,Same tested fact as: Which church father is known for his work Against Heresies?
+archive/sample_batch_03_part_006.csv,2,Which church father translated the Bible into Latin in the Vulgate tradition?,duplicate_fact,82,Same tested fact as: Which church father translated the Bible into Latin (the Vulgate)?
+archive/sample_batch_03_part_006.csv,3,Which church father wrote The City of God?,duplicate_prompt,728,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,4,Which church father was known as the 'Golden-Mouthed' preacher?,duplicate_prompt,22,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,5,Which church father wrote On the Incarnation?,duplicate_prompt,893,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,6,Which church father was bishop of Hippo?,duplicate_prompt,132,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,7,Which church father was a disciple of the apostle John according to early tradition?,duplicate_fact,666,Same tested fact as: Which church father was a disciple of the Apostle John according to tradition?
+archive/sample_batch_03_part_006.csv,8,Which church father was martyred in Smyrna?,duplicate_prompt,872,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,9,Which church father is associated with the Hexapla?,duplicate_prompt,162,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,10,Which church historian wrote Ecclesiastical History?,duplicate_prompt,779,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,11,Which apologist wrote First Apology?,duplicate_prompt,829,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,12,"Which Latin theologian asked, 'What has Athens to do with Jerusalem?'",duplicate_prompt,484,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,13,Which bishop of Milan was influential in Augustine's conversion?,duplicate_prompt,68,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,14,Which church father authored Confessions?,duplicate_fact,18,Same tested fact as: Which church father authored the Confessions?
+archive/sample_batch_03_part_006.csv,15,Which church father opposed Pelagius?,duplicate_prompt,298,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,16,Which church father defended Nicene orthodoxy against Arianism?,duplicate_fact,641,Same tested fact as: Which church father defended the Trinity against Arianism?
+archive/sample_batch_03_part_006.csv,17,Which early Christian writing begins with a greeting from the church of Rome to the church of Corinth?,duplicate_prompt,323,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,18,Which early Christian manual begins by describing the Two Ways?,duplicate_prompt,276,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,19,Which church father wrote letters on the way to martyrdom in Rome around the early second century?,duplicate_prompt,760,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,20,Which council condemned Arius?,duplicate_prompt,891,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,21,Which council affirmed the full deity of the Holy Spirit in the Nicene-Constantinopolitan Creed?,duplicate_fact,507,Same tested fact as: Which council affirmed the full deity of the Holy Spirit?
+archive/sample_batch_03_part_006.csv,22,Which council condemned Nestorius?,duplicate_prompt,70,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_006.csv,23,Which council produced the Definition concerning Christ's two natures?,duplicate_fact,415,Same tested fact as: Which council produced the definition of Christ's two natures?
+archive/sample_batch_03_part_006.csv,24,Which council addressed Pelagianism and grace in the West?,duplicate_prompt,737,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,2,Which creed begins with 'I believe in God the Father Almighty'?,duplicate_prompt,652,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,3,"Which creed is especially associated with detailed Trinitarian language and the phrase 'not three Gods, but one God'?",duplicate_prompt,621,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,4,Which Reformer posted the Ninety-Five Theses?,duplicate_prompt,538,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,5,Which Reformer is strongly associated with Geneva?,duplicate_prompt,380,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,6,Which English reformer helped shape the Book of Common Prayer?,duplicate_prompt,38,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,7,Who translated much of the Bible into English before being executed in 1536?,duplicate_prompt,753,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,8,Which missionary is known for work in Burma and an English-Burmese dictionary?,duplicate_prompt,757,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,9,Which missionary is often called the father of modern missions?,duplicate_prompt,688,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,10,Which missionary founded the China Inland Mission?,duplicate_prompt,781,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,11,Which evangelist preached the sermon 'Sinners in the Hands of an Angry God'?,duplicate_prompt,663,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,12,Which hymn writer wrote 'And Can It Be'?,duplicate_prompt,432,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,13,Which hymn writer wrote 'Amazing Grace'?,duplicate_prompt,771,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,14,Which theologian wrote Institutes of the Christian Religion?,duplicate_prompt,820,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,15,Which confession is associated with the English Reformed tradition and was completed in 1646?,duplicate_prompt,592,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,16,Which confession is a Lutheran confession presented in 1530?,duplicate_prompt,364,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,17,Which term refers to the list of books recognized as Scripture?,duplicate_prompt,605,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,18,Which term means 'God-breathed' in reference to Scripture?,duplicate_prompt,214,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,19,Which doctrine teaches that Christ is fully God and fully man?,duplicate_prompt,478,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,20,Which term describes God's creating all things out of nothing?,duplicate_prompt,645,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,21,Which Latin phrase means 'Scripture alone'?,duplicate_prompt,589,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,22,Which Latin phrase means 'by faith alone'?,duplicate_prompt,475,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,23,Which Greek term is commonly translated 'gospel'?,duplicate_prompt,410,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,24,Which Greek term is commonly translated 'church' or 'assembly'?,duplicate_prompt,109,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,25,Which Hebrew word is often rendered 'peace' and carries the idea of wholeness?,duplicate_prompt,494,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,26,Which Hebrew term is often used for covenant loyalty or steadfast love?,duplicate_prompt,320,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,27,Which doctrine concerns God's final judgment and the last things?,duplicate_prompt,385,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_03_part_007.csv,28,Which doctrine concerns salvation?,duplicate_prompt,86,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_04_part_001.csv,2,Who was the first son born to Adam and Eve?,retained,669,
+archive/sample_batch_04_part_001.csv,3,Which animal spoke to Balaam?,retained,578,
+archive/sample_batch_04_part_001.csv,4,Who was the father of King Solomon?,retained,808,
+archive/sample_batch_04_part_001.csv,5,Which sea did Moses lead Israel through?,retained,48,
+archive/sample_batch_04_part_001.csv,6,Who was the mother of Isaac?,retained,878,
+archive/sample_batch_04_part_001.csv,7,Which disciple walked on water toward Jesus?,retained,419,
+archive/sample_batch_04_part_001.csv,8,Which book tells the story of Queen Esther?,retained,54,
+archive/sample_batch_04_part_001.csv,9,Who was the high priest when Hannah prayed for a son?,duplicate_fact,268,Same tested fact as: Who was the high priest when Samuel was a child?
+archive/sample_batch_04_part_001.csv,10,Which prophet anointed David as king?,retained,192,
+archive/sample_batch_04_part_001.csv,11,What was the name of Ruth's first husband?,retained,406,
+archive/sample_batch_04_part_001.csv,12,Which judge killed Eglon king of Moab?,duplicate_fact,21,Same tested fact as: Which judge was left-handed and killed Eglon?
+archive/sample_batch_04_part_001.csv,13,Which Gospel includes the parable of the prodigal son?,retained,101,
+archive/sample_batch_04_part_001.csv,14,Who was Paul's companion on his first missionary journey?,retained,607,
+archive/sample_batch_04_part_001.csv,15,Which city was home to Aquila and Priscilla when Paul first met them?,retained,453,
+archive/sample_batch_04_part_001.csv,16,Who was the emperor when Jesus was born according to Luke?,retained,794,
+archive/sample_batch_04_part_001.csv,17,Which Old Testament book begins with the words The words of the Preacher?,retained,865,
+archive/sample_batch_04_part_001.csv,18,Which prophet bought a field at Anathoth?,retained,317,
+archive/sample_batch_04_part_001.csv,19,Who was the father of King Hezekiah?,retained,502,
+archive/sample_batch_04_part_001.csv,20,Which council affirmed the term Theotokos for Mary?,retained,803,
+archive/sample_batch_04_part_001.csv,21,Which church father wrote On the Incarnation?,duplicate_prompt,893,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_04_part_001.csv,22,Which prophet saw four horns and four craftsmen?,retained,527,
+archive/sample_batch_04_part_001.csv,23,Which New Testament letter mentions Onesimus by name?,duplicate_fact,661,Same tested fact as: Which epistle is addressed to a runaway slave's master?
+archive/sample_batch_04_part_001.csv,24,Which Persian official opposed Nehemiah with Sanballat?,retained_clarified,479,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_001.csv,25,Which heresy taught that Christ only seemed to have a physical body?,retained,689,
+archive/sample_batch_04_part_002.csv,2,Who found baby Moses in the Nile?,retained,327,
+archive/sample_batch_04_part_002.csv,3,What food did God provide Israel in the wilderness each morning?,retained,625,
+archive/sample_batch_04_part_002.csv,4,Who was the strongest judge of Israel?,retained_clarified,810,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_002.csv,5,Which mountain is associated with the Ten Commandments?,retained,627,
+archive/sample_batch_04_part_002.csv,6,Who climbed a sycamore tree to see Jesus?,duplicate_prompt,623,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_04_part_002.csv,7,Which prophet called down fire on Mount Carmel?,duplicate_fact,355,Same tested fact as: Which prophet challenged Baal's prophets on Mount Carmel?
+archive/sample_batch_04_part_002.csv,8,Who was the first person baptized by Philip in Acts 8?,excluded_ambiguous,,Acts 8:12-13 records baptisms by Philip before the Ethiopian official.
+archive/sample_batch_04_part_002.csv,9,Which woman was a seller of purple cloth?,duplicate_fact,404,Same tested fact as: Who was Lydia?
+archive/sample_batch_04_part_002.csv,10,Which king dreamed of a statue with feet of iron and clay?,retained,106,
+archive/sample_batch_04_part_002.csv,11,Who replaced Judas among the twelve apostles?,retained,539,
+archive/sample_batch_04_part_002.csv,12,Which book contains the armor of God passage?,retained,655,
+archive/sample_batch_04_part_002.csv,13,Who was Moses' father-in-law?,retained_clarified,884,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_002.csv,14,Which prophet was told to name his son Maher-shalal-hash-baz?,retained,730,
+archive/sample_batch_04_part_002.csv,15,Which city was destroyed along with Sodom?,retained,611,
+archive/sample_batch_04_part_002.csv,16,Which apostle raised Tabitha from the dead?,retained,613,
+archive/sample_batch_04_part_002.csv,17,Which Roman centurion sent for Peter in Acts 10?,duplicate_fact,122,Same tested fact as: Who was the Roman centurion converted in Acts 10?
+archive/sample_batch_04_part_002.csv,18,Which early Christian teacher was known as golden mouthed?,duplicate_fact,22,"Same tested fact as: Which church father was known as the ""Golden-Mouthed"" preacher?"
+archive/sample_batch_04_part_002.csv,19,Who wrote the Ecclesiastical History of the early church?,duplicate_fact,779,Same tested fact as: Which church historian wrote Ecclesiastical History?
+archive/sample_batch_04_part_002.csv,20,Which king of Judah was struck with leprosy after burning incense?,duplicate_fact,734,Same tested fact as: Which king was struck with leprosy for entering the Temple improperly?
+archive/sample_batch_04_part_002.csv,21,Which prophet pronounced judgment against Edom in the shortest Old Testament book?,duplicate_fact,616,Same tested fact as: Which short prophetic book is addressed against Edom?
+archive/sample_batch_04_part_002.csv,22,Which council produced a creed expanded against Macedonianism?,duplicate_fact,507,Same tested fact as: Which council affirmed the full deity of the Holy Spirit?
+archive/sample_batch_04_part_002.csv,23,Which companion did Paul leave sick at Miletus?,retained,505,
+archive/sample_batch_04_part_002.csv,24,Which sect denied the resurrection according to the Gospels?,retained,363,
+archive/sample_batch_04_part_002.csv,25,Which theologian argued against Pelagius in the early fifth century?,duplicate_fact,298,Same tested fact as: Which church father opposed Pelagius?
+archive/sample_batch_04_part_003.csv,2,Who built an ark before the flood?,retained,694,
+archive/sample_batch_04_part_003.csv,3,Which city was David's capital?,retained_clarified,2,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_003.csv,4,Who was sold by his brothers into Egypt?,retained,99,
+archive/sample_batch_04_part_003.csv,5,Which river did John the Baptist use for baptizing?,retained,650,
+archive/sample_batch_04_part_003.csv,6,Who was the sister of Mary and Lazarus?,retained,720,
+archive/sample_batch_04_part_003.csv,7,Which king spared Agag and lost God's favor?,retained,859,
+archive/sample_batch_04_part_003.csv,8,Which prophet succeeded Moses as leader only after Moses died?,duplicate_fact,877,Same tested fact as: Who succeeded Moses as leader of Israel?
+archive/sample_batch_04_part_003.csv,9,What was the name of Abraham's servant who sought a wife for Isaac?,excluded_ambiguous,,The servant in Genesis 24 is unnamed; identifying him with Eliezer is an inference.
+archive/sample_batch_04_part_003.csv,10,Which apostle was also called Didymus?,retained,148,
+archive/sample_batch_04_part_003.csv,11,Which book records Paul's shipwreck on Malta?,retained,885,
+archive/sample_batch_04_part_003.csv,12,Who helped Paul after his conversion in Jerusalem?,retained,472,
+archive/sample_batch_04_part_003.csv,13,Which prophet confronted King Ahab about Naboth's vineyard?,retained,497,
+archive/sample_batch_04_part_003.csv,14,Which son of David rebelled and was caught by his hair?,retained_clarified,359,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_003.csv,15,Which book says the righteous shall live by his faith?,retained_clarified,110,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_003.csv,16,Who was Timothy's grandmother?,duplicate_prompt,634,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_batch_04_part_003.csv,17,Which church received the letter that says you have left your first love?,duplicate_fact,41,Same tested fact as: Which church was told it had abandoned its first love in Revelation?
+archive/sample_batch_04_part_003.csv,18,Which bishop of Smyrna was martyred in the second century?,duplicate_fact,872,Same tested fact as: Which church father was martyred in Smyrna?
+archive/sample_batch_04_part_003.csv,19,Which apologist wrote the First Apology to a Roman emperor?,duplicate_fact,829,Same tested fact as: Which apologist wrote First Apology?
+archive/sample_batch_04_part_003.csv,20,Which prophet saw a basket of summer fruit?,retained,341,
+archive/sample_batch_04_part_003.csv,21,Which Judean governor rebuilt the altar before the second Temple was completed?,retained,133,
+archive/sample_batch_04_part_003.csv,22,Which doctrine did Arius deny about the Son?,retained,805,
+archive/sample_batch_04_part_003.csv,23,Which deacon was one of the seven and later evangelized Samaria?,retained,455,
+archive/sample_batch_04_part_003.csv,24,Which king of Assyria captured Samaria?,excluded_ambiguous,,Samaria fell during the Shalmaneser V / Sargon II transition; the unqualified attribution is disputed.
+archive/sample_batch_04_part_003.csv,25,Which Latin phrase means from the Son in the Nicene Creed controversy?,retained,529,
+archive/sample_batch_04_part_004.csv,2,Who interpreted dreams while imprisoned in Egypt?,retained,739,
+archive/sample_batch_04_part_004.csv,3,What was the name of Adam's wife?,retained,646,
+archive/sample_batch_04_part_004.csv,4,Who led Israel in song after crossing the sea?,retained_clarified,879,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_004.csv,5,Which apostle was the brother of John?,retained,535,
+archive/sample_batch_04_part_004.csv,6,Which Gospel was written by a physician according to tradition?,duplicate_fact,582,Same tested fact as: Which Gospel was written by a physician?
+archive/sample_batch_04_part_004.csv,7,Who was the father of Isaac?,retained,698,
+archive/sample_batch_04_part_004.csv,8,Which prophet told Naaman to wash in the Jordan?,retained,9,
+archive/sample_batch_04_part_004.csv,9,Which king made a golden image on the plain of Dura?,retained,37,
+archive/sample_batch_04_part_004.csv,10,Who was the mother of Timothy?,duplicate_fact,203,Same tested fact as: Who was Timothy's mother?
+archive/sample_batch_04_part_004.csv,11,Which epistle says faith without works is dead?,duplicate_fact,656,Same tested fact as: Which epistle emphasizes that faith without works is dead?
+archive/sample_batch_04_part_004.csv,12,Which city was Paul's birthplace?,retained,542,
+archive/sample_batch_04_part_004.csv,13,Who was released instead of Jesus?,retained,377,
+archive/sample_batch_04_part_004.csv,14,Which prophet saw the Lord high and lifted up in the Temple?,retained_clarified,498,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_004.csv,15,Which book contains the prayer of Jabez?,retained,711,
+archive/sample_batch_04_part_004.csv,16,Which woman judged Israel under a palm tree?,retained,85,
+archive/sample_batch_04_part_004.csv,17,Which king was told that the kingdom would be divided after him?,retained,15,
+archive/sample_batch_04_part_004.csv,18,Which church father wrote Confessions?,duplicate_fact,18,Same tested fact as: Which church father authored the Confessions?
+archive/sample_batch_04_part_004.csv,19,Which council defined Christ as one person in two natures?,duplicate_fact,415,Same tested fact as: Which council produced the definition of Christ's two natures?
+archive/sample_batch_04_part_004.csv,20,Which prophet called Nineveh the bloody city?,duplicate_fact,665,Same tested fact as: Which prophet warned Nineveh after Jonah's time?
+archive/sample_batch_04_part_004.csv,21,Which apostle did Paul oppose at Antioch according to Galatians?,retained,272,
+archive/sample_batch_04_part_004.csv,22,Which Old Testament book mentions Darius the Mede?,retained,706,
+archive/sample_batch_04_part_004.csv,23,Which second-century movement claimed new prophecy through Montanus?,retained,184,
+archive/sample_batch_04_part_004.csv,24,Which companion deserted Paul because he loved the present world?,retained,851,
+archive/sample_batch_04_part_004.csv,25,Which bishop wrote seven letters while traveling to martyrdom in Rome?,duplicate_fact,760,Same tested fact as: Which church father wrote letters on the way to martyrdom in Rome around the early second century?
+archive/sample_batch_04_part_005.csv,2,Who was the younger brother of Esau?,retained,510,
+archive/sample_batch_04_part_005.csv,3,Which city was Jesus raised in?,retained,762,
+archive/sample_batch_04_part_005.csv,4,Who became queen after Vashti was removed?,retained,304,
+archive/sample_batch_04_part_005.csv,5,Which disciple was a fisherman and brother of Peter?,retained,602,
+archive/sample_batch_04_part_005.csv,6,What instrument did David play for Saul?,retained,741,
+archive/sample_batch_04_part_005.csv,7,Which prophet was taken up in a whirlwind?,retained,330,
+archive/sample_batch_04_part_005.csv,8,Who wrote a letter to the seven churches in Revelation?,duplicate_fact,282,Same tested fact as: Who wrote the Book of Revelation?
+archive/sample_batch_04_part_005.csv,9,Which priest found the Book of the Law under Josiah?,retained,414,
+archive/sample_batch_04_part_005.csv,10,Which woman drove a tent peg through Sisera?,duplicate_fact,503,Same tested fact as: Who killed Sisera?
+archive/sample_batch_04_part_005.csv,11,Which apostle was known as the son of encouragement?,retained_clarified,493,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_005.csv,12,Which king of Israel built Samaria?,retained,87,
+archive/sample_batch_04_part_005.csv,13,Which New Testament book contains the hall of faith?,duplicate_fact,888,Same tested fact as: Which chapter is often called the 'faith chapter'?
+archive/sample_batch_04_part_005.csv,14,Which prophet ministered during the days of Uzziah Jotham Ahaz and Hezekiah?,retained,896,
+archive/sample_batch_04_part_005.csv,15,Who was the scribe sent by Artaxerxes to teach the Law?,retained,631,
+archive/sample_batch_04_part_005.csv,16,Which book includes the phrase vanity of vanities?,retained_clarified,541,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_005.csv,17,Which apostle met Jesus on the road to Damascus?,retained,53,
+archive/sample_batch_04_part_005.csv,18,Which church father is associated with the rule of faith against Gnosticism?,retained_clarified,707,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_005.csv,19,Which prophet's book ends by mentioning a curse on the land?,retained_clarified,500,See clarifications.csv for original and final wording.
+archive/sample_batch_04_part_005.csv,20,Which emperor called the Council of Nicaea?,retained,292,
+archive/sample_batch_04_part_005.csv,21,Which island was John on when he received Revelation?,duplicate_fact,469,Same tested fact as: Which apostle was exiled to Patmos?
+archive/sample_batch_04_part_005.csv,22,Which term means of the same substance in the Nicene debate?,retained,574,
+archive/sample_batch_04_part_005.csv,23,Which Old Testament book is set during the reign of Ahasuerus?,retained,569,
+archive/sample_batch_04_part_005.csv,24,Which prophet denounced the cows of Bashan?,retained,526,
+archive/sample_batch_04_part_005.csv,25,Which early writer was known for Against Marcion?,retained,691,
+archive/sample_batch_05_part_001.csv,2,How many days did God create before resting on the seventh day?,retained,556,
+archive/sample_batch_05_part_001.csv,3,Which son of Jacob received an ornate robe from his father?,retained,854,
+archive/sample_batch_05_part_001.csv,4,From which tree did God forbid Adam and Eve to eat?,retained,508,
+archive/sample_batch_05_part_001.csv,5,What did Jacob use as a pillow at Bethel?,retained,512,
+archive/sample_batch_05_part_001.csv,6,What sign marked God's covenant with Noah after the flood?,retained,257,
+archive/sample_batch_05_part_001.csv,7,What was placed on Israelite doorframes at the first Passover?,retained,834,
+archive/sample_batch_05_part_001.csv,8,Who accompanied Abram from Haran and later settled near Sodom?,retained,55,
+archive/sample_batch_05_part_001.csv,9,What new name did God give Jacob?,retained,466,
+archive/sample_batch_05_part_001.csv,10,Who fashioned the golden calf at Mount Sinai?,retained,562,
+archive/sample_batch_05_part_001.csv,11,How many spies did Moses send to explore Canaan?,retained,171,
+archive/sample_batch_05_part_001.csv,12,How many daughters did Zelophehad have?,retained,215,
+archive/sample_batch_05_part_001.csv,13,Which son of Jacob offered himself as a personal guarantee for Benjamin?,retained,659,
+archive/sample_batch_05_part_001.csv,14,What was the name of Moses' wife?,retained_clarified,450,See clarifications.csv for original and final wording.
+archive/sample_batch_05_part_001.csv,15,Which tribe was set apart for service at the Tabernacle?,retained,14,
+archive/sample_batch_05_part_001.csv,16,What happened to Dathan and Abiram during their rebellion?,retained,678,
+archive/sample_batch_05_part_001.csv,17,Who was Bezalel's grandfather according to Exodus?,retained,640,
+archive/sample_batch_05_part_001.csv,18,From whom did Abraham buy the cave of Machpelah?,retained,755,
+archive/sample_batch_05_part_001.csv,19,On which mountain were Israel's blessings to be proclaimed?,retained,154,
+archive/sample_batch_05_part_001.csv,20,What did Moses make when fiery serpents afflicted Israel?,retained,411,
+archive/sample_batch_05_part_001.csv,21,How many cities of refuge were designated for Israel?,retained,113,
+archive/sample_batch_05_part_001.csv,22,What name did Hagar use for the God who saw her?,retained,828,
+archive/sample_batch_05_part_001.csv,23,At which place did Israel find bitter water after crossing the sea?,retained,115,
+archive/sample_batch_05_part_001.csv,24,Whose iron bedstead is described in Deuteronomy?,retained,758,
+archive/sample_batch_05_part_001.csv,25,Which Israelite man did Phinehas kill together with Cozbi?,retained,46,
+archive/sample_batch_05_part_002.csv,2,Which river did Israel cross before entering Jericho?,retained,715,
+archive/sample_batch_05_part_002.csv,3,Who was Samuel's father?,retained,531,
+archive/sample_batch_05_part_002.csv,4,What was the name of the son born to Ruth and Boaz?,retained,119,
+archive/sample_batch_05_part_002.csv,5,Who cut off the corner of Saul's robe while Saul was in a cave?,retained,670,
+archive/sample_batch_05_part_002.csv,6,What did the priests blow before the walls of Jericho fell?,retained,740,
+archive/sample_batch_05_part_002.csv,7,What did Rahab tie in her window as a sign for Israel's army?,retained,790,
+archive/sample_batch_05_part_002.csv,8,What first sign did Gideon request involving a fleece?,retained,12,
+archive/sample_batch_05_part_002.csv,9,What name was given to the child born when the ark was captured by the Philistines?,retained,723,
+archive/sample_batch_05_part_002.csv,10,Which priest gave David consecrated bread at Nob?,retained,283,
+archive/sample_batch_05_part_002.csv,11,Which son of Saul ate honey despite the king's oath?,retained,307,
+archive/sample_batch_05_part_002.csv,12,What did Elijah have poured over his sacrifice on Mount Carmel?,retained,745,
+archive/sample_batch_05_part_002.csv,13,Which judge killed six hundred Philistines with an oxgoad?,retained,314,
+archive/sample_batch_05_part_002.csv,14,What did David do as the ark entered Jerusalem?,retained,195,
+archive/sample_batch_05_part_002.csv,15,How old was Josiah when he became king?,retained,313,
+archive/sample_batch_05_part_002.csv,16,Through which gate did Nehemiah leave for his nighttime inspection of Jerusalem's walls?,retained,291,
+archive/sample_batch_05_part_002.csv,17,Where did Achan hide the stolen items from Jericho?,retained,525,
+archive/sample_batch_05_part_002.csv,18,To which tribe did the left-handed judge Ehud belong?,retained,752,
+archive/sample_batch_05_part_002.csv,19,Who was Abigail's husband before she married David?,retained,294,
+archive/sample_batch_05_part_002.csv,20,For how many years was the young Joash hidden in the Temple?,retained,686,
+archive/sample_batch_05_part_002.csv,21,Which priest protected the young Joash from Athaliah?,retained,269,
+archive/sample_batch_05_part_002.csv,22,In Jotham's parable which tree was first invited to become king?,retained,480,
+archive/sample_batch_05_part_002.csv,23,Which two men did Mordecai expose for plotting against Ahasuerus?,retained,619,
+archive/sample_batch_05_part_002.csv,24,From which city's well did three mighty men bring water to David?,retained,643,
+archive/sample_batch_05_part_002.csv,25,Which son of Saul reigned over Israel while David ruled Judah from Hebron?,retained,391,
+archive/sample_batch_05_part_003.csv,2,Which book comes immediately after Psalms?,retained,830,
+archive/sample_batch_05_part_003.csv,3,Which psalm begins with The Lord is my shepherd?,retained,186,
+archive/sample_batch_05_part_003.csv,4,Which wisdom book tells of a righteous man tested through severe suffering?,retained,211,
+archive/sample_batch_05_part_003.csv,5,In the standard Christian Old Testament ordering which book comes immediately after Proverbs?,retained_clarified,187,See clarifications.csv for original and final wording.
+archive/sample_batch_05_part_003.csv,6,Which prophet described himself as a shepherd from Tekoa?,retained,421,
+archive/sample_batch_05_part_003.csv,7,How many friends initially came together to comfort Job?,retained,536,
+archive/sample_batch_05_part_003.csv,8,Which book says that the fear of the Lord is the beginning of knowledge?,retained,887,
+archive/sample_batch_05_part_003.csv,9,What touched Isaiah's lips in his Temple vision?,retained,425,
+archive/sample_batch_05_part_003.csv,10,How many of Daniel's companions were thrown into the fiery furnace?,retained,100,
+archive/sample_batch_05_part_003.csv,11,Which book says there is a time for every purpose under heaven?,retained,564,
+archive/sample_batch_05_part_003.csv,12,Which prophet saw an almond branch in his first recorded vision?,retained,245,
+archive/sample_batch_05_part_003.csv,13,Which crop did Amos say he tended?,retained,36,
+archive/sample_batch_05_part_003.csv,14,How many sections based on Hebrew letters structure Psalm 119?,retained,177,
+archive/sample_batch_05_part_003.csv,15,For how many years did Isaiah go barefoot as a sign?,retained,384,
+archive/sample_batch_05_part_003.csv,16,Which scribe wrote Jeremiah's prophecies on a scroll?,retained,778,
+archive/sample_batch_05_part_003.csv,17,Which king cut and burned Jeremiah's scroll as it was read?,retained,316,
+archive/sample_batch_05_part_003.csv,18,What were the dimensions of Zechariah's flying scroll?,retained,64,
+archive/sample_batch_05_part_003.csv,19,What was the name of Job's first daughter born after his restoration?,retained,367,
+archive/sample_batch_05_part_003.csv,20,Which psalm is called a prayer of Moses in its heading?,retained,299,
+archive/sample_batch_05_part_003.csv,21,What object did Ezekiel use to portray the coming siege of Jerusalem?,retained,114,
+archive/sample_batch_05_part_003.csv,22,Who was governor of Judah during Haggai's ministry?,retained,759,
+archive/sample_batch_05_part_003.csv,23,Which prophet is identified as the son of Buzi?,retained,436,
+archive/sample_batch_05_part_003.csv,24,Which Ezrahite is named in the heading of Psalm 89?,retained,690,
+archive/sample_batch_05_part_003.csv,25,To what land did the women in Zechariah's vision carry the basket?,retained,438,
+archive/sample_batch_05_part_004.csv,2,What was the name of Jesus' mother?,retained,693,
+archive/sample_batch_05_part_004.csv,3,In which town was Jesus born?,retained,164,
+archive/sample_batch_05_part_004.csv,4,Which Gospel records the visit of the Magi?,retained,76,
+archive/sample_batch_05_part_004.csv,5,At Cana what did Jesus turn into wine?,retained,328,
+archive/sample_batch_05_part_004.csv,6,How many apostles did Jesus appoint?,retained,145,
+archive/sample_batch_05_part_004.csv,7,Which disciple betrayed Jesus?,retained,838,
+archive/sample_batch_05_part_004.csv,8,What collection of blessings opens the Sermon on the Mount?,retained,697,
+archive/sample_batch_05_part_004.csv,9,In which town did Jesus raise a widow's only son?,retained,146,
+archive/sample_batch_05_part_004.csv,10,Which blind beggar called to Jesus near Jericho?,retained,561,
+archive/sample_batch_05_part_004.csv,11,How many small coins did the poor widow put into the Temple treasury?,retained,540,
+archive/sample_batch_05_part_004.csv,12,At whose well did Jesus speak with a Samaritan woman?,retained,84,
+archive/sample_batch_05_part_004.csv,13,Which disciple did visiting Greeks approach because they wanted to see Jesus?,retained,174,
+archive/sample_batch_05_part_004.csv,14,How old was Jairus's daughter when Jesus raised her?,retained,310,
+archive/sample_batch_05_part_004.csv,15,Which three disciples witnessed the Transfiguration?,retained,127,
+archive/sample_batch_05_part_004.csv,16,From which tribe was the prophetess Anna?,retained,709,
+archive/sample_batch_05_part_004.csv,17,How much did the servant owe the king in the parable of the unforgiving servant?,retained,339,
+archive/sample_batch_05_part_004.csv,18,What Aramaic command did Jesus speak when raising Jairus's daughter?,retained,568,
+archive/sample_batch_05_part_004.csv,19,Which disciple did Jesus say he had seen under a fig tree?,retained,383,
+archive/sample_batch_05_part_004.csv,20,On which side of the altar of incense did an angel appear to Zechariah?,retained,845,
+archive/sample_batch_05_part_004.csv,21,Which traveler to Emmaus is named in Luke?,retained,42,
+archive/sample_batch_05_part_004.csv,22,What did the young man leave behind when he fled at Jesus' arrest in Mark?,retained,24,
+archive/sample_batch_05_part_004.csv,23,Where did Peter find the coin used for the Temple tax?,retained,134,
+archive/sample_batch_05_part_004.csv,24,What was the name of Joanna's husband in Luke?,retained,159,
+archive/sample_batch_05_part_004.csv,25,Who was tetrarch of Abilene when John the Baptist began his ministry?,retained,300,
+archive/sample_batch_05_part_005.csv,2,What happened to Saul's sight on the road to Damascus?,retained,324,
+archive/sample_batch_05_part_005.csv,3,Which apostle healed a lame man at the Beautiful Gate alongside John?,retained,118,
+archive/sample_batch_05_part_005.csv,4,Which apostle saw a vision of a sheet filled with animals?,retained,395,
+archive/sample_batch_05_part_005.csv,5,Who was imprisoned with Paul in Philippi?,retained,213,
+archive/sample_batch_05_part_005.csv,6,Who sold a field and laid the money at the apostles' feet?,retained,120,
+archive/sample_batch_05_part_005.csv,7,From which city did Lydia come?,retained,446,
+archive/sample_batch_05_part_005.csv,8,Which governor became alarmed when Paul spoke about righteousness and coming judgment?,retained,33,
+archive/sample_batch_05_part_005.csv,9,What does Romans call the wages of sin?,retained,560,
+archive/sample_batch_05_part_005.csv,10,Which letter compares loveless speech to a noisy gong or clanging cymbal?,retained,836,
+archive/sample_batch_05_part_005.csv,11,What opened the prison doors while Paul and Silas were singing?,retained,743,
+archive/sample_batch_05_part_005.csv,12,What did the Bereans examine daily to evaluate Paul's message?,retained,244,
+archive/sample_batch_05_part_005.csv,13,At whose house did Peter stay in Joppa?,retained,331,
+archive/sample_batch_05_part_005.csv,14,Who asked Paul and Silas what he must do to be saved?,retained,519,
+archive/sample_batch_05_part_005.csv,15,In which city were disciples first called Christians?,retained,775,
+archive/sample_batch_05_part_005.csv,16,On which island did Paul leave Titus to appoint elders?,retained,178,
+archive/sample_batch_05_part_005.csv,17,Which church was associated with Phoebe in Romans?,retained,570,
+archive/sample_batch_05_part_005.csv,18,About how many believers saw the risen Christ at one time according to 1 Corinthians?,retained,180,
+archive/sample_batch_05_part_005.csv,19,How did Paul escape from Damascus according to 2 Corinthians?,retained_clarified,708,See clarifications.csv for original and final wording.
+archive/sample_batch_05_part_005.csv,20,What other name did the magician Bar-Jesus use?,retained,413,
+archive/sample_batch_05_part_005.csv,21,Which two women did Paul urge to agree in the Lord in Philippians?,retained,780,
+archive/sample_batch_05_part_005.csv,22,Who identified himself as the writer who took down the letter to the Romans?,retained,576,
+archive/sample_batch_05_part_005.csv,23,Which Ephesian official quieted the crowd after the silversmiths' protest?,retained,92,
+archive/sample_batch_05_part_005.csv,24,Who often refreshed Paul and was not ashamed of his chains?,retained,597,
+archive/sample_batch_05_part_005.csv,25,With which neighboring church were the Colossians instructed to exchange letters?,retained,804,
+archive/sample_batch_05_part_006.csv,2,According to Hebrews who is the great high priest who passed through the heavens?,retained,348,
+archive/sample_batch_05_part_006.csv,3,How many churches receive individual messages in Revelation chapters 2 and 3?,retained,117,
+archive/sample_batch_05_part_006.csv,4,Which New Testament book describes a new heaven and a new earth near its end?,retained,416,
+archive/sample_batch_05_part_006.csv,5,In which chapter of Hebrews is the long catalog of witnesses of faith?,duplicate_fact,888,Same tested fact as: Which chapter is often called the 'faith chapter'?
+archive/sample_batch_05_part_006.csv,6,According to James what should a person ask God for when lacking it?,retained,673,
+archive/sample_batch_05_part_006.csv,7,Which general epistle calls believers a chosen race and a royal priesthood?,retained,489,
+archive/sample_batch_05_part_006.csv,8,In Hebrews what is sharper than any two-edged sword?,retained,518,
+archive/sample_batch_05_part_006.csv,9,James compares the tongue to what that can set a forest ablaze?,retained,56,
+archive/sample_batch_05_part_006.csv,10,First John states that God is what and in him is no darkness?,retained,701,
+archive/sample_batch_05_part_006.csv,11,What name is given to the rider on the pale horse in Revelation?,retained,515,
+archive/sample_batch_05_part_006.csv,12,How many elders surround the heavenly throne in Revelation?,retained,426,
+archive/sample_batch_05_part_006.csv,13,In Hebrews 4 which Israelite leader is said not to have given final rest?,retained,290,
+archive/sample_batch_05_part_006.csv,14,Which prophet does James cite as praying that rain would stop?,retained,773,
+archive/sample_batch_05_part_006.csv,15,In 2 Peter what event does the author recall when a voice came from the Majestic Glory?,retained,774,
+archive/sample_batch_05_part_006.csv,16,What is each of the twelve gates of the New Jerusalem made from?,retained,632,
+archive/sample_batch_05_part_006.csv,17,According to Hebrews 9 what figures overshadowed the mercy seat?,retained,685,
+archive/sample_batch_05_part_006.csv,18,Whom does 1 Peter cite as obeying Abraham and calling him lord?,retained,799,
+archive/sample_batch_05_part_006.csv,19,To whom is 2 John addressed?,retained,247,
+archive/sample_batch_05_part_006.csv,20,What name is given to the star that makes waters bitter in Revelation?,retained,869,
+archive/sample_batch_05_part_006.csv,21,Which patriarch does James cite as offering his son on the altar?,retained,617,
+archive/sample_batch_05_part_006.csv,22,In Hebrews 7 who receives a tenth of the spoils from Abraham?,retained,620,
+archive/sample_batch_05_part_006.csv,23,Which archangel disputes with the devil over the body of Moses in Jude?,retained,345,
+archive/sample_batch_05_part_006.csv,24,What Hebrew name is given to the king over the abyss in Revelation?,retained,871,
+archive/sample_batch_05_part_006.csv,25,According to Hebrews 10 the blood of bulls and what other animals cannot take away sins?,retained,483,
+archive/sample_batch_05_part_007.csv,2,Jerusalem was the principal city of which Roman province during the ministry of Jesus?,retained,50,
+archive/sample_batch_05_part_007.csv,3,Which body of water did Jesus and his disciples often cross near Capernaum?,retained,532,
+archive/sample_batch_05_part_007.csv,4,Which body of water was also known as the Lake of Gennesaret?,retained,580,
+archive/sample_batch_05_part_007.csv,5,What Roman coin did Jesus request when questioned about taxes to Caesar?,retained,696,
+archive/sample_batch_05_part_007.csv,6,Bethlehem lies about six miles south of which city?,retained,787,
+archive/sample_batch_05_part_007.csv,7,Which village near Jerusalem was home to Mary Martha and Lazarus?,retained,152,
+archive/sample_batch_05_part_007.csv,8,Which region lay between Judea and Galilee?,retained,150,
+archive/sample_batch_05_part_007.csv,9,What was Golgotha said to mean?,retained,59,
+archive/sample_batch_05_part_007.csv,10,What kind of bread was eaten during the Passover festival?,retained,378,
+archive/sample_batch_05_part_007.csv,11,What were phylacteries in first-century Jewish practice?,retained,585,
+archive/sample_batch_05_part_007.csv,12,Which synagogue leader asked Jesus to heal his daughter?,retained,583,
+archive/sample_batch_05_part_007.csv,13,Which Jerusalem pool was near the Sheep Gate and had five colonnades?,retained,840,
+archive/sample_batch_05_part_007.csv,14,The name Decapolis referred to a group of how many cities?,retained,839,
+archive/sample_batch_05_part_007.csv,15,Under customary Jewish daylight reckoning the sixth hour was roughly what time?,retained,749,
+archive/sample_batch_05_part_007.csv,16,Which coastal city served as the Roman governors' administrative center for Judea?,retained,128,
+archive/sample_batch_05_part_007.csv,17,Near which Samaritan town was Jacob's well?,retained,270,
+archive/sample_batch_05_part_007.csv,18,In the parable of the good Samaritan the attacked traveler was heading toward which city?,retained,867,
+archive/sample_batch_05_part_007.csv,19,In Mark 7 the designation Corban meant a gift devoted to whom?,retained,91,
+archive/sample_batch_05_part_007.csv,20,In Athens what site where Paul spoke is also called Mars Hill?,retained,156,
+archive/sample_batch_05_part_007.csv,21,On which island were the ancient cities of Salamis and Paphos?,retained,246,
+archive/sample_batch_05_part_007.csv,22,Which spring fed Hezekiah's tunnel leading toward the Pool of Siloam?,retained,205,
+archive/sample_batch_05_part_007.csv,23,The Aramaic name Gabbatha referred to which location in Jerusalem?,retained,618,
+archive/sample_batch_05_part_007.csv,24,Which Nabataean king ruled when an ethnarch guarded Damascus according to 2 Corinthians?,retained,593,
+archive/sample_batch_05_part_007.csv,25,According to Acts 27 which Cretan harbor was considered unsuitable for spending the winter?,retained,806,
+archive/sample_batch_05_part_008.csv,2,Which Greek word meaning fish became an early Christian acrostic?,retained,325,
+archive/sample_batch_05_part_008.csv,3,Which apostle was executed by Herod Agrippa I in Acts 12?,retained,738,
+archive/sample_batch_05_part_008.csv,4,What Jewish feast was underway when the Holy Spirit came in Acts 2?,retained,189,
+archive/sample_batch_05_part_008.csv,5,Which apostle baptized the Roman centurion Cornelius?,retained_clarified,487,See clarifications.csv for original and final wording.
+archive/sample_batch_05_part_008.csv,6,In what year did the First Council of Nicaea meet?,retained,98,
+archive/sample_batch_05_part_008.csv,7,Which city hosted the meeting in Acts 15 about circumcision and Gentile converts?,retained,815,
+archive/sample_batch_05_part_008.csv,8,Who gave the concluding proposal at the Jerusalem meeting recorded in Acts 15?,retained,700,
+archive/sample_batch_05_part_008.csv,9,Which two rulers reached the agreement commonly called the Edict of Milan?,retained,265,
+archive/sample_batch_05_part_008.csv,10,What underground burial complexes are especially associated with early Christians at Rome?,retained,793,
+archive/sample_batch_05_part_008.csv,11,Ignatius served as bishop of which city?,retained,566,
+archive/sample_batch_05_part_008.csv,12,What does the title Didache mean?,retained,428,
+archive/sample_batch_05_part_008.csv,13,Perpetua and Felicity were martyred near which North African city?,retained,193,
+archive/sample_batch_05_part_008.csv,14,Which Roman governor wrote to Trajan asking how Christians in Bithynia should be handled?,retained,823,
+archive/sample_batch_05_part_008.csv,15,Papias traditionally served as bishop of which city in Asia Minor?,retained,454,
+archive/sample_batch_05_part_008.csv,16,What was Tatian's harmony of the four Gospels called?,retained,224,
+archive/sample_batch_05_part_008.csv,17,Under Emperor Decius what documents certified that a person had performed the required sacrifice?,retained,523,
+archive/sample_batch_05_part_008.csv,18,Which emperor initiated the Great Persecution in 303?,retained,387,
+archive/sample_batch_05_part_008.csv,19,Which early canon list survives in a manuscript discovered by Ludovico Muratori?,retained,44,
+archive/sample_batch_05_part_008.csv,20,Which Alexandrian teacher wrote the Stromata?,retained,342,
+archive/sample_batch_05_part_008.csv,21,Which bishop of Carthage opposed Novatian and supported restoring the penitent lapsed?,retained,275,
+archive/sample_batch_05_part_008.csv,22,Which controversy centered on sacraments administered by clergy who had surrendered Scriptures during persecution?,retained,136,
+archive/sample_batch_05_part_008.csv,23,Which early apologist presented a defense to Hadrian that survives only in a fragment quoted by Eusebius?,retained,231,
+archive/sample_batch_05_part_008.csv,24,Which bishop of Ephesus defended Quartodeciman observance against Victor of Rome?,retained,183,
+archive/sample_batch_05_part_008.csv,25,Canon 6 of Nicaea confirmed the ancient jurisdiction of which see over Egypt Libya and Pentapolis?,retained,553,
+archive/sample_batch_05_part_009.csv,2,Who founded the Salvation Army with Catherine Booth?,retained,280,
+archive/sample_batch_05_part_009.csv,3,Who was the principal founder of the Society of Jesus?,retained,49,
+archive/sample_batch_05_part_009.csv,4,Which emperor issued the Edict of Thessalonica jointly with Gratian and Valentinian II in 380?,retained,352,
+archive/sample_batch_05_part_009.csv,5,What year conventionally marks the Great Schism between Rome and Constantinople?,retained,259,
+archive/sample_batch_05_part_009.csv,6,Who led the Methodist movement alongside his brother Charles?,retained,880,
+archive/sample_batch_05_part_009.csv,7,Who baptized Augustine in Milan?,retained,816,
+archive/sample_batch_05_part_009.csv,8,Who wrote the Summa Theologiae?,retained_clarified,58,See clarifications.csv for original and final wording.
+archive/sample_batch_05_part_009.csv,9,Which council clarified Roman Catholic doctrine in response to the Protestant Reformation?,retained,423,
+archive/sample_batch_05_part_009.csv,10,At which imperial assembly did Martin Luther refuse to recant in 1521?,retained,10,
+archive/sample_batch_05_part_009.csv,11,Which council condemned Monothelitism in 680-681?,retained,722,
+archive/sample_batch_05_part_009.csv,12,Which trio is known as the Cappadocian Fathers?,retained,35,
+archive/sample_batch_05_part_009.csv,13,What issue stood at the center of Byzantine Iconoclasm?,retained,633,
+archive/sample_batch_05_part_009.csv,14,Who developed a satisfaction account of the atonement in Cur Deus Homo?,retained,198,
+archive/sample_batch_05_part_009.csv,15,Which medieval abbess wrote the visionary work Scivias?,retained,129,
+archive/sample_batch_05_part_009.csv,16,Which ecumenical council convened in 553 under Justinian I?,retained,89,
+archive/sample_batch_05_part_009.csv,17,Which theologian defended two wills in Christ and suffered the loss of his tongue and right hand?,retained,892,
+archive/sample_batch_05_part_009.csv,18,Which Burgundian abbey became the center of a major tenth-century monastic reform?,retained,571,
+archive/sample_batch_05_part_009.csv,19,Which council in 1215 defined transubstantiation and required annual confession?,retained,430,
+archive/sample_batch_05_part_009.csv,20,At which council was Jan Hus condemned in 1415?,retained,179,
+archive/sample_batch_05_part_009.csv,21,At which council did Reccared publicly profess Catholic Christianity in 589?,retained,274,
+archive/sample_batch_05_part_009.csv,22,Which ninth-century patriarch was central to the dispute called the Photian Schism?,retained,228,
+archive/sample_batch_05_part_009.csv,23,Who wrote the Periphyseon at the Carolingian court?,retained,714,
+archive/sample_batch_05_part_009.csv,24,Who presided over the Ephesian gathering of 449 later called the Robber Council?,retained,139,
+archive/sample_batch_05_part_009.csv,25,Which council suppressed the Knights Templar in 1312?,retained,252,
+archive/sample_batch_05_part_010.csv,2,Who dreamed of a stairway reaching from earth to heaven?,retained,534,
+archive/sample_batch_05_part_010.csv,3,Which New Testament book immediately follows the four Gospels?,retained,95,
+archive/sample_batch_05_part_010.csv,4,Which judge killed a lion with his bare hands?,retained,25,
+archive/sample_batch_05_part_010.csv,5,Who was the mother of John Mark?,retained,51,
+archive/sample_batch_05_part_010.csv,6,Whose servant was Gehazi?,retained,75,
+archive/sample_batch_05_part_010.csv,7,Who was the chief tabernacle craftsman from the tribe of Judah?,retained,375,
+archive/sample_batch_05_part_010.csv,8,For how many years had Aeneas been bedridden before Peter healed him?,retained,354,
+archive/sample_batch_05_part_010.csv,9,Which daughter-in-law of Judah gave birth to Perez and Zerah?,retained,814,
+archive/sample_batch_05_part_010.csv,10,Who produced the first complete printed English Bible in 1535?,retained,882,
+archive/sample_batch_05_part_010.csv,11,Which count sponsored the Moravian renewal at Herrnhut?,retained,147,
+archive/sample_batch_05_part_010.csv,12,What name is given to the ancient Greek translation of the Hebrew Scriptures?,retained,452,
+archive/sample_batch_05_part_010.csv,13,Which monk wrote the Rule that became influential in Western monasticism?,retained,218,
+archive/sample_batch_05_part_010.csv,14,Which blind American hymn writer wrote Blessed Assurance?,retained,679,
+archive/sample_batch_05_part_010.csv,15,Which prophetess tried to intimidate Nehemiah?,retained,501,
+archive/sample_batch_05_part_010.csv,16,Whom did Paul call his fellow prisoner in the letter to Philemon?,retained,249,
+archive/sample_batch_05_part_010.csv,17,Which Syriac theologian and hymn writer is known as the Harp of the Holy Spirit?,retained,615,
+archive/sample_batch_05_part_010.csv,18,Which surviving work by Patrick recounts his calling and mission in Ireland?,retained,318,
+archive/sample_batch_05_part_010.csv,19,Which English synod in 664 chose the Roman calculation of Easter?,retained,157,
+archive/sample_batch_05_part_010.csv,20,Whose sayings form Proverbs chapter 30?,retained,894,
+archive/sample_batch_05_part_010.csv,21,Which American Baptist missionary translated the Bible into Burmese?,retained,69,
+archive/sample_batch_05_part_010.csv,22,According to Zephaniah 1:1 who was the prophet's father?,retained,435,
+archive/sample_batch_05_part_010.csv,23,Which second-century apologist wrote A Plea for the Christians?,retained,874,
+archive/sample_batch_05_part_010.csv,24,Who led the Lutheran team that compiled the Magdeburg Centuries?,retained,736,
+archive/sample_batch_05_part_010.csv,25,Which Anglican theologian wrote Of the Laws of Ecclesiastical Polity?,retained,161,
+archive/sample_batch_06_part_001.csv,2,What metal were Israel's two signaling trumpets made from?,retained,441,
+archive/sample_batch_06_part_001.csv,3,Which working animal was not to be muzzled while treading grain?,retained,485,
+archive/sample_batch_06_part_001.csv,4,Which traits made a land animal permitted for food in Leviticus?,retained,5,
+archive/sample_batch_06_part_001.csv,5,Where was the live goat sent after Israel's sins were confessed over it?,retained,236,
+archive/sample_batch_06_part_001.csv,6,Which food did Israel recall eating in Egypt along with melons and leeks?,retained,577,
+archive/sample_batch_06_part_001.csv,7,What grew on Aaron's staff after it budded and blossomed?,retained,142,
+archive/sample_batch_06_part_001.csv,8,In which year could Israelites begin eating fruit from a newly planted tree?,retained,77,
+archive/sample_batch_06_part_001.csv,9,What color cord was placed on the corner tassels of Israelite garments?,retained,492,
+archive/sample_batch_06_part_001.csv,10,What feature was required around the roof of a new house?,retained,422,
+archive/sample_batch_06_part_001.csv,11,How long was a newly married man excused from military duty?,retained,102,
+archive/sample_batch_06_part_001.csv,12,How were the twelve loaves arranged before the LORD?,retained,219,
+archive/sample_batch_06_part_001.csv,13,What must never have been placed on the red heifer?,retained,772,
+archive/sample_batch_06_part_001.csv,14,What determined whether Israel could cut down a tree during a siege?,retained,796,
+archive/sample_batch_06_part_001.csv,15,How many witnesses were required at minimum to establish a charge?,retained,473,
+archive/sample_batch_06_part_001.csv,16,How many cycles of seven years were counted before the Jubilee?,retained,684,
+archive/sample_batch_06_part_001.csv,17,What happened to a clay pot used to boil a sin offering?,retained,16,
+archive/sample_batch_06_part_001.csv,18,In which month was the delayed Passover observed?,retained,226,
+archive/sample_batch_06_part_001.csv,19,When did Deuteronomy require a body hung on a tree to be buried?,retained,155,
+archive/sample_batch_06_part_001.csv,20,Which plant accompanied the birds and cedarwood in a cleansing rite?,retained,895,
+archive/sample_batch_06_part_001.csv,21,Which numbered herd or flock animal passing under the rod became holy to the Lord?,retained,733,
+archive/sample_batch_06_part_001.csv,22,What event allowed a protected manslayer to return home?,retained,551,
+archive/sample_batch_06_part_001.csv,23,What coated the stones on which Israel was to write the Law?,retained,827,
+archive/sample_batch_06_part_001.csv,24,Which priest went against Midian with the holy objects and signaling trumpets?,retained,322,
+archive/sample_batch_06_part_001.csv,25,In which generation could an Edomite's descendants enter the LORD's assembly?,retained,575,
+archive/sample_batch_06_part_002.csv,2,What item was removed to confirm a property transfer in Ruth?,retained,232,
+archive/sample_batch_06_part_002.csv,3,What object did Elisha cause to float after it fell into the water?,retained,393,
+archive/sample_batch_06_part_002.csv,4,What replaced Rehoboam's gold shields after Shishak took them?,retained,372,
+archive/sample_batch_06_part_002.csv,5,What did Achsah ask Caleb to give her in addition to her southern land?,retained,649,
+archive/sample_batch_06_part_002.csv,6,What pulled the new cart carrying the ark back from Philistia?,retained,671,
+archive/sample_batch_06_part_002.csv,7,What was read to the king in Esther when he could not sleep?,retained,603,
+archive/sample_batch_06_part_002.csv,8,How were the priestly divisions assigned their duties in 1 Chronicles?,retained,514,
+archive/sample_batch_06_part_002.csv,9,What did Cyrus entrust to Sheshbazzar for the return to Jerusalem?,retained,653,
+archive/sample_batch_06_part_002.csv,10,What did Michal place in David's bed to make it appear occupied?,retained,284,
+archive/sample_batch_06_part_002.csv,11,Where did Joshua set up twelve stones where the priests had stood?,retained,264,
+archive/sample_batch_06_part_002.csv,12,Who sounded the cymbals when David stationed ministers before the ark?,retained,610,
+archive/sample_batch_06_part_002.csv,13,How many chosen attendants did Hegai assign to Esther?,retained,588,
+archive/sample_batch_06_part_002.csv,14,Where did David tell his humiliated envoys to wait until their beards grew back?,retained,795,
+archive/sample_batch_06_part_002.csv,15,Where was Manasseh taken in shackles before he humbled himself?,retained,427,
+archive/sample_batch_06_part_002.csv,16,What did Jair's thirty sons ride?,retained,549,
+archive/sample_batch_06_part_002.csv,17,Which soldiers received the same share of plunder as those who fought?,retained,130,
+archive/sample_batch_06_part_002.csv,18,Which group did Ezra find missing from his assembly by the Ahava canal?,retained,201,
+archive/sample_batch_06_part_002.csv,19,Which king received a letter from Elijah warning of severe illness?,retained,407,
+archive/sample_batch_06_part_002.csv,20,Which month did the Pur select for Haman's planned attack?,retained,229,
+archive/sample_batch_06_part_002.csv,21,From which city did Ahaz copy the altar he installed in Jerusalem?,retained,182,
+archive/sample_batch_06_part_002.csv,22,Which Temple gate was the focus of Jotham's construction?,retained,273,
+archive/sample_batch_06_part_002.csv,23,Which city did Joshua receive as his own inheritance?,retained,481,
+archive/sample_batch_06_part_002.csv,24,Which governor questioned the authority for rebuilding the Temple?,retained,392,
+archive/sample_batch_06_part_002.csv,25,Who hid in a well at Bahurim while carrying news to David?,retained,875,
+archive/sample_batch_06_part_003.csv,2,In which land did Job live?,retained,163,
+archive/sample_batch_06_part_003.csv,3,Which image describes the person who delights in the LORD's instruction in Psalm 1?,retained,233,
+archive/sample_batch_06_part_003.csv,4,Which of Job's three friends is identified as a Shuhite?,retained,833,
+archive/sample_batch_06_part_003.csv,5,Which friend delivers the first speech after Job's lament?,retained,303,
+archive/sample_batch_06_part_003.csv,6,Which crisis is named in Psalm 3's superscription?,retained,143,
+archive/sample_batch_06_part_003.csv,7,Which group is repeatedly addressed by name in Song of Songs?,retained,302,
+archive/sample_batch_06_part_003.csv,8,Which psalm's heading calls it a song for the Sabbath day?,retained,123,
+archive/sample_batch_06_part_003.csv,9,Which group is named in the heading of Psalm 42?,retained,308,
+archive/sample_batch_06_part_003.csv,10,Which chapter immediately follows Proverbs' opening instructions and begins Solomon's proverbs?,retained_clarified,8,See clarifications.csv for original and final wording.
+archive/sample_batch_06_part_003.csv,11,What Hebrew title identifies Ecclesiastes' main speaker?,retained,447,
+archive/sample_batch_06_part_003.csv,12,In Job which creature has a tail compared to a cedar?,retained,565,
+archive/sample_batch_06_part_003.csv,13,What collection label begins at Proverbs 22:17?,retained,448,
+archive/sample_batch_06_part_003.csv,14,Ecclesiastes compares the words of the wise to which pointed tools?,retained,702,
+archive/sample_batch_06_part_003.csv,15,How many warriors form the guard in Solomon's procession in Song of Songs 3?,retained,403,
+archive/sample_batch_06_part_003.csv,16,How many psalms carry the heading A Song of Ascents?,retained,638,
+archive/sample_batch_06_part_003.csv,17,Whose men copied the proverbs beginning in Proverbs 25?,retained,821,
+archive/sample_batch_06_part_003.csv,18,In Ecclesiastes' story of a besieged little city who had the wisdom to deliver it?,retained,433,
+archive/sample_batch_06_part_003.csv,19,In Song of Songs which city joins Jerusalem in a comparison of the beloved?,retained,889,
+archive/sample_batch_06_part_003.csv,20,Who is named as Elihu's father in Job?,retained,343,
+archive/sample_batch_06_part_003.csv,21,Who is named in Psalm 7's superscription as a Benjaminite?,retained,573,
+archive/sample_batch_06_part_003.csv,22,Who is named as Agur's father in Proverbs 30?,retained,802,
+archive/sample_batch_06_part_003.csv,23,What poetic structure shapes Proverbs 31:10-31 in Hebrew?,retained,230,
+archive/sample_batch_06_part_003.csv,24,Who is the final named human speaker before the LORD answers Job?,retained,185,
+archive/sample_batch_06_part_003.csv,25,Which pair of psalms has superscriptions naming Solomon?,retained,208,
+archive/sample_batch_06_part_004.csv,2,In Jonah what attacked the plant that had shaded the prophet?,retained,71,
+archive/sample_batch_06_part_004.csv,3,Haggai pictures a wage earner putting earnings into what?,retained,809,
+archive/sample_batch_06_part_004.csv,4,In Obadiah which bird pictures Edom nesting high among the stars?,retained,396,
+archive/sample_batch_06_part_004.csv,5,Which tribe does Hosea compare to a cake not turned over?,retained,856,
+archive/sample_batch_06_part_004.csv,6,To which official does Malachi say a defective animal should be presented?,retained,165,
+archive/sample_batch_06_part_004.csv,7,Whose death was Ezekiel commanded not to mourn?,retained,443,
+archive/sample_batch_06_part_004.csv,8,Where does Joel say the nations will be gathered for judgment?,retained,724,
+archive/sample_batch_06_part_004.csv,9,Who broke the yoke from Jeremiah's neck in the Temple?,retained,34,
+archive/sample_batch_06_part_004.csv,10,Who served as high priest when Haggai's first message came?,retained,767,
+archive/sample_batch_06_part_004.csv,11,Where was the rider on the red horse in Zechariah's first vision?,retained,263,
+archive/sample_batch_06_part_004.csv,12,Which son accompanied Isaiah when he went to meet King Ahaz?,retained,222,
+archive/sample_batch_06_part_004.csv,13,Amos dates his visions how long before the earthquake?,retained,677,
+archive/sample_batch_06_part_004.csv,14,In Haggai whom does the LORD promise to make like a signet ring?,retained,521,
+archive/sample_batch_06_part_004.csv,15,With what does the LORD say he will search Jerusalem in Zephaniah?,retained,727,
+archive/sample_batch_06_part_004.csv,16,What fuel was Ezekiel permitted to use instead of human waste?,retained,870,
+archive/sample_batch_06_part_004.csv,17,Which Egyptian city does Nahum use as a warning example for Nineveh?,retained,687,
+archive/sample_batch_06_part_004.csv,18,What was placed on high priest Joshua's head after his filthy garments were removed?,retained,223,
+archive/sample_batch_06_part_004.csv,19,What record was written for those who feared the LORD in Malachi?,retained,826,
+archive/sample_batch_06_part_004.csv,20,Which royal steward's self-made tomb is rebuked in Isaiah 22?,retained,460,
+archive/sample_batch_06_part_004.csv,21,Which regions does Micah name as ancient grazing grounds for God's flock?,retained,66,
+archive/sample_batch_06_part_004.csv,22,How many chariots emerged between the two mountains in Zechariah's vision?,retained,550,
+archive/sample_batch_06_part_004.csv,23,In Zechariah 7 the delegation asked about mourning and fasting in which month?,retained,23,
+archive/sample_batch_06_part_004.csv,24,Whom did Jeremiah instruct to read his scroll in Babylon and throw it into the Euphrates?,retained,668,
+archive/sample_batch_06_part_004.csv,25,From which places does Habakkuk 3 picture God and the Holy One coming?,retained,622,
+archive/sample_batch_06_part_005.csv,2,In Matthew's parable what did the foolish wedding attendants fail to bring?,retained,140,
+archive/sample_batch_06_part_005.csv,3,Who had five barley loaves and two fish before Jesus fed the crowd in John?,retained,853,
+archive/sample_batch_06_part_005.csv,4,In Mark what does the name Boanerges mean?,retained,581,
+archive/sample_batch_06_part_005.csv,5,Why was a guest removed from the wedding feast in Matthew's parable?,retained,96,
+archive/sample_batch_06_part_005.csv,6,Which woman does Luke name with Mary Magdalene and Joanna among those supporting Jesus?,retained,601,
+archive/sample_batch_06_part_005.csv,7,What kind of containers held the water Jesus turned to wine in John's Gospel?,retained,212,
+archive/sample_batch_06_part_005.csv,8,In Matthew who sold everything to buy one pearl of great value?,retained,329,
+archive/sample_batch_06_part_005.csv,9,Where was Jesus sleeping during the storm in Mark?,retained,586,
+archive/sample_batch_06_part_005.csv,10,Which disciples wanted to call down fire on a Samaritan village in Luke?,retained,376,
+archive/sample_batch_06_part_005.csv,11,What did Jesus use to make a whip when clearing the Temple courts in John?,retained,170,
+archive/sample_batch_06_part_005.csv,12,In Matthew's sheep and goats scene where does the shepherd place the goats?,retained,637,
+archive/sample_batch_06_part_005.csv,13,Which group joined the Pharisees in plotting after Jesus healed on the Sabbath in Mark?,retained,335,
+archive/sample_batch_06_part_005.csv,14,In Luke's friend-at-midnight example how many loaves does a man ask his neighbor for?,retained_clarified,866,See clarifications.csv for original and final wording.
+archive/sample_batch_06_part_005.csv,15,Who urged the disciples to go with Jesus to Judea even if it meant dying with him in John?,retained,194,
+archive/sample_batch_06_part_005.csv,16,Where did Jesus explain the parable of the weeds to his disciples in Matthew?,retained,639,
+archive/sample_batch_06_part_005.csv,17,In Mark's mission instructions what could the disciples take for their journey?,retained,338,
+archive/sample_batch_06_part_005.csv,18,Whom did Jesus call a daughter of Abraham after a Sabbath healing in Luke?,retained,362,
+archive/sample_batch_06_part_005.csv,19,In John where was Jesus walking during the winter Feast of Dedication?,retained,476,
+archive/sample_batch_06_part_005.csv,20,What story were the tomb guards bribed to tell in Matthew?,retained,434,
+archive/sample_batch_06_part_005.csv,21,How does Mark describe the woman who begged Jesus to free her daughter from a demon?,retained,297,
+archive/sample_batch_06_part_005.csv,22,Which structure's collapse killed eighteen people according to Jesus in Luke?,retained,296,
+archive/sample_batch_06_part_005.csv,23,In John's farewell discourse who asked why Jesus would reveal himself to them but not the world?,retained,206,
+archive/sample_batch_06_part_005.csv,24,At Bethsaida what did the partly healed blind man initially say people resembled in Mark?,retained,782,
+archive/sample_batch_06_part_005.csv,25,In Luke's rich man and Lazarus story how many brothers did the rich man say he had?,retained,321,
+archive/sample_batch_06_part_006.csv,2,In 1 Peter what animal pictures the devil prowling for someone to devour?,retained,278,
+archive/sample_batch_06_part_006.csv,3,In 2 Corinthians what containers hold treasure to show that the power comes from God?,retained,763,
+archive/sample_batch_06_part_006.csv,4,Who recognized Peter's voice at the gate of John Mark's mother's house but left him outside?,retained,258,
+archive/sample_batch_06_part_006.csv,5,In Revelation what purpose do the leaves of the tree of life serve?,retained,256,
+archive/sample_batch_06_part_006.csv,6,Why did John weep before the Lamb appeared in Revelation 5?,retained,28,
+archive/sample_batch_06_part_006.csv,7,James compares a hearer who does not act to someone doing what?,retained,281,
+archive/sample_batch_06_part_006.csv,8,Which prophet in Acts predicted a severe famine during Claudius's reign?,retained,80,
+archive/sample_batch_06_part_006.csv,9,Whose people told the writer of 1 Corinthians about quarrels in the church?,retained,399,
+archive/sample_batch_06_part_006.csv,10,In Galatians which coworker was not compelled to be circumcised?,retained,886,
+archive/sample_batch_06_part_006.csv,11,What was under the feet of the woman clothed with the sun in Revelation 12?,retained,837,
+archive/sample_batch_06_part_006.csv,12,Which god did the Lystra crowd identify with Paul because he was the chief speaker?,retained,241,
+archive/sample_batch_06_part_006.csv,13,Who is sent in Ephesians to report the writer's circumstances and encourage the church?,retained,751,
+archive/sample_batch_06_part_006.csv,14,Where does the anchor of hope reach in Hebrews?,retained,863,
+archive/sample_batch_06_part_006.csv,15,Which faithful witness was killed in Pergamum according to Revelation?,retained,199,
+archive/sample_batch_06_part_006.csv,16,Whose house was attacked when opponents searched for Paul and Silas in Thessalonica?,retained,248,
+archive/sample_batch_06_part_006.csv,17,Which Philippian coworker nearly died while carrying out the work of Christ?,retained,63,
+archive/sample_batch_06_part_006.csv,18,Who is told in Colossians to complete the ministry received in the Lord?,retained,200,
+archive/sample_batch_06_part_006.csv,19,Who loved to be first and refused to welcome fellow believers in 3 John?,retained,822,
+archive/sample_batch_06_part_006.csv,20,Which one of the seven in Acts 6 is identified as a proselyte from Antioch?,retained,412,
+archive/sample_batch_06_part_006.csv,21,With whom at Troas was the cloak mentioned in 2 Timothy left?,retained,664,
+archive/sample_batch_06_part_006.csv,22,What weather image does Jude use for corrupt intruders carried along by winds?,retained,366,
+archive/sample_batch_06_part_006.csv,23,Whom could the fifth-trumpet locusts harm in Revelation?,retained,135,
+archive/sample_batch_06_part_006.csv,24,Which early disciple from Cyprus hosted Paul and his companions as they reached Jerusalem?,retained,506,
+archive/sample_batch_06_part_006.csv,25,Which lawyer or expert in the law is named with Apollos at the end of Titus?,retained,93,
+archive/sample_batch_06_part_007.csv,2,What name is given to the standard Syriac version of the Bible?,retained,3,
+archive/sample_batch_06_part_007.csv,3,Which realm is traditionally regarded as the first to adopt Christianity as its state religion?,retained,648,
+archive/sample_batch_06_part_007.csv,4,Which monk is widely credited with pioneering cenobitic monasticism in Egypt?,retained,511,
+archive/sample_batch_06_part_007.csv,5,Which missionary became Aksum's first bishop and is linked to King Ezana's conversion?,retained,558,
+archive/sample_batch_06_part_007.csv,6,Who is traditionally credited with creating the Armenian alphabet around 405?,retained,397,
+archive/sample_batch_06_part_007.csv,7,Which fourth-century pilgrim described Christian worship in Jerusalem in a travel account?,retained,672,
+archive/sample_batch_06_part_007.csv,8,How is Blandina described in the ancient account of the martyrs of Lyon?,retained,584,
+archive/sample_batch_06_part_007.csv,9,Which Egyptian monastic center drew a large community of ascetics around Amoun?,retained,746,
+archive/sample_batch_06_part_007.csv,10,Which emperor's reign supplies the 284 epoch for the Coptic Era of the Martyrs?,retained,630,
+archive/sample_batch_06_part_007.csv,11,Which ancient anaphora belongs to the East Syriac liturgical tradition?,retained,513,
+archive/sample_batch_06_part_007.csv,12,In the Letter to Diognetus Christians in the world are compared to what in the body?,retained,382,
+archive/sample_batch_06_part_007.csv,13,In the Passion of Perpetua and Felicity what happened to Felicity shortly before their martyrdom?,retained,358,
+archive/sample_batch_06_part_007.csv,14,In which city did John Cassian establish monasteries after his years among Egyptian ascetics?,retained,520,
+archive/sample_batch_06_part_007.csv,15,Which monument erected in 781 records the Church of the East's presence in Tang China?,retained,658,
+archive/sample_batch_06_part_007.csv,16,In the Shepherd of Hermas what does the tower being built in the third vision represent?,retained,729,
+archive/sample_batch_06_part_007.csv,17,How many principal evil thoughts did Evagrius Ponticus identify for ascetic self-examination?,retained,776,
+archive/sample_batch_06_part_007.csv,18,What title is given to Aphrahat's collection of twenty-three Syriac treatises?,retained,546,
+archive/sample_batch_06_part_007.csv,19,At which battle in 451 did Vardan Mamikonian lead Armenian forces resisting forced Zoroastrianism?,retained,710,
+archive/sample_batch_06_part_007.csv,20,In Minucius Felix's dialogue who answers Caecilius by defending Christianity?,retained,20,
+archive/sample_batch_06_part_007.csv,21,Which dead brother did Perpetua see thirsty and suffering in her prison visions?,retained,207,
+archive/sample_batch_06_part_007.csv,22,Which Greek title is commonly translated as Sayings of the Desert Fathers?,retained,456,
+archive/sample_batch_06_part_007.csv,23,Which see hosted the 410 synod that helped organize the Church of the East in the Persian Empire?,retained,389,
+archive/sample_batch_06_part_007.csv,24,Which anonymous sixth-century work supplied a major literary source for the Rule of Benedict?,retained,852,
+archive/sample_batch_06_part_007.csv,25,Which group did early heresiologists describe as rejecting marriage and abstaining from meat and wine?,retained,369,
+archive/sample_batch_06_part_008.csv,2,Which Byzantine emperor commissioned the sixth-century rebuilding of Hagia Sophia?,retained,234,
+archive/sample_batch_06_part_008.csv,3,Who is traditionally credited with writing The Imitation of Christ?,retained,533,
+archive/sample_batch_06_part_008.csv,4,Which alphabet was devised for the Slavic mission of Cyril and Methodius?,retained,857,
+archive/sample_batch_06_part_008.csv,5,Which ruler's baptism is linked to the official Christianization of Kyivan Rus in 988?,retained,766,
+archive/sample_batch_06_part_008.csv,6,Which monastic order began at Citeaux in 1098?,retained,417,
+archive/sample_batch_06_part_008.csv,7,What name was given to medieval lay religious women who formed communities without permanent vows?,retained,811,
+archive/sample_batch_06_part_008.csv,8,Which empress ended the second period of Byzantine Iconoclasm by restoring icons in 843?,retained,238,
+archive/sample_batch_06_part_008.csv,9,Who became the first archbishop of the autocephalous Serbian Church in 1219?,retained,699,
+archive/sample_batch_06_part_008.csv,10,Which work by Peter Lombard became a standard medieval theology textbook?,retained,285,
+archive/sample_batch_06_part_008.csv,11,Who founded the Brethren of the Common Life associated with the Devotio Moderna?,retained,675,
+archive/sample_batch_06_part_008.csv,12,Which work of John of Damascus covers dialectic and heresies as well as the Orthodox faith?,retained,471,
+archive/sample_batch_06_part_008.csv,13,Who founded the Carthusian community at Grande Chartreuse in 1084?,retained,612,
+archive/sample_batch_06_part_008.csv,14,Which work by Peter Abelard arranged apparently conflicting authorities for comparison?,retained,334,
+archive/sample_batch_06_part_008.csv,15,Which Franciscan missionary became the first archbishop of Khanbaliq in China?,retained,544,
+archive/sample_batch_06_part_008.csv,16,At which Constantinople monastery did Theodore lead a major monastic reform?,retained,477,
+archive/sample_batch_06_part_008.csv,17,Which theologian defended hesychasm using a distinction between divine essence and energies?,retained,662,
+archive/sample_batch_06_part_008.csv,18,Which monastic tradition traces its origins to Romuald's work in central Italy?,retained,408,
+archive/sample_batch_06_part_008.csv,19,Which English anchoress wrote the work commonly called Revelations of Divine Love?,retained,499,
+archive/sample_batch_06_part_008.csv,20,What title is commonly used for Photius's collection of summaries of books he had read?,retained,295,
+archive/sample_batch_06_part_008.csv,21,Which Greek bishop refused to sign the decree of union at the Council of Florence in 1439?,retained,204,
+archive/sample_batch_06_part_008.csv,22,Which reforming abbot adapted Cluniac customs for a German monastery?,retained,340,
+archive/sample_batch_06_part_008.csv,23,Which pope issued Parens scientiarum in 1231 to confirm the University of Paris's privileges?,retained,572,
+archive/sample_batch_06_part_008.csv,24,Which bishop issued the Paris condemnation of 219 propositions in 1277?,retained,530,
+archive/sample_batch_06_part_008.csv,25,At which Majorcan site was a school established at Ramon Llull's urging to train missionaries in Arabic?,retained,254,
+archive/sample_batch_06_part_009.csv,2,Which Carmelite reformer wrote The Interior Castle?,retained,439,
+archive/sample_batch_06_part_009.csv,3,Which French king issued the Edict of Nantes in 1598?,retained,624,
+archive/sample_batch_06_part_009.csv,4,Which Swiss reformer succeeded Zwingli as chief pastor in Zurich?,retained,74,
+archive/sample_batch_06_part_009.csv,5,Who wrote The First Blast of the Trumpet against the Monstrous Regiment of Women?,retained,716,
+archive/sample_batch_06_part_009.csv,6,Which former Catholic priest became the namesake of the Mennonites?,retained,579,
+archive/sample_batch_06_part_009.csv,7,Which women's order traces its origins to Angela Merici's 1535 company in Brescia?,retained,188,
+archive/sample_batch_06_part_009.csv,8,Who was the chief author of the Belgic Confession?,retained,770,
+archive/sample_batch_06_part_009.csv,9,Which ruler convened the 1529 Colloquy of Marburg?,retained,791,
+archive/sample_batch_06_part_009.csv,10,Who became the first archbishop of Canterbury under Elizabeth I?,retained,402,
+archive/sample_batch_06_part_009.csv,11,Which pope established the Roman Inquisition in 1542?,retained,309,
+archive/sample_batch_06_part_009.csv,12,Who is generally credited as chief author of the 1527 Schleitheim Confession?,retained,103,
+archive/sample_batch_06_part_009.csv,13,Who served as the first rector of Geneva's academy when it opened in 1559?,retained,842,
+archive/sample_batch_06_part_009.csv,14,Which 1577 document sought to resolve disputes among German Lutherans?,retained,105,
+archive/sample_batch_06_part_009.csv,15,Who wrote the 1562 Apology of the Church of England?,retained,312,
+archive/sample_batch_06_part_009.csv,16,Which Latin maxim summarized the territorial rule of the Peace of Augsburg?,retained,17,
+archive/sample_batch_06_part_009.csv,17,Which 1549 agreement joined Calvin and Bullinger on the Lord's Supper?,retained,504,
+archive/sample_batch_06_part_009.csv,18,Which Anabaptist leader was burned at the stake in Innsbruck in 1536?,retained,108,
+archive/sample_batch_06_part_009.csv,19,Which Scottish reformer became principal of Glasgow University in 1574?,retained,90,
+archive/sample_batch_06_part_009.csv,20,Which 1648 settlement gave Calvinism legal recognition in the Holy Roman Empire?,retained,801,
+archive/sample_batch_06_part_009.csv,21,Whose Franciscan reform led to the formation of the Capuchins?,retained,848,
+archive/sample_batch_06_part_009.csv,22,Who became king of Anabaptist Munster after Jan Matthys died?,retained,138,
+archive/sample_batch_06_part_009.csv,23,Which 1521 work by Melanchthon systematized early Lutheran theology?,retained,45,
+archive/sample_batch_06_part_009.csv,24,Which Anabaptist hymnbook was first printed in 1564 and remains in Amish use?,retained,116,
+archive/sample_batch_06_part_009.csv,25,Which elector of the Palatinate commissioned the Heidelberg Catechism?,retained,437,
+archive/sample_batch_06_part_010.csv,2,Who led the mission at the center of the 1906 Azusa Street Revival?,retained,141,
+archive/sample_batch_06_part_010.csv,3,Which London draper founded the YMCA in 1844?,retained,692,
+archive/sample_batch_06_part_010.csv,4,"Which movement experienced the Great Disappointment on October 22, 1844?",retained,167,
+archive/sample_batch_06_part_010.csv,5,Whose journey to buy a Welsh Bible helped inspire the British and Foreign Bible Society?,retained,301,
+archive/sample_batch_06_part_010.csv,6,Which former captive became the first African Anglican bishop in 1864?,retained,832,
+archive/sample_batch_06_part_010.csv,7,Who preached New Zealand's first recorded Christian sermon on Christmas Day 1814?,retained,490,
+archive/sample_batch_06_part_010.csv,8,Which 1801 Kentucky camp meeting became a landmark of the Second Great Awakening?,retained,563,
+archive/sample_batch_06_part_010.csv,9,Into which Indigenous language was John Eliot's 1663 Bible translated?,retained,32,
+archive/sample_batch_06_part_010.csv,10,What is the classical liturgical language of the Ethiopian Orthodox Tewahedo Church?,retained,260,
+archive/sample_batch_06_part_010.csv,11,In which Japanese city were the Twenty-Six Martyrs crucified in 1597?,retained,172,
+archive/sample_batch_06_part_010.csv,12,Which revivalist made seven preaching visits to Britain's American colonies?,retained,333,
+archive/sample_batch_06_part_010.csv,13,Which printer formed the Serampore Trio with William Carey and Joshua Marshman?,retained,705,
+archive/sample_batch_06_part_010.csv,14,Las Casas served as bishop of which New Spain diocese?,retained,861,
+archive/sample_batch_06_part_010.csv,15,Which city hosted the 1910 World Missionary Conference?,retained,449,
+archive/sample_batch_06_part_010.csv,16,Which weekly gathering in Phoebe Palmer's home promoted Holiness teaching?,retained,39,
+archive/sample_batch_06_part_010.csv,17,Who co-translated the Bible into Chinese with Robert Morrison?,retained,868,
+archive/sample_batch_06_part_010.csv,18,In which colony did Simon Kimbangu begin his healing and preaching ministry in 1921?,retained,361,
+archive/sample_batch_06_part_010.csv,19,Which Indian Christian reformer founded Mukti Mission near Pune?,retained,202,
+archive/sample_batch_06_part_010.csv,20,"Which denomination traces its founding to a 1908 union at Pilot Point, Texas?",retained,594,
+archive/sample_batch_06_part_010.csv,21,Into which language did Bartholomaus Ziegenbalg translate the New Testament at Tranquebar?,retained,458,
+archive/sample_batch_06_part_010.csv,22,Which Xhosa minister translated the first part of Bunyan's The Pilgrim's Progress?,retained,849,
+archive/sample_batch_06_part_010.csv,23,What Japanese Christian movement did Uchimura Kanzo lead outside formal denominations?,retained,644,
+archive/sample_batch_06_part_010.csv,24,Which Italian Jesuit adopted a sannyasi's saffron dress and vegetarian diet in Madurai?,retained,598,
+archive/sample_batch_06_part_010.csv,25,Which Indigenous people were the main inhabitants of Jesuit reductions in colonial Paraguay?,retained,346,
+archive/sample_of_100_trivia_questions.csv,2,How many apostles did Jesus choose during His earthly ministry?,duplicate_fact,145,Same tested fact as: How many apostles did Jesus appoint?
+archive/sample_of_100_trivia_questions.csv,3,Which city did God destroy along with Gomorrah in Genesis?,duplicate_fact,611,Same tested fact as: Which city was destroyed along with Sodom?
+archive/sample_of_100_trivia_questions.csv,4,Who built the ark before the flood?,duplicate_fact,694,Same tested fact as: Who built an ark before the flood?
+archive/sample_of_100_trivia_questions.csv,5,"Which Gospel begins, 'In the beginning was the Word'?",duplicate_fact,166,Same tested fact as: Which Gospel begins with 'In the beginning was the Word'?
+archive/sample_of_100_trivia_questions.csv,6,Who was the mother of Samuel?,duplicate_prompt,464,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_of_100_trivia_questions.csv,7,Which prophet was swallowed by a great fish?,duplicate_fact,442,Same tested fact as: Who was swallowed by a great fish?
+archive/sample_of_100_trivia_questions.csv,8,What food did God provide for Israel in the wilderness?,duplicate_fact,625,Same tested fact as: What food did God provide Israel in the wilderness each morning?
+archive/sample_of_100_trivia_questions.csv,9,Which book contains the Ten Commandments as first given at Sinai?,retained,516,
+archive/sample_of_100_trivia_questions.csv,10,Which apostle denied Jesus three times?,duplicate_fact,761,Same tested fact as: Who denied Jesus three times?
+archive/sample_of_100_trivia_questions.csv,11,Which book immediately follows Obadiah in the Protestant Old Testament?,retained,754,
+archive/sample_of_100_trivia_questions.csv,12,Who was Joshua's father?,retained,495,
+archive/sample_of_100_trivia_questions.csv,13,Which woman hid the Israelite spies in Jericho?,duplicate_fact,792,Same tested fact as: Who hid the spies in Jericho?
+archive/sample_of_100_trivia_questions.csv,14,Who was Moses' father-in-law?,duplicate_prompt,884,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_of_100_trivia_questions.csv,15,Which tribe was set apart for priestly service in Israel?,duplicate_fact,14,Same tested fact as: Which tribe was set apart for service at the Tabernacle?
+archive/sample_of_100_trivia_questions.csv,16,Who was the first high priest of Israel?,retained,451,
+archive/sample_of_100_trivia_questions.csv,17,Which king of Judah found the Book of the Law during temple repairs?,duplicate_fact,124,Same tested fact as: Which king was known for discovering the Book of the Law during Temple repairs?
+archive/sample_of_100_trivia_questions.csv,18,Which prophet confronted David after his sin with Bathsheba?,duplicate_prompt,444,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_of_100_trivia_questions.csv,19,Which queen visited Solomon to test him with hard questions?,duplicate_fact,674,Same tested fact as: Which queen visited Solomon?
+archive/sample_of_100_trivia_questions.csv,20,Who rebuilt Jerusalem's wall after the exile?,duplicate_fact,467,Same tested fact as: Who rebuilt the walls of Jerusalem?
+archive/sample_of_100_trivia_questions.csv,21,Which Babylonian king destroyed Jerusalem in 586 BC?,retained,271,
+archive/sample_of_100_trivia_questions.csv,22,Which Persian king issued a decree allowing Jews to return and rebuild the temple?,duplicate_fact,704,Same tested fact as: Which king ordered the rebuilding of the Temple after the exile?
+archive/sample_of_100_trivia_questions.csv,23,Who led the first major return from exile and helped rebuild the temple?,duplicate_fact,528,Same tested fact as: Who led the first return from exile under Cyrus?
+archive/sample_of_100_trivia_questions.csv,24,Which prophet married Gomer?,duplicate_prompt,266,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_of_100_trivia_questions.csv,25,Which Old Testament book is shortest by number of chapters?,retained_clarified,289,See clarifications.csv for original and final wording.
+archive/sample_of_100_trivia_questions.csv,26,Which Bible chapter has the most verses?,retained,813,
+archive/sample_of_100_trivia_questions.csv,27,"Which psalm begins, 'The LORD is my shepherd'?",duplicate_fact,186,Same tested fact as: Which psalm begins with The Lord is my shepherd?
+archive/sample_of_100_trivia_questions.csv,28,Which psalm is associated with David's repentance after his sin with Bathsheba?,retained_clarified,332,See clarifications.csv for original and final wording.
+archive/sample_of_100_trivia_questions.csv,29,"Which book begins, 'Vanity of vanities'?",duplicate_fact,541,Same tested fact as: Which book includes the phrase vanity of vanities?
+archive/sample_of_100_trivia_questions.csv,30,"Which book contains the Shema: 'Hear, O Israel: The LORD our God, the LORD is one'?",retained,336,
+archive/sample_of_100_trivia_questions.csv,31,Which Gospel begins with a genealogy from Abraham to Jesus?,retained,176,
+archive/sample_of_100_trivia_questions.csv,32,Which Gospel was written by a physician according to traditional attribution?,duplicate_fact,582,Same tested fact as: Which Gospel was written by a physician?
+archive/sample_of_100_trivia_questions.csv,33,Which Gospels contain infancy narratives of Jesus?,retained,470,
+archive/sample_of_100_trivia_questions.csv,34,Who came to Jesus by night in John 3?,duplicate_fact,418,Same tested fact as: Who visited Jesus by night in John 3?
+archive/sample_of_100_trivia_questions.csv,35,Which woman did Jesus meet at Jacob's well in John 4?,retained,261,
+archive/sample_of_100_trivia_questions.csv,36,Who helped carry Jesus' cross?,duplicate_fact,629,Same tested fact as: Who carried Jesus' cross?
+archive/sample_of_100_trivia_questions.csv,37,Who buried Jesus in his own new tomb?,duplicate_prompt,30,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_of_100_trivia_questions.csv,38,Who preached at Pentecost in Acts 2?,duplicate_fact,279,Same tested fact as: Who preached the sermon at Pentecost?
+archive/sample_of_100_trivia_questions.csv,39,Who was the first Christian martyr described in Acts?,duplicate_fact,121,Same tested fact as: Who was the first Christian martyr?
+archive/sample_of_100_trivia_questions.csv,40,Who accompanied Paul on his first missionary journey?,duplicate_fact,607,Same tested fact as: Who was Paul's companion on his first missionary journey?
+archive/sample_of_100_trivia_questions.csv,41,Which runaway slave is central to Paul's letter to Philemon?,duplicate_fact,661,Same tested fact as: Which epistle is addressed to a runaway slave's master?
+archive/sample_of_100_trivia_questions.csv,42,Which New Testament book is addressed to 'the twelve tribes in the Dispersion'?,retained,712,
+archive/sample_of_100_trivia_questions.csv,43,Which chapter is often called the 'faith chapter'?,retained,888,
+archive/sample_of_100_trivia_questions.csv,44,Which book contains the fruit of the Spirit?,duplicate_prompt,6,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_of_100_trivia_questions.csv,45,Which epistle contains the armor of God passage?,duplicate_fact,655,Same tested fact as: Which book contains the armor of God passage?
+archive/sample_of_100_trivia_questions.csv,46,Which church in Revelation was described as lukewarm?,duplicate_fact,175,Same tested fact as: Which church in Revelation was lukewarm?
+archive/sample_of_100_trivia_questions.csv,47,Which church in Revelation was told it had abandoned its first love?,duplicate_fact,41,Same tested fact as: Which church was told it had abandoned its first love in Revelation?
+archive/sample_of_100_trivia_questions.csv,48,Which prophet challenged the prophets of Baal on Mount Carmel?,duplicate_fact,355,Same tested fact as: Which prophet challenged Baal's prophets on Mount Carmel?
+archive/sample_of_100_trivia_questions.csv,49,Who was taken up to heaven in a whirlwind?,duplicate_fact,330,Same tested fact as: Which prophet was taken up in a whirlwind?
+archive/sample_of_100_trivia_questions.csv,50,Who killed Sisera by driving a tent peg into his temple?,duplicate_fact,503,Same tested fact as: Who killed Sisera?
+archive/sample_of_100_trivia_questions.csv,51,What is the theological term for the study of salvation?,duplicate_fact,86,Same tested fact as: Which doctrine concerns salvation?
+archive/sample_of_100_trivia_questions.csv,52,What is the theological term for the study of the church?,retained,125,
+archive/sample_of_100_trivia_questions.csv,53,What is the theological term for the study of last things?,duplicate_fact,385,Same tested fact as: Which doctrine concerns God's final judgment and the last things?
+archive/sample_of_100_trivia_questions.csv,54,What doctrine teaches that Scripture alone is the final infallible authority for the church?,duplicate_fact,589,Same tested fact as: Which Latin phrase means 'Scripture alone'?
+archive/sample_of_100_trivia_questions.csv,55,Which Reformer wrote Institutes of the Christian Religion?,duplicate_fact,820,Same tested fact as: Which theologian wrote Institutes of the Christian Religion?
+archive/sample_of_100_trivia_questions.csv,56,Which man is widely associated with beginning the Protestant Reformation in 1517?,duplicate_fact,538,Same tested fact as: Which Reformer posted the Ninety-Five Theses?
+archive/sample_of_100_trivia_questions.csv,57,What document is Martin Luther traditionally said to have posted in 1517?,duplicate_fact,538,Same tested fact as: Which Reformer posted the Ninety-Five Theses?
+archive/sample_of_100_trivia_questions.csv,58,Which council addressed Arianism in AD 325?,duplicate_fact,891,Same tested fact as: Which council condemned Arius?
+archive/sample_of_100_trivia_questions.csv,59,Which fourth-century bishop strongly opposed Arianism?,duplicate_fact,641,Same tested fact as: Which church father defended the Trinity against Arianism?
+archive/sample_of_100_trivia_questions.csv,60,Which church father wrote Confessions and City of God?,duplicate_fact,728,Same tested fact as: Which church father wrote The City of God?
+archive/sample_of_100_trivia_questions.csv,61,Which church father is known for a sermon condemning slavery and slave markets?,retained,253,
+archive/sample_of_100_trivia_questions.csv,62,Which term refers to books often included in Roman Catholic Old Testaments but not Protestant Old Testaments?,retained,748,
+archive/sample_of_100_trivia_questions.csv,63,Which books record the Jewish revolt associated with the Maccabean family?,retained,548,
+archive/sample_of_100_trivia_questions.csv,64,Which book contains Paul's fullest sustained argument for justification by faith?,retained,19,
+archive/sample_of_100_trivia_questions.csv,65,Which Old Testament book contains the vision of the valley of dry bones?,duplicate_fact,242,Same tested fact as: Which prophet saw a valley of dry bones?
+archive/sample_of_100_trivia_questions.csv,66,Which prophet saw the Lord high and lifted up in the temple?,duplicate_prompt,498,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_of_100_trivia_questions.csv,67,Which prophet bought a field at Anathoth while Jerusalem was under threat?,duplicate_fact,317,Same tested fact as: Which prophet bought a field at Anathoth?
+archive/sample_of_100_trivia_questions.csv,68,Which prophet lay on his side as a sign-act concerning Israel and Judah?,retained,365,
+archive/sample_of_100_trivia_questions.csv,69,Which king of Judah was granted fifteen additional years of life after prayer?,retained,431,
+archive/sample_of_100_trivia_questions.csv,70,Which king of Judah was struck with leprosy after unlawfully entering the temple to burn incense?,duplicate_fact,734,Same tested fact as: Which king was struck with leprosy for entering the Temple improperly?
+archive/sample_of_100_trivia_questions.csv,71,Which prophet rebuked King Asa for relying on Syria rather than the LORD?,retained,482,
+archive/sample_of_100_trivia_questions.csv,72,Which prophet told Jeroboam that the kingdom would be torn from Solomon's house?,retained,390,
+archive/sample_of_100_trivia_questions.csv,73,Which prophet foretold that Josiah would defile the altar at Bethel?,retained,368,
+archive/sample_of_100_trivia_questions.csv,74,Which book records the deaths of Nadab and Abihu?,retained,846,
+archive/sample_of_100_trivia_questions.csv,75,Which two sons of Aaron died after offering unauthorized fire?,retained,88,
+archive/sample_of_100_trivia_questions.csv,76,Which census book records Balaam's oracle about a star from Jacob?,retained,595,
+archive/sample_of_100_trivia_questions.csv,77,Which king consulted the medium at En-dor?,duplicate_fact,543,Same tested fact as: Which king consulted the medium at Endor?
+archive/sample_of_100_trivia_questions.csv,78,Which prophet rebuked Ahab for taking Naboth's vineyard?,duplicate_fact,497,Same tested fact as: Which prophet confronted King Ahab about Naboth's vineyard?
+archive/sample_of_100_trivia_questions.csv,79,Who was the mother of Solomon?,retained,104,
+archive/sample_of_100_trivia_questions.csv,80,Which son of David rebelled and was killed after his hair caught in a tree?,duplicate_fact,359,Same tested fact as: Which son of David rebelled and was caught by his hair?
+archive/sample_of_100_trivia_questions.csv,81,Which book records the phrase 'such a time as this'?,retained,587,
+archive/sample_of_100_trivia_questions.csv,82,Which Persian king is named Ahasuerus in Esther?,retained_clarified,461,See clarifications.csv for original and final wording.
+archive/sample_of_100_trivia_questions.csv,83,Which New Testament writer says he was a Pharisee from the tribe of Benjamin?,retained,843,
+archive/sample_of_100_trivia_questions.csv,84,Which city was Paul's destination when he was arrested and appealed to Caesar?,retained_clarified,112,See clarifications.csv for original and final wording.
+archive/sample_of_100_trivia_questions.csv,85,Which couple explained the way of God more accurately to Apollos?,duplicate_fact,250,Same tested fact as: Who taught Apollos more accurately?
+archive/sample_of_100_trivia_questions.csv,86,Which Macedonian woman was Paul's first recorded convert in Europe?,retained_clarified,522,See clarifications.csv for original and final wording.
+archive/sample_of_100_trivia_questions.csv,87,Which deacon baptized the Ethiopian eunuch?,duplicate_fact,405,Same tested fact as: Which apostle preached to the Ethiopian eunuch?
+archive/sample_of_100_trivia_questions.csv,88,Which Roman centurion received Peter in Acts 10?,duplicate_fact,122,Same tested fact as: Who was the Roman centurion converted in Acts 10?
+archive/sample_of_100_trivia_questions.csv,89,Which council in Acts addressed whether Gentile believers must be circumcised?,duplicate_fact,815,Same tested fact as: Which city hosted the meeting in Acts 15 about circumcision and Gentile converts?
+archive/sample_of_100_trivia_questions.csv,90,Which New Testament book warns against receiving the mark of the beast?,retained,220,
+archive/sample_of_100_trivia_questions.csv,91,Which epistle says Jesus is the image of the invisible God?,retained,319,
+archive/sample_of_100_trivia_questions.csv,92,Which epistle contains the hymn-like passage about Christ emptying Himself?,retained,62,
+archive/sample_of_100_trivia_questions.csv,93,Which pastoral epistle says all Scripture is breathed out by God?,duplicate_fact,608,Same tested fact as: Which book says all Scripture is breathed out by God?
+archive/sample_of_100_trivia_questions.csv,94,Which epistle says Jesus is a priest forever after the order of Melchizedek?,retained,65,
+archive/sample_of_100_trivia_questions.csv,95,Which general epistle compares the tongue to a small fire?,duplicate_fact,56,Same tested fact as: James compares the tongue to what that can set a forest ablaze?
+archive/sample_of_100_trivia_questions.csv,96,"Which doctrine teaches that Christ has two natures, divine and human, in one person?",duplicate_fact,478,Same tested fact as: Which doctrine teaches that Christ is fully God and fully man?
+archive/sample_of_100_trivia_questions.csv,97,Which heresy denied the full deity of the Son and was opposed at Nicaea?,retained,800,
+archive/sample_of_100_trivia_questions.csv,98,Which heresy taught that Christ only seemed to have a physical body?,duplicate_prompt,689,Matching normalized prompt; choices or difficulty may differ.
+archive/sample_of_100_trivia_questions.csv,99,Which theological framework emphasizes distinct economies or dispensations in God's dealings with humanity?,retained,614,
+archive/sample_of_100_trivia_questions.csv,100,Which confession is a major 17th-century Reformed confession produced by the Westminster Assembly?,duplicate_fact,592,Same tested fact as: Which confession is associated with the English Reformed tradition and was completed in 1646?
+archive/sample_of_100_trivia_questions.csv,101,Which early Christian writer is associated with the phrase 'the blood of the martyrs is the seed of the church'?,retained,277,
+archive/space_batch_01.csv,2,Who built the ark before the great flood?,duplicate_fact,694,Same tested fact as: Who built an ark before the flood?
+archive/space_batch_01.csv,3,What planet is known as the Red Planet?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,4,Who was swallowed by a great fish?,duplicate_prompt,442,Matching normalized prompt; choices or difficulty may differ.
+archive/space_batch_01.csv,5,What is the name of Earth's moon?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,6,Who led the Israelites out of Egypt?,retained,807,
+archive/space_batch_01.csv,7,What star is at the center of our solar system?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,8,What giant did David defeat?,duplicate_fact,695,Same tested fact as: Who killed Goliath?
+archive/space_batch_01.csv,9,What do astronauts wear in space to stay safe?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,10,Who was Jesus' mother?,duplicate_fact,693,Same tested fact as: What was the name of Jesus' mother?
+archive/space_batch_01.csv,11,What is the largest planet in our solar system?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,12,How many disciples did Jesus choose?,duplicate_fact,145,Same tested fact as: How many apostles did Jesus appoint?
+archive/space_batch_01.csv,13,What planet has famous rings around it?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,14,Who climbed a tree to see Jesus?,duplicate_fact,623,Same tested fact as: Who climbed a sycamore tree to see Jesus?
+archive/space_batch_01.csv,15,What was the first spacecraft to land humans on the Moon?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,16,Who was thrown into a den of lions?,duplicate_prompt,855,Matching normalized prompt; choices or difficulty may differ.
+archive/space_batch_01.csv,17,What galaxy contains our solar system?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,18,What was the name of Jesus' earthly father?,retained_clarified,509,See clarifications.csv for original and final wording.
+archive/space_batch_01.csv,19,Which planet is closest to the Sun?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,20,Who received the Ten Commandments from God?,retained,94,
+archive/space_batch_01.csv,21,What vehicle launches astronauts into space?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_01.csv,22,What city was Jesus born in?,duplicate_fact,164,Same tested fact as: In which town was Jesus born?
+archive/space_batch_01.csv,23,What do we call a person who travels into space?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,2,Who was the first man created by God?,retained,554,
+archive/space_batch_02.csv,3,What planet do we live on?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,4,Who built a very large boat called an ark?,duplicate_fact,694,Same tested fact as: Who built an ark before the flood?
+archive/space_batch_02.csv,5,What is the name of our nearest star?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,6,Who was Jesus placed in a manger beside after He was born?,excluded_ambiguous,,Luke 2:7 names the manger but does not say Jesus was placed beside Mary.
+archive/space_batch_02.csv,7,How many planets are in our solar system?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,8,Who helped baby Moses by watching him in the river?,retained_clarified,785,See clarifications.csv for original and final wording.
+archive/space_batch_02.csv,9,What is a scientist who studies space called?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,10,Who was the strongest man in the Bible?,duplicate_fact,810,Same tested fact as: Who was the strongest judge of Israel?
+archive/space_batch_02.csv,11,What planet is famous for its Great Red Spot storm?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,12,What did Jesus turn water into?,duplicate_fact,328,Same tested fact as: At Cana what did Jesus turn into wine?
+archive/space_batch_02.csv,13,What is the name of the telescope launched in 2021 to study deep space?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,14,Who was Jesus' cousin who baptized people?,duplicate_fact,600,Same tested fact as: Who baptized Jesus?
+archive/space_batch_02.csv,15,What is the force that keeps us on the ground?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,16,Who interpreted Pharaoh's dreams in Egypt?,duplicate_fact,326,Same tested fact as: Who interpreted Pharaoh's dreams?
+archive/space_batch_02.csv,17,What is the smallest planet in our solar system?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,18,Who climbed Mount Sinai to meet with God?,retained,394,
+archive/space_batch_02.csv,19,What is the name of the space station where astronauts live and work today?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,20,Which disciple walked on water toward Jesus?,duplicate_prompt,419,Matching normalized prompt; choices or difficulty may differ.
+archive/space_batch_02.csv,21,What is the name of the red planet?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_02.csv,22,Who was sold into slavery by his brothers?,duplicate_fact,99,Same tested fact as: Who was sold by his brothers into Egypt?
+archive/space_batch_02.csv,23,What do astronauts experience when they float in orbit?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,2,Who was the first woman created by God?,duplicate_fact,646,Same tested fact as: What was the name of Adam's wife?
+archive/space_batch_03.csv,3,Which planet is known for its beautiful rings?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,4,Who gathered animals into the ark?,retained,784,
+archive/space_batch_03.csv,5,What is the name of the galaxy we live in?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,6,Who defeated the giant Goliath?,duplicate_fact,695,Same tested fact as: Who killed Goliath?
+archive/space_batch_03.csv,7,What do astronauts ride to reach space?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,8,Who was born in Bethlehem?,duplicate_fact,164,Same tested fact as: In which town was Jesus born?
+archive/space_batch_03.csv,9,Which planet is the largest in our solar system?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,10,Who spent three days inside a great fish?,duplicate_fact,442,Same tested fact as: Who was swallowed by a great fish?
+archive/space_batch_03.csv,11,What is the name of NASA's famous space telescope launched in 1990?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,12,Who was the mother of Samuel?,duplicate_prompt,464,Matching normalized prompt; choices or difficulty may differ.
+archive/space_batch_03.csv,13,What is the closest planet to Earth in size?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,14,Who was thrown into a fiery furnace with two other men?,retained_clarified,306,See clarifications.csv for original and final wording.
+archive/space_batch_03.csv,15,What is the name of the first artificial satellite launched into space?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,16,Who gave Jesus gifts after His birth?,retained,235,
+archive/space_batch_03.csv,17,What planet is farthest from the Sun?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,18,Who was the king of Israel after Saul?,retained_clarified,351,See clarifications.csv for original and final wording.
+archive/space_batch_03.csv,19,What does NASA stand for?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,20,Who built the temple in Jerusalem?,duplicate_fact,555,Same tested fact as: Which king built the first Temple in Jerusalem?
+archive/space_batch_03.csv,21,What is the name of the first person to walk on the Moon?,excluded_topic,,Not Bible or church-related trivia.
+archive/space_batch_03.csv,22,Who baptized Jesus?,duplicate_prompt,600,Matching normalized prompt; choices or difficulty may differ.
+archive/space_batch_03.csv,23,What do astronauts use to see faraway objects in space?,excluded_topic,,Not Bible or church-related trivia.
+sample_of_5_trivia_questions.csv,2,What planet is known as the Red Planet?,excluded_topic,,Not Bible or church-related trivia.
+sample_of_5_trivia_questions.csv,3,Which element has the chemical symbol O?,excluded_topic,,Not Bible or church-related trivia.
+sample_of_5_trivia_questions.csv,4,How many continents are there on Earth?,excluded_topic,,Not Bible or church-related trivia.
+sample_of_5_trivia_questions.csv,5,Who wrote the play Romeo and Juliet?,excluded_topic,,Not Bible or church-related trivia.
+sample_of_5_trivia_questions.csv,6,What is the largest ocean on Earth?,excluded_topic,,Not Bible or church-related trivia.
