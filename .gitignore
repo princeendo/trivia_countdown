@@ -10,4 +10,6 @@ sample_objects/sample_trivia_countdown.mp4
 .coverage
 htmlcov/
 /build/
-/dist/
+/dist/*
+!/dist/social-media-post/
+/dist/social-media-post/geodepths-countdown-source.mp4
