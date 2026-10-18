@@ -108,6 +108,13 @@ The installer rejects older Windows releases and non-x64 operating systems, uses
 
 A manual workflow run from a branch produces verified workflow artifacts, **not** a release. After qualification, update the project version and lockfile, commit/push, and create a new matching `v`-prefixed tag. A tag run creates or updates a **draft prerelease** containing the three Windows release files. Windows and macOS draft updates are serialized for the tag so simultaneous builds do not race to create the release. Reruns replace only their platform's draft assets; both workflows refuse to change any published release. Do not reuse the already published `v0.1.0` tag.
 
+GitHub wraps the `trivia-countdown-windows-x64` workflow artifact in a ZIP for
+download. Testers must extract it and launch the included
+`Trivia-Countdown-<version>-Windows-x64-Setup.exe` installer. Do not distribute
+the intermediate `dist\Trivia Countdown\` directory as an installer; its
+`Trivia Countdown.exe` launches the app directly. Published release assets
+provide the **Setup.exe** as a direct download after qualification.
+
 Before publishing, complete and retain the [Windows preview qualification checklist](../tasks/windows_preview_qualification.md). This includes human source/license approval, separate-machine testing, every DPI setting, a version-changing upgrade, and browser-download verification. CI completion never publishes a Windows release automatically. If a separate test system is unavailable, keep the candidate unpublished and the checklist pending.
 
 ### Verify the frozen Windows application

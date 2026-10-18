@@ -63,6 +63,15 @@ is complete. Candidates support Windows 10 22H2 and Windows 11 on native x64
 hardware, not ARM64. Use only artifacts from this repository's successful
 **Build unsigned Windows installer** workflow or its draft prerelease.
 
+For a workflow download, open the successful run's **Artifacts** section and
+choose **trivia-countdown-windows-x64**. GitHub wraps the artifact in a ZIP;
+use **Extract All** first. Inside, `Trivia-Countdown-<version>-Windows-x64-Setup.exe`
+is the installer, accompanied by the source archive and checksum file. The
+`windows-package-verification` artifact contains test reports, not the app.
+If your download only contains `Trivia Countdown.exe` and an `_internal` folder,
+it is the raw app bundle: the executable launches the app without installing it.
+Use the **Setup.exe** artifact for installation and Start menu shortcuts.
+
 Download the `Trivia-Countdown-<version>-Windows-x64-Setup.exe`, matching
 `Trivia-Countdown-FFmpeg-9.0.1-Windows-x64-sources.tar.gz`, and
 `Trivia-Countdown-<version>-Windows-x64-SHA256SUMS.txt` into the same folder.

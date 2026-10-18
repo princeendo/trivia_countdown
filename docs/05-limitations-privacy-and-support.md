@@ -10,6 +10,7 @@
 - Text fitting is automatic, but very long wording may become too small for comfortable viewing.
 - One source video and one trivia CSV are processed per command.
 - The GUI provides static frame-and-overlay previews and a read-only question inspector; it does not provide video playback, a timeline editor, or CSV editing.
+- The Questions tab creates widgets for at most 25 rows per page. CSV data is still loaded and validated in memory, so exceptionally large input files can still consume significant memory.
 
 ## Privacy
 
