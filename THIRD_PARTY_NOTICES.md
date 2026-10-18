@@ -2,8 +2,9 @@
 
 Trivia Countdown includes Python, Tcl/Tk, Pillow, Pillow's native libraries,
 the PyInstaller bootloader, Noto Sans fonts, and FFmpeg executables built with
-x264 support. Their full license texts are included in the **Third-Party
-Licenses** folder in released applications.
+x264 support. Their license texts are included in the **Third-Party Licenses**
+folder on the macOS DMG and under `_internal/licenses/` in the Windows
+installation directory.
 
 ## Python, Tcl/Tk, and Pillow
 
@@ -27,17 +28,26 @@ hashes and license text are in [`assets/fonts/`](assets/fonts/).
 
 ## FFmpeg and x264
 
-The bundled FFmpeg executables are built with x264 support and are distributed
-under the GNU General Public License, version 2 or later. Copyright belongs to
-the FFmpeg and x264 contributors.
+The bundled FFmpeg executables are built with x264 support and distributed
+under the GNU General Public License, version 2 or later. Windows builds are
+compiled from pinned FFmpeg 9.0.1, x264, and zlib sources with external-library
+autodetection disabled. They do not use the former Gyan Essentials binary
+bundle. Copyright belongs to the respective FFmpeg and library contributors.
 
 - FFmpeg: https://ffmpeg.org/
 - x264: https://www.videolan.org/developers/x264.html
+- zlib: https://zlib.net/
 - GPL version 2: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-The exact corresponding FFmpeg and x264 source code, including the build script
-used for this application, is published beside each DMG on the project's GitHub
+The exact corresponding sources, including the build script used for this
+application, must be published beside each DMG or Windows installer on the project's GitHub
 Releases page: https://github.com/princeendo/trivia_countdown/releases
+
+Windows source archives contain FFmpeg, x264, zlib, and their build materials.
+Windows applications also include zlib, MinGW-w64 runtime notices, and GCC
+runtime license/exception texts in their third-party licenses directory. See
+the [Windows source and rebuild guide](https://github.com/princeendo/trivia_countdown/blob/master/packaging/FFMPEG_WINDOWS_SOURCE_README.md).
+Do not substitute a macOS source archive for the Windows archive.
 
 Run `ffmpeg -version` from the bundled executable to see its complete build
 configuration and library versions.

@@ -4,7 +4,9 @@ param(
     [string]$UncTestRoot,
 
     [Parameter(Mandatory)]
-    [string]$LongPathTestRoot
+    [string]$LongPathTestRoot,
+
+    [string]$Msys2Root
 )
 
 $ErrorActionPreference = "Stop"
@@ -76,6 +78,10 @@ $verificationDirectory = Join-Path $root "build\verification"
 New-Item -ItemType Directory -Force -Path $verificationDirectory | Out-Null
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $reportPath = Join-Path $verificationDirectory "WIN-302-$timestamp.log"
+$savedEnvironment = @{}
+foreach ($name in @('PATH', 'TEMP', 'TMP', 'TRIVIA_COUNTDOWN_UNC_TEST_ROOT', 'TRIVIA_COUNTDOWN_LONG_PATH_TEST_ROOT')) {
+    $savedEnvironment[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
+}
 
 Start-Transcript -LiteralPath $reportPath -Force | Out-Null
 try {
@@ -84,7 +90,7 @@ try {
     Write-Host "Long-path test root: $LongPathTestRoot"
     Write-Host "Long paths enabled: $longPathsEnabled"
 
-    & (Join-Path $PSScriptRoot "fetch_windows_ffmpeg.ps1") -Force
+    & (Join-Path $PSScriptRoot 'build_ffmpeg_windows.ps1') -Msys2Root $Msys2Root
 
     $ffmpegBin = (Resolve-Path (Join-Path $root "build\vendor\windows\bin")).Path
     $env:Path = "$ffmpegBin;$env:Path"
@@ -99,11 +105,13 @@ try {
     $resolvedFfprobe = (Resolve-Path $ffprobeCommands[0].Path).Path
     if ($resolvedFfmpeg -ine (Join-Path $ffmpegBin "ffmpeg.exe") -or
         $resolvedFfprobe -ine (Join-Path $ffmpegBin "ffprobe.exe")) {
-        throw "Tests are not using the fetched pinned FFmpeg tools."
+        throw 'Tests are not using the source-built bundled FFmpeg tools.'
     }
 
     & "$ffmpegBin\ffmpeg.exe" -hide_banner -version
+    if ($LASTEXITCODE -ne 0) { throw 'Bundled ffmpeg version check failed.' }
     & "$ffmpegBin\ffprobe.exe" -hide_banner -version
+    if ($LASTEXITCODE -ne 0) { throw 'Bundled ffprobe version check failed.' }
 
     uv sync --frozen
     if ($LASTEXITCODE -ne 0) {
@@ -119,5 +127,8 @@ try {
 
     Write-Host "`nWIN-302 verification passed. Share this report for review: $reportPath"
 } finally {
+    foreach ($name in $savedEnvironment.Keys) {
+        [Environment]::SetEnvironmentVariable($name, $savedEnvironment[$name], 'Process')
+    }
     Stop-Transcript | Out-Null
 }

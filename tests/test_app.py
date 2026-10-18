@@ -125,7 +125,7 @@ class RenderServiceTests(unittest.TestCase):
         path.write_text(CSV_CONTENT, encoding="utf-8")
         return path
 
-    def compose_test_video(self, root: Path, output: Path, process: FakeFfmpegProcess) -> None:
+    def compose_test_video(self, root: Path, output: Path, process: FakeFfmpegProcess, **kwargs) -> None:
         normal = root / "normal.png"
         reveal = root / "reveal.png"
         Image.new("RGBA", (16, 16)).save(normal)
@@ -147,6 +147,7 @@ class RenderServiceTests(unittest.TestCase):
                 start_delay=0,
                 fade_in_time=0,
                 fade_out_time=0,
+                **kwargs,
             )
 
     def test_default_output_path(self) -> None:
@@ -236,6 +237,23 @@ class RenderServiceTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, "Close any application using the file"):
                     self.compose_test_video(root, output, FakeFfmpegProcess(0))
 
+            self.assertEqual(output.read_bytes(), b"existing output")
+            self.assertEqual(list(root.glob(".result.*.mp4")), [])
+
+    def test_cancellation_at_ffmpeg_exit_preserves_existing_output(self) -> None:
+        token = CancellationToken()
+
+        class CancellingProcess(FakeFfmpegProcess):
+            def wait(self, timeout=None):
+                token.cancel()
+                return 0
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "result.mp4"
+            output.write_bytes(b"existing output")
+            with self.assertRaises(RenderCancelled):
+                self.compose_test_video(root, output, CancellingProcess(0), cancel_check=token.cancelled)
             self.assertEqual(output.read_bytes(), b"existing output")
             self.assertEqual(list(root.glob(".result.*.mp4")), [])
 
@@ -351,6 +369,54 @@ class VideoIntegrationTests(unittest.TestCase):
             self.assertGreater(output.stat().st_size, 0)
             self.assertGreater(result.overlay_count, 0)
             self.assertTrue(any(event.phase == "Composing video" for event in progress))
+
+    @unittest.skipUnless(os.name == "nt", "Executes the source GUI command in PowerShell")
+    def test_generated_powershell_command_renders_and_redirects_progress(self) -> None:
+        from trivia_countdown.gui import TriviaCountdownApp
+
+        try:
+            window = tk.Tk()
+        except tk.TclError as exc:
+            self.skipTest(f"Tk display unavailable: {exc}")
+        try:
+            window.withdraw()
+            app = TriviaCountdownApp(window)
+            with TemporaryDirectory(prefix="trivia-caf\u00e9's ") as directory:
+                root = Path(directory)
+                source = root / "source video's.mp4"
+                trivia = root / "trivia questions.csv"
+                output = root / "finished video's.mp4"
+                trivia.write_text(CSV_CONTENT, encoding="utf-8")
+                self.create_source_video(source)
+                app.video_path.set(str(source))
+                app.trivia_path.set(str(trivia))
+                app.output_path.set(str(output))
+                app.keep_overlays.set(True)
+                app.overlay_directory.set(str(root / "overlay's PNGs"))
+                app.randomize.set(True)
+                app.seed.set("19")
+                for name in app.option_values:
+                    app.option_values[name].set("0")
+                app.option_values["question_duration"].set("0.5")
+                app.option_values["answer_duration"].set("0.3")
+                command = app._build_cli_command()
+                self.assertTrue(command.startswith("& 'uv' "))
+                # -EncodedCommand preserves Unicode under Windows PowerShell 5.1.
+                import base64
+                encoded = base64.b64encode(command.encode("utf-16-le")).decode("ascii")
+                result = subprocess.run(
+                    ["powershell.exe", "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
+                    cwd=Path(__file__).resolve().parents[1],
+                    capture_output=True, timeout=60,
+                )
+                self.assertEqual(result.returncode, 0, (result.stdout + result.stderr).decode(errors="replace"))
+                self.assertTrue(output.is_file())
+                self.assertGreater(output.stat().st_size, 0)
+                self.assertTrue(list((root / "overlay's PNGs").glob("*.png")))
+                self.assertNotIn(b"\x1b[", result.stderr)
+                self.assertIn(b"Composing video", result.stderr)
+        finally:
+            window.destroy()
 
     def test_special_paths_render_with_relative_overlay_directory(self) -> None:
         with TemporaryDirectory() as directory:

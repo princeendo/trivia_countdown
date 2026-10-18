@@ -45,7 +45,7 @@ Use [Installation](docs/01-installation.md#install-from-source) for setup and [U
 
 ### Maintainers
 
-Use [Building and Releasing](docs/06-building-and-releasing.md) for unsigned DMG artifacts and GitHub prereleases.
+Use [Building and Releasing](docs/06-building-and-releasing.md) for unsigned DMG artifacts, Windows installer candidates and frozen-render checks, and GitHub prereleases. The Windows installer bundles source-built FFmpeg and ffprobe; end users will not install them separately. The build also generates the matching source archive. Windows publication remains gated on source/license review, build provenance, and the [separate live-installation qualification checklist](tasks/windows_preview_qualification.md). Branch builds do not publish releases; matching new version tags prepare draft prereleases only.
 
 For a concise list of every command-line option, source users can run:
 

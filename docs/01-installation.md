@@ -55,9 +55,53 @@ After installation, launch **Trivia Countdown** from Applications. The app alrea
 
 The desktop window contains Main, Advanced, and Questions tabs. Choose a source video and CSV on Main, review the generated output path, and select **Create Video**.
 
+## Windows Preview Candidates
+
+**The Windows installer is not yet a published download.** These instructions
+are for approved candidate testers until the separate live-system qualification
+is complete. Candidates support Windows 10 22H2 and Windows 11 on native x64
+hardware, not ARM64. Use only artifacts from this repository's successful
+**Build unsigned Windows installer** workflow or its draft prerelease.
+
+Download the `Trivia-Countdown-<version>-Windows-x64-Setup.exe`, matching
+`Trivia-Countdown-FFmpeg-9.0.1-Windows-x64-sources.tar.gz`, and
+`Trivia-Countdown-<version>-Windows-x64-SHA256SUMS.txt` into the same folder.
+In PowerShell, change to that folder and verify both checksum entries (replace
+`<version>` with the downloaded version):
+
+```powershell
+Get-Content -LiteralPath 'Trivia-Countdown-<version>-Windows-x64-SHA256SUMS.txt' | ForEach-Object {
+    $expected, $name = $_ -split ' \*', 2
+    $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $name).Hash
+    if ($actual -ine $expected) { throw "Checksum mismatch: $name" }
+    Write-Output "OK: $name"
+}
+```
+
+If GitHub CLI is installed, also run
+`gh attestation verify '<filename>' --repo princeendo/trivia_countdown` for the
+installer, source archive, and checksum file. Provenance ties the files to the
+repository's workflow and commit; it is not Authenticode signing.
+
+The installer is unsigned, so Microsoft Defender SmartScreen may warn because
+it has no verified publisher or established reputation. Verify its origin,
+checksums, and provenance before deciding whether to proceed. Do not disable
+SmartScreen, antivirus, or Windows security controls; if organizational policy
+blocks the installer, ask your administrator rather than bypassing it.
+
+Run the verified installer as your normal user. It installs under
+`%LOCALAPPDATA%\Programs\Trivia Countdown` by default without elevation and
+creates a Start menu shortcut; a desktop shortcut is optional. Open **Trivia
+Countdown** from Start. Python, uv, FFmpeg, and ffprobe are included and need not
+be installed separately. A **Sample Trivia Questions.csv** file is installed
+beside the executable; provide your own source video. Choose the video, CSV,
+and output on Main, then select **Create Video**. Uninstall through Windows
+Settings > Apps. The [qualification checklist](../tasks/windows_preview_qualification.md)
+records the remaining checks; installing a candidate is not release approval.
+
 ## Install From Source
 
-This is an advanced alternative for developers who want the command-line interface, want to modify the project, or cannot use the packaged Apple Silicon app. The repository's `.python-version` pins uv to Python 3.12. It also requires Tcl/Tk support and FFmpeg; macOS source GUI use requires Tcl/Tk 8.6 or later. The downloadable app remains Mac-only until the Windows preview passes its separate qualification process.
+This is an advanced alternative for developers who want the command-line interface, want to modify the project, or cannot use the packaged Apple Silicon app. The repository's `.python-version` pins uv to Python 3.12. It also requires Tcl/Tk support and FFmpeg; macOS source GUI use requires Tcl/Tk 8.6 or later. The downloadable app remains Mac-only until the Windows preview passes its separate qualification process. That Windows installer will include its own FFmpeg and ffprobe executables; the manual FFmpeg setup below applies only to source users.
 
 ### macOS
 

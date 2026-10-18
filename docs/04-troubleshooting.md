@@ -12,6 +12,23 @@ If macOS reports that the app is damaged rather than identifying it as an unveri
 
 The current download requires an Apple Silicon Mac running macOS 14 Sonoma or later. Choose **Apple menu > About This Mac** to check the chip and macOS version. Intel Macs are not supported by this prototype.
 
+## Windows Blocks a Preview Installer
+
+The Windows candidate is unsigned and still under qualification; it is not yet
+a published download. SmartScreen can warn about its unverified publisher or
+low reputation. Follow the [candidate verification instructions](01-installation.md#windows-preview-candidates)
+before deciding whether to run it. Do not disable Windows security features.
+Report a verified candidate that fails to launch, including the Windows version,
+installer hash, and exact message. ARM64 and Windows releases older than
+Windows 10 22H2 are not supported.
+
+## The Generated PowerShell Command Is Not Executed
+
+Copy the entire command from the source GUI's CLI tab, including the leading
+`&` call operator. Keep single-quoted arguments intact; apostrophes inside a
+quoted path must be doubled. Run it from the repository folder in PowerShell,
+not Command Prompt. See [command-line usage](03-usage-and-reference.md#command-line).
+
 ## `brew: command not found`
 
 Homebrew is only required for a source installation. Normal DMG users should follow the [Mac app installation instructions](01-installation.md#install-the-mac-app). Source users can install Homebrew from [brew.sh](https://brew.sh/) and then run `brew install uv ffmpeg` again.
@@ -24,7 +41,7 @@ On Windows source installations, install uv using the [official Windows instruct
 
 ## `Required executable not found: ffmpeg` or `ffprobe`
 
-This message should only occur in a source installation because the Mac app bundles both tools. macOS source users can run `brew install ffmpeg`. Windows source users must install an FFmpeg build that provides `ffmpeg.exe` and `ffprobe.exe` on `PATH`, then open a new PowerShell window. If the packaged app reports a missing bundled executable, reinstall it from a verified DMG and open an issue if the problem remains.
+This message should only occur in a source installation because the Mac app and Windows candidate bundle both tools. macOS source users can run `brew install ffmpeg`. Windows source users must install an FFmpeg build that provides `ffmpeg.exe` and `ffprobe.exe` on `PATH`, then open a new PowerShell window. If the packaged app reports a missing bundled executable, reinstall it from a verified DMG or installer and open an issue if the problem remains.
 
 ## The Desktop Interface Does Not Open
 

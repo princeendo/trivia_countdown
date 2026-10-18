@@ -15,12 +15,15 @@ OutputBaseFilename=Trivia-Countdown-{#AppVersion}-Windows-x64-Setup
 Compression=lzma2
 SolidCompression=yes
 PrivilegesRequired=lowest
-ArchitecturesAllowed=x64compatible
-ArchitecturesInstallIn64BitMode=x64compatible
+MinVersion=10.0.19045
+ArchitecturesAllowed=x64os
+ArchitecturesInstallIn64BitMode=x64os
+SetupIconFile=..\build\windows\TriviaCountdown.ico
 UninstallDisplayIcon={app}\Trivia Countdown.exe
 
 [Files]
 Source: "..\dist\Trivia Countdown\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\sample_objects\sample_of_5_trivia_questions.csv"; DestDir: "{app}"; DestName: "Sample Trivia Questions.csv"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\Trivia Countdown"; Filename: "{app}\Trivia Countdown.exe"

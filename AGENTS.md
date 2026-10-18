@@ -68,13 +68,41 @@ uv run python make_trivia_countdown.py --help
 
 When changing CSV parsing, argument validation, scheduling, rendering, or composition behavior, run a targeted CLI command with a sample CSV and a known local video if one is available. Full video renders can be slow and require `ffmpeg`/`ffprobe`, so avoid running them unnecessarily.
 
-For a Windows package build, use a Windows x64 system with Inno Setup 7.1.0 and run:
+For a Windows package build, use a Windows x64 system with Inno Setup 7.1.0
+and a checkout path without spaces or apostrophes. Set up the isolated MSYS2
+build tools once, then run:
 
 ```powershell
+.\scripts\setup_windows_ffmpeg_tools.ps1
 .\scripts\build_windows_installer.ps1
 ```
 
 Do not publish the resulting installer until the required FFmpeg corresponding-source archive is attached and the installer has passed the approved live-system qualification.
+Use `tasks/windows_preview_qualification.md` to record the separate-machine,
+DPI, playback, version-changing upgrade, and source/license approvals. A branch
+CI run produces artifacts only; new matching version tags prepare drafts and
+must never replace assets on an already published release.
+
+The installer build runs `scripts/verify_windows_package.ps1` before compiling
+the installer. To repeat just the frozen preview/render checks, run:
+
+```powershell
+.\scripts\verify_windows_package.ps1
+```
+
+Reports remain under `build/verification/`; generated smoke-test videos are
+temporary. Run all repository tests with:
+
+```sh
+uv run python -m unittest discover -s tests
+```
+
+The Windows build compiles pinned FFmpeg, x264, and zlib sources, bundles both
+executables in the installer, and generates a matching source archive with
+build instructions. See `packaging/FFMPEG_WINDOWS_SOURCE_README.md`; do not
+substitute the macOS source archive or mark licensing complete based only on
+a successful render. Requalify the Windows path matrix after changing the
+bundled FFmpeg build.
 
 Before finalizing changes, run:
 

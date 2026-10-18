@@ -38,6 +38,8 @@ In PowerShell, use single quotes around paths. A single quote within a path is r
 uv run python make_trivia_countdown.py 'C:\Videos\Trivia''s Source.mp4' 'C:\Trivia\questions.csv'
 ```
 
+The source GUI quotes every argument and prefixes the generated PowerShell command with `&`, PowerShell's call operator. Keep that prefix when copying the command; a quoted executable name alone is a string, not a command. Multiline examples below use POSIX backslash continuation; in PowerShell, put the command on one line or copy the GUI-generated command.
+
 The command validates the inputs, reports how many questions fit, renders the trivia panels, and composes the final video. By default, the output is created beside the source video as `<source-name>_trivia_countdown.mp4`.
 
 Video rendering can take several minutes. The duration and resolution of the source video, as well as the Mac's hardware, affect the processing time.

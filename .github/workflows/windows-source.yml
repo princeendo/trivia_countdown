@@ -27,7 +27,8 @@ jobs:
       - name: Run source checks
         shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference = $true
           uv sync --frozen
           uv run python -m compileall -q make_trivia_countdown.py make_trivia_countdown_gui.py trivia_countdown
-          uv run python -m unittest tests.test_app
+          uv run python -m unittest discover -s tests
           uv run python make_trivia_countdown.py --help

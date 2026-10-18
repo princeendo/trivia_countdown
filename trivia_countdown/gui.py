@@ -511,7 +511,8 @@ class TriviaCountdownApp(ttk.Frame):
                 command.extend((option_name, f"{value:g}"))
         if options.overlay_dir is not None:
             command.extend(("--overlay-dir", str(options.overlay_dir)))
-        return " ".join(quote_cli_argument(part) for part in command)
+        prefix = "& " if sys.platform == "win32" else ""
+        return prefix + " ".join(quote_cli_argument(part) for part in command)
 
     def _copy_cli_command(self) -> None:
         command = self._build_cli_command()
@@ -762,9 +763,19 @@ def main() -> int:
         print(f"error: Could not start the desktop interface: {exc}", file=sys.stderr)
         return 1
     TriviaCountdownApp(root)
-    if os.environ.get("TRIVIA_COUNTDOWN_SMOKE_TEST") == "1":
-        root.update_idletasks()
-        root.destroy()
-        return 0
+    smoke_mode = os.environ.get("TRIVIA_COUNTDOWN_SMOKE_TEST")
+    if smoke_mode in {"1", "render"}:
+        try:
+            root.update_idletasks()
+            if smoke_mode == "render":
+                from .package_smoke import run_package_smoke_test
+
+                report_path = os.environ.get("TRIVIA_COUNTDOWN_SMOKE_REPORT")
+                if not report_path or not Path(report_path).is_absolute():
+                    return 1
+                return run_package_smoke_test(Path(report_path))
+            return 0
+        finally:
+            root.destroy()
     root.mainloop()
     return 0
