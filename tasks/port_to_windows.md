@@ -376,7 +376,7 @@ and GitHub-hosted runners. Evidence is under
   testers to copy the installed sample CSV to Documents before editing it.
   Installer upgrades and uninstall can replace or remove the bundled sample.
 - Fresh local MSYS2 extraction, keyring initialization, both update passes,
-  and compiler/package installation completed successfully. All 44 discovered
+  and compiler/package installation completed successfully. All 45 discovered
   local tests passed with the bundled media tools and configured UNC/long-path
   roots, without skips; report:
   `build/verification/Windows-resumed-tests-20261018.log`. Source compilation,
@@ -405,6 +405,18 @@ and GitHub-hosted runners. Evidence is under
   `ad336cccfda47758b5e15cda993fbba421115cb0b126697daef1ee4dfe37209f`.
   Extraction runs hidden, checks its exit code, and requires the expected Bash
   executable before updates. Added failure-path tests for both checks.
+- Repeated setup locally from the pinned self-extractor in a fresh directory;
+  extraction, initialization, updates, and compiler installation passed. The
+  replacement also passed the hosted Windows setup step in 54 seconds in
+  [run 39159147579](https://github.com/princeendo/trivia_countdown/actions/runs/39159147579).
+  [Windows source CI](https://github.com/princeendo/trivia_countdown/actions/runs/39159147390)
+  passed at `95a649a69707e01ff722cd1edf8f83808d2f9816`.
+- [macOS run 39159190987](https://github.com/princeendo/trivia_countdown/actions/runs/39159190987)
+  passed on the same code commit. Downloaded its three artifacts into
+  `build/verification/ci-macos-39159190987/`; both checksums and all three
+  repository/workflow/commit/ref/hosted-runner-constrained attestations passed.
+  One source-archive attestation attempt hit a verifier-initialization error;
+  a separate retry passed without changing the artifact or verification policy.
 - The separate-system, DPI, icon, playback, upgrade, and human source/license
   approvals remain pending. No publication approval is inferred from automation.
 
