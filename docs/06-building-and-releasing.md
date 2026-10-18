@@ -83,7 +83,7 @@ Build it on Windows in PowerShell after installing Python with Tcl/Tk, uv, Git, 
 .\scripts\build_windows_installer.ps1
 ```
 
-The setup helper downloads and hash-verifies a pinned MSYS2 base into `build\tools\msys64`, updates that isolated installation, and installs its compiler/build tools without changing system `PATH`. The installer build fetches exact Git commits, compiles FFmpeg/x264/zlib, audits native x64 executable imports against a Windows-system-DLL allowlist, creates the multi-resolution icon, collects runtime license files, builds `dist\Trivia Countdown\`, verifies the frozen application's preview and render paths, and writes these release candidates:
+The setup helper downloads and hash-verifies a pinned MSYS2 self-extracting base into `build\tools\msys64`, updates that isolated installation, and installs its compiler/build tools without changing system `PATH`. It uses the upstream CI self-extractor because Windows Server 2022's `tar.exe` stalled on the equivalent `.tar.xz` archive. The installer build fetches exact Git commits, compiles FFmpeg/x264/zlib, audits native x64 executable imports against a Windows-system-DLL allowlist, creates the multi-resolution icon, collects runtime license files, builds `dist\Trivia Countdown\`, verifies the frozen application's preview and render paths, and writes these release candidates:
 
 - `Trivia-Countdown-<version>-Windows-x64-Setup.exe`
 - `Trivia-Countdown-FFmpeg-9.0.1-Windows-x64-sources.tar.gz`

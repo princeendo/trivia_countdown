@@ -31,7 +31,7 @@ function global:Invoke-WebRequest {{
     if ($TimeoutSec -ne 300 -or -not $UseBasicParsing) {{ throw 'Unbounded download' }}
     Set-Content -LiteralPath $OutFile -Value 'invalid archive' -Encoding ascii
 }}
-function global:tar.exe {{ throw 'Must not extract an unverified archive' }}
+function global:Start-Process {{ throw 'Must not extract an unverified archive' }}
 try {{
     & '{quoted_script}' -Destination '{quoted_root}'
     throw 'Setup unexpectedly succeeded'
@@ -47,6 +47,39 @@ exit 0
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertIn("Downloading pinned MSYS2 base", result.stdout)
             self.assertIn("Verifying the MSYS2 base archive", result.stdout)
+
+    def test_toolchain_setup_checks_extractor_exit_and_requires_bash(self):
+        script = Path(__file__).resolve().parents[1] / "scripts/setup_windows_ffmpeg_tools.ps1"
+        for exit_code in (42, 0):
+            with self.subTest(exit_code=exit_code), TemporaryDirectory() as directory:
+                quoted_script = str(script).replace("'", "''")
+                quoted_root = directory.replace("'", "''")
+                expected = "Could not extract the MSYS2 base archive*" if exit_code else "MSYS2 extraction did not create*"
+                command = rf"""
+$ErrorActionPreference = 'Stop'
+Import-Module Microsoft.PowerShell.Utility
+Import-Module Microsoft.PowerShell.Management
+function global:Invoke-WebRequest {{}}
+function global:Get-FileHash {{ @{{ Hash = 'ad336cccfda47758b5e15cda993fbba421115cb0b126697daef1ee4dfe37209f' }} }}
+function global:Start-Process {{
+    param($FilePath, $ArgumentList, $WindowStyle, [switch]$Wait, [switch]$PassThru)
+    if ($FilePath -notlike '*.sfx.exe' -or $ArgumentList[0] -ne '-y' -or $ArgumentList[1] -ne '-o{quoted_root}') {{ throw 'Invalid extractor invocation' }}
+    if ($WindowStyle -ne 'Hidden' -or -not $Wait -or -not $PassThru) {{ throw 'Invalid process options' }}
+    @{{ ExitCode = {exit_code} }}
+}}
+try {{
+    & '{quoted_script}' -Destination '{quoted_root}'
+    throw 'Setup unexpectedly succeeded'
+}} catch {{
+    if ($_.Exception.Message -notlike '{expected}') {{ throw }}
+}}
+exit 0
+"""
+                result = subprocess.run(
+                    ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", command],
+                    env=windows_powershell_environment(), capture_output=True, text=True, timeout=30,
+                )
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_toolchain_setup_initializes_before_updates_and_restores_environment(self):
         script = Path(__file__).resolve().parents[1] / "scripts/setup_windows_ffmpeg_tools.ps1"

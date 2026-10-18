@@ -93,7 +93,7 @@ test is not sufficient.
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | WIN-101 | Resolve bundled Windows executable names | `P0` | `VERIFIED` | None | None | Frozen builds find `bin/ffmpeg.exe` and `bin/ffprobe.exe`; source mode continues to use `PATH`; macOS behavior is preserved. | Windows source/frozen renders and macOS source/package CI passed on 2026-10-17. |
-| WIN-102 | Bundle and load portable fonts | `P0` | `IN_REVIEW` | None | DEC-103 | Regular and bold fonts load through `resource_path`; requested sizes are honored in source and frozen builds; font and license are packaged. | Font unit tests, image inspection, packaged smoke test. |
+| WIN-102 | Bundle and load portable fonts | `P0` | `VERIFIED` | None | DEC-103 | Regular and bold fonts load through `resource_path`; requested sizes are honored in source and frozen builds; font and license are packaged. | Requested-size tests, regular/bold and accented-text image inspection, installed font/license inspection, and frozen preview/render checks passed locally on Windows. |
 | WIN-103 | Make FFconcat path handling portable | `P0` | `VERIFIED` | None | None | Manifest paths are absolute and valid for spaces, Unicode, apostrophes, drive-letter paths, relative overlay directories, and supported UNC paths. | Unit tests plus real FFmpeg path-matrix renders on Windows; source-built bundle requalified on 2026-10-17. |
 | WIN-104 | Add Windows-safe subprocess behavior | `P1` | `IN_REVIEW` | None | WIN-101 | Packaged GUI renders do not open child console windows; ffprobe and FFmpeg diagnostics decode safely under Windows code pages; CLI behavior remains visible. | Source and frozen GUI tests on Windows. |
 | WIN-105 | Report Windows filesystem and process failures cleanly | `P1` | `VERIFIED` | None | None | CLI converts expected `OSError` and `PermissionError` failures into actionable `error:` messages without tracebacks; GUI retains actionable messages. | Windows unit tests cover CLI preparation/render errors, missing executable errors, and locked-output preservation. |
@@ -375,6 +375,36 @@ and GitHub-hosted runners. Evidence is under
 - Retained and completed the interrupted documentation edits advising Windows
   testers to copy the installed sample CSV to Documents before editing it.
   Installer upgrades and uninstall can replace or remove the bundled sample.
+- Fresh local MSYS2 extraction, keyring initialization, both update passes,
+  and compiler/package installation completed successfully. All 44 discovered
+  local tests passed with the bundled media tools and configured UNC/long-path
+  roots, without skips; report:
+  `build/verification/Windows-resumed-tests-20261018.log`. Source compilation,
+  CLI help, and all 58 local links in README and `docs/` passed validation.
+  Frozen preview/audio/silent/full-decode checks passed again; report:
+  `build/verification/WIN-405-20261018-142317-49ae921942664c34bf8e81087211bc87.json`.
+- Inspected `build/verification/WIN-102-font-inspection.png`: normal and
+  answer-reveal panels have readable regular/bold text, accented characters,
+  and the correct highlight without clipping. Together with requested-size
+  tests, previous installed resource inspection, and the repeated frozen
+  preview/render checks, this verifies WIN-102 locally. Separate-system DPI
+  qualification remains WIN-304.
+- [macOS regression run 39158497902](https://github.com/princeendo/trivia_countdown/actions/runs/39158497902)
+  passed at `277f674e9169fdaf53ea8e0f3a07af97be7c29d3`. Downloaded the DMG,
+  matching media sources, and checksums into
+  `build/verification/ci-macos-39158497902/`; both checksum entries passed.
+  All three GitHub attestations passed with repository, workflow, source
+  commit, branch ref, and hosted-runner constraints. The exact verified
+  attestation JSON files are retained beside the downloaded artifacts.
+- The instrumented Windows run
+  [39158435184](https://github.com/princeendo/trivia_countdown/actions/runs/39158435184)
+  downloaded and hash-verified the base in under a second, then stalled in
+  Windows Server 2022's `tar.exe` extraction. Cancelled the diagnostic run to
+  retrieve its logs. Replaced that extraction with upstream's CI self-extracting
+  base from the same pinned 2026-09-27 release, enforcing its SHA-256
+  `ad336cccfda47758b5e15cda993fbba421115cb0b126697daef1ee4dfe37209f`.
+  Extraction runs hidden, checks its exit code, and requires the expected Bash
+  executable before updates. Added failure-path tests for both checks.
 - The separate-system, DPI, icon, playback, upgrade, and human source/license
   approvals remain pending. No publication approval is inferred from automation.
 
@@ -473,10 +503,10 @@ The Windows preview is complete when:
 | Open or accepted blockers | 2 |
 | `READY` tasks | 0 |
 | `IN_PROGRESS` tasks | 0 |
-| `IN_REVIEW` tasks | 12 |
+| `IN_REVIEW` tasks | 11 |
 | `BLOCKED` tasks | 3 |
 | `DEFERRED` tasks | 1 |
-| `VERIFIED` implementation tasks | 16 |
+| `VERIFIED` implementation tasks | 17 |
 
 Update this summary whenever task statuses change. Do not mark implementation
 tasks `VERIFIED` until their listed Windows verification has passed.
