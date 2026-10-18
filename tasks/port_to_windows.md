@@ -26,7 +26,9 @@ The most important confirmed incompatibilities are:
 - FFconcat rendering passed the Windows path matrix again with the source-built
   replacement, including UNC and long paths.
 - Local frozen application preview and render checks pass on Windows 11 x64.
-  Installer, GUI DPI, and separate live-installation behavior remain unverified.
+  Local automated install/render/uninstall checks also pass for the downloaded
+  CI candidate. Interactive installer, GUI DPI, and separate live-installation
+  behavior remain unverified.
 - The approved path now builds FFmpeg/x264/zlib from pinned sources, bundles the
   executables, and generates the matching source archive. Source/license review,
   provenance, and live-system qualification remain release gates.
@@ -176,8 +178,8 @@ and GitHub-hosted runners. Evidence is under
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | WIN-501 | Build the EXE installer | `P0` | `IN_REVIEW` | None | DEC-101, WIN-402, WIN-403, WIN-404 | Installer uses per-user installation unless elevation is justified, creates expected shortcuts, includes notices, supports clean uninstall, and has deterministic artifact naming. | Install, upgrade, and uninstall tests on a live supported Windows system. |
-| WIN-502 | Add Windows package CI | `P0` | `IN_REVIEW` | None | WIN-303, WIN-401, WIN-405, WIN-501 | A pinned Windows runner builds the application and installer, verifies hashes and bundled tools, smoke-tests the result, and uploads the complete artifact set including matching sources. | Successful workflow artifact build; rerun after the self-built FFmpeg switch. |
-| WIN-503 | Add checksums and build provenance | `P1` | `IN_REVIEW` | None | WIN-502 | Release output includes SHA-256 checksums and GitHub build provenance for the installer and corresponding source archive. | Checksum verification and `gh attestation verify` after a new CI build. |
+| WIN-502 | Add Windows package CI | `P0` | `VERIFIED` | None | WIN-303, WIN-401, WIN-405, WIN-501 | A pinned Windows runner builds the application and installer, verifies hashes and bundled tools, smoke-tests the result, and uploads the complete artifact set including matching sources. | Source-built package run 39159147579 passed on 2026-10-18; downloaded artifacts, frozen reports, and local installed checks verified. |
+| WIN-503 | Add checksums and build provenance | `P1` | `VERIFIED` | None | WIN-502 | Release output includes SHA-256 checksums and GitHub build provenance for the installer and corresponding source archive. | Both downloaded checksum entries and all three workflow/commit/ref/hosted-runner-constrained attestations passed for run 39159147579. |
 | WIN-504 | Qualify the unsigned preview by live installation | `P0` | `BLOCKED` | BLK-007 | WIN-501, WIN-502, WIN-503 | Installer, first launch, render, output playback, upgrade, and uninstall pass on a separate live Windows 10 22H2 or Windows 11 x64 system. | Signed-off live-installation checklist. |
 | WIN-505 | Publish an unsigned Windows prerelease | `P0` | `BLOCKED` | BLK-007 | WIN-504, WIN-601 | Draft prerelease includes installer, checksums, FFmpeg corresponding source, provenance, release notes, support caveats, and accurate SmartScreen guidance. | Download artifacts through a browser and repeat the live-installation smoke test. |
 | WIN-506 | Define the signed-release follow-up | `P2` | `DEFERRED` | BLK-006 | Preview feedback | Document certificate ownership, secret storage, timestamping, signing order, and verification before promoting Windows builds beyond preview status. | Approved signing design and verified signed artifact. |
@@ -417,6 +419,42 @@ and GitHub-hosted runners. Evidence is under
   repository/workflow/commit/ref/hosted-runner-constrained attestations passed.
   One source-archive attestation attempt hit a verifier-initialization error;
   a separate retry passed without changing the artifact or verification policy.
+- The source-built Windows package
+  [run 39159147579](https://github.com/princeendo/trivia_countdown/actions/runs/39159147579)
+  passed at `95a649a69707e01ff722cd1edf8f83808d2f9816`: the compiler/source
+  build, PE import audit, PyInstaller/Inno build, frozen preview/audio/silent
+  renders/full decode, checksums, provenance, and artifact upload all passed.
+  It ran 45 tests before building tools (eight availability skips) and after
+  building tools (only the two unconfigured UNC/long-path cases skipped).
+  The downloaded CI frozen report also records its audio and silent render
+  cases as passed.
+- Downloaded the installer, matching Windows sources, checksums, and frozen
+  report into `build/verification/ci-windows-39159147579/`. Both checksum
+  entries and all three attestations passed with repository, workflow, source
+  commit, branch ref, and hosted-runner constraints. Installer SHA-256:
+  `9bc943fcff3d72bc451e79fd373fb21f61369b637d0205928840679373a8d70d`;
+  corresponding-source SHA-256:
+  `bb694839193d7a399e2798bc8979a013fbe527b1f70b1dc601be8931ebe72714`.
+- Compared all 10,422 FFmpeg, 270 x264, and 262 zlib source entries with the
+  pinned Git archives: exact matches with no missing or extra source files.
+  The compile script matched exactly. Build instructions differed from the
+  local checkout only by CRLF/LF line endings; their normalized text matched.
+  Configuration, package/compiler records, PE/version reports, and required
+  license/exception texts were present. Report: `source-archive-audit.json`
+  in the downloaded artifact directory. This is technical archive verification,
+  not human source/license approval.
+- Installed that exact CI candidate into an isolated local Windows 11 path
+  containing spaces, Unicode, and an apostrophe, after guarding against any
+  existing installation. Installed sample, runtime/font/media/compiler notices,
+  frozen previews, audio/silent renders, and full decoding passed. All seven
+  integration tests passed against its installed FFmpeg build without skips,
+  requalifying spaces/Unicode/apostrophes, relative overlay paths, UNC, long
+  paths, generated PowerShell commands, cancellation, and locked outputs.
+  Uninstall removed the application and registration. Reports:
+  `build/verification/ci-windows-39159147579/local-installed-qualification.json`,
+  its `installed-media-integration.log`, and
+  `build/verification/WIN-405-20261018-144917-d4d4f5b716194682ac4fd9638d8a9068.json`.
+  WIN-502/WIN-503 are verified; WIN-504/WIN-505 remain blocked by BLK-007.
 - The separate-system, DPI, icon, playback, upgrade, and human source/license
   approvals remain pending. No publication approval is inferred from automation.
 
@@ -425,7 +463,7 @@ and GitHub-hosted runners. Evidence is under
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | WIN-601 | Update the README and user documentation | `P0` | `IN_REVIEW` | None | Finalized setup, packaging, and release behavior | `README.md` and every file under `docs/` accurately cover Windows installation, PowerShell usage, paths, SmartScreen, troubleshooting, supported systems, privacy, and release procedures without making macOS instructions ambiguous. | Follow all Windows instructions from a clean system; check every link and duplicated command. |
-| WIN-602 | Update maintainer guidance | `P1` | `IN_REVIEW` | None | WIN-203, WIN-502 | `AGENTS.md` contains platform-neutral setup and verification commands and the Windows package/release checks. | Execute documented commands in PowerShell and macOS CI. |
+| WIN-602 | Update maintainer guidance | `P1` | `VERIFIED` | None | WIN-203, WIN-502 | `AGENTS.md` contains platform-neutral setup and verification commands and the Windows package/release checks. | Documented source checks passed on Windows/macOS; fresh Windows setup, local/CI package builds, path verification, and frozen checks passed. Human publication gates remain explicit. |
 | WIN-603 | Update third-party and source notices | `P0` | `IN_REVIEW` | None | WIN-402 | `THIRD_PARTY_NOTICES.md` and packaging documentation describe both macOS and Windows artifacts, native Pillow libraries, bundled fonts, FFmpeg provenance, and corresponding source locations. | License review and artifact inspection. |
 
 ## Verification Gates
@@ -515,10 +553,10 @@ The Windows preview is complete when:
 | Open or accepted blockers | 2 |
 | `READY` tasks | 0 |
 | `IN_PROGRESS` tasks | 0 |
-| `IN_REVIEW` tasks | 11 |
+| `IN_REVIEW` tasks | 8 |
 | `BLOCKED` tasks | 3 |
 | `DEFERRED` tasks | 1 |
-| `VERIFIED` implementation tasks | 17 |
+| `VERIFIED` implementation tasks | 20 |
 
 Update this summary whenever task statuses change. Do not mark implementation
 tasks `VERIFIED` until their listed Windows verification has passed.
