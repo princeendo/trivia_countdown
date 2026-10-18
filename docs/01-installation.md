@@ -94,7 +94,9 @@ Run the verified installer as your normal user. It installs under
 creates a Start menu shortcut; a desktop shortcut is optional. Open **Trivia
 Countdown** from Start. Python, uv, FFmpeg, and ffprobe are included and need not
 be installed separately. A **Sample Trivia Questions.csv** file is installed
-beside the executable; provide your own source video. Choose the video, CSV,
+beside the executable; copy it to Documents before editing because upgrades or
+uninstall can replace or remove the bundled copy. Provide your own source video.
+Choose the video, CSV,
 and output on Main, then select **Create Video**. Uninstall through Windows
 Settings > Apps. The [qualification checklist](../tasks/windows_preview_qualification.md)
 records the remaining checks; installing a candidate is not release approval.

@@ -56,6 +56,12 @@ If **Randomize question order** is enabled, provide a random seed when you need 
 
 A complete five-question example is included at the top level of the mounted DMG as **Sample Trivia Questions.csv**. Source users can find the same file at [`sample_objects/sample_of_5_trivia_questions.csv`](../sample_objects/sample_of_5_trivia_questions.csv).
 
+The Windows installer candidate places **Sample Trivia Questions.csv** beside
+the installed executable. Copy it to Documents before editing; upgrades and
+uninstall may replace or remove the installed copy. The candidate remains
+[under qualification](01-installation.md#windows-preview-candidates), not a
+published Windows download.
+
 The source checkout also includes a curated Bible and church-trivia collection:
 
 - [`sample_objects/master_trivia.csv`](../sample_objects/master_trivia.csv): 895 questions, including 100 new additions reviewed against the original batches.

@@ -19,6 +19,82 @@ def windows_powershell_environment():
 
 @unittest.skipUnless(os.name == "nt", "Windows PowerShell packaging checks")
 class WindowsPackagingTests(unittest.TestCase):
+    def test_toolchain_setup_bounds_download_and_rejects_bad_hash_before_extraction(self):
+        script = Path(__file__).resolve().parents[1] / "scripts/setup_windows_ffmpeg_tools.ps1"
+        with TemporaryDirectory() as directory:
+            quoted_script = str(script).replace("'", "''")
+            quoted_root = directory.replace("'", "''")
+            command = rf"""
+$ErrorActionPreference = 'Stop'
+function global:Invoke-WebRequest {{
+    param($Uri, $OutFile, $TimeoutSec, [switch]$UseBasicParsing)
+    if ($TimeoutSec -ne 300 -or -not $UseBasicParsing) {{ throw 'Unbounded download' }}
+    Set-Content -LiteralPath $OutFile -Value 'invalid archive' -Encoding ascii
+}}
+function global:tar.exe {{ throw 'Must not extract an unverified archive' }}
+try {{
+    & '{quoted_script}' -Destination '{quoted_root}'
+    throw 'Setup unexpectedly succeeded'
+}} catch {{
+    if ($_.Exception.Message -ne 'MSYS2 base archive checksum mismatch.') {{ throw }}
+}}
+exit 0
+"""
+            result = subprocess.run(
+                ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", command],
+                env=windows_powershell_environment(), capture_output=True, text=True, timeout=30,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("Downloading pinned MSYS2 base", result.stdout)
+            self.assertIn("Verifying the MSYS2 base archive", result.stdout)
+
+    def test_toolchain_setup_initializes_before_updates_and_restores_environment(self):
+        script = Path(__file__).resolve().parents[1] / "scripts/setup_windows_ffmpeg_tools.ps1"
+        # Execute the real try/finally block with a command fixture. Avoid
+        # generating an executable that Windows Application Control can block.
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            quoted_script = str(script).replace("'", "''")
+            for fail in ("", "pacman -Syu --noconfirm"):
+                with self.subTest(fail=fail):
+                    log = root / "commands.txt"
+                    log.unlink(missing_ok=True)
+                    command = rf"""
+$ErrorActionPreference = 'Stop'
+$ast = [System.Management.Automation.Language.Parser]::ParseFile('{quoted_script}', [ref]$null, [ref]$null)
+$blocks = @($ast.FindAll({{ param($node) $node -is [System.Management.Automation.Language.TryStatementAst] }}, $true))
+if ($blocks.Count -ne 1) {{ throw 'Expected one setup try/finally block' }}
+function Invoke-TestBash {{
+    if ($args.Count -ne 3 -or $args[0] -ne '--login' -or $args[1] -ne '-c') {{ throw 'Invalid Bash invocation' }}
+    if ($env:MSYSTEM -ne 'UCRT64') {{ throw 'Wrong MSYS2 environment' }}
+    Add-Content -LiteralPath $env:SETUP_TEST_LOG -Value $args[2]
+    $global:LASTEXITCODE = if ($args[2] -eq $env:SETUP_TEST_FAIL) {{ 42 }} else {{ 0 }}
+}}
+$bash = 'Invoke-TestBash'
+$Destination = 'fixture'
+$previous = $env:MSYSTEM
+try {{
+    . ([scriptblock]::Create($blocks[0].Extent.Text))
+    if ($env:SETUP_TEST_FAIL) {{ throw 'Setup unexpectedly succeeded' }}
+}} catch {{
+    if (-not $env:SETUP_TEST_FAIL -or $_.Exception.Message -notlike 'MSYS2 toolchain setup failed:*') {{ throw }}
+}}
+if ($env:MSYSTEM -ne 'test-original') {{ throw 'MSYSTEM was not restored' }}
+exit 0
+"""
+                    result = subprocess.run(
+                        ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", command],
+                        env={**windows_powershell_environment(), "MSYSTEM": "test-original",
+                             "SETUP_TEST_LOG": str(log), "SETUP_TEST_FAIL": fail},
+                        capture_output=True, text=True, timeout=30,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    commands = log.read_text().splitlines()
+                    self.assertEqual(commands[0], " ")
+                    self.assertEqual(commands[1], "pacman -Syu --noconfirm")
+                    self.assertEqual(len(commands), 2 if fail else 4)
+                    self.assertIn("Running MSYS2 setup command", result.stdout)
+
     def test_source_build_cache_verifies_binaries_and_source_archive(self):
         repository = Path(__file__).resolve().parents[1]
         with TemporaryDirectory() as directory:

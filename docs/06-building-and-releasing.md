@@ -89,6 +89,13 @@ The setup helper downloads and hash-verifies a pinned MSYS2 base into `build\too
 - `Trivia-Countdown-FFmpeg-9.0.1-Windows-x64-sources.tar.gz`
 - `Trivia-Countdown-<version>-Windows-x64-SHA256SUMS.txt`
 
+Toolchain setup logs download, checksum, extraction, initial shell setup, and
+package-update phases separately. The base download has a five-minute timeout;
+CI limits the complete setup step to 20 minutes. If setup stalls, use the last
+logged phase to diagnose it before retrying. Initial shell setup initializes
+the MSYS2 keyring before package updates, following the
+[MSYS2 CI instructions](https://www.msys2.org/docs/ci/#other-systems).
+
 To build just FFmpeg and its source archive, run `.\scripts\build_ffmpeg_windows.ps1`. The source trees and compile script are archived together with revision URLs, configuration and DLL-import reports, toolchain package versions, and licenses. Hash-verified binaries and sources can be reused while their build inputs are unchanged; pass `-Force` to rebuild. A custom MSYS2 installation can be selected with `-Msys2Root 'C:\msys64'` on the FFmpeg build, installer build, or path verifier. `fetch_windows_ffmpeg.ps1` is retained only as a compatibility entry point to the source build; it no longer downloads Gyan binaries. The source archive includes [rebuild instructions](../packaging/FFMPEG_WINDOWS_SOURCE_README.md). These builds are source-pinned, not promised byte-for-byte reproducible across toolchain updates.
 
 The **Build unsigned Windows installer** workflow first runs source compilation, all discovered tests under `tests/`, and CLI help, then sets up the compiler, repeats the build, verifies checksums for both the installer and source archive, and publishes GitHub build provenance for the installer, source archive, and checksum file. Native-command failures stop the build instead of allowing stale artifacts to pass. The Inno Setup installer hash is published in the immutable [Inno Setup 7.1.0 release](https://github.com/jrsoftware/issrc/releases/tag/is-7_1_0).

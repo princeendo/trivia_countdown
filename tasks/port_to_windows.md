@@ -357,6 +357,27 @@ and GitHub-hosted runners. Evidence is under
   remaining manual, source/license, DPI, playback, and upgrade approvals.
   No new release or version tag has been created; published `v0.1.0` is unchanged.
 
+### Resumed Toolchain CI Investigation (2026-10-18)
+
+- The final Windows source run at `3dec99042d50f479a63b152148c4b5536f436819`
+  [passed](https://github.com/princeendo/trivia_countdown/actions/runs/39095043379).
+- The source-built Windows package run
+  [39094570428](https://github.com/princeendo/trivia_countdown/actions/runs/39094570428)
+  was cancelled at GitHub's six-hour job limit while setting up MSYS2. It
+  produced no phase diagnostics and no installer artifacts, so it does not
+  qualify WIN-502 or WIN-503. The logs do not establish which setup operation
+  stalled.
+- Added explicit download/checksum/extraction/shell/update logging, a
+  five-minute base-download timeout, and a 20-minute CI setup-step timeout.
+  First-run keyring initialization is separate from package updates, following
+  the upstream MSYS2 CI procedure. Offline Windows tests exercise rejected
+  archive hashes, command order, native failures, and environment restoration.
+- Retained and completed the interrupted documentation edits advising Windows
+  testers to copy the installed sample CSV to Documents before editing it.
+  Installer upgrades and uninstall can replace or remove the bundled sample.
+- The separate-system, DPI, icon, playback, upgrade, and human source/license
+  approvals remain pending. No publication approval is inferred from automation.
+
 ## Phase 6: Documentation
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |

@@ -57,6 +57,7 @@ jobs:
           if ($process.ExitCode -ne 0) { throw "Inno Setup installation failed with exit code $($process.ExitCode)." }
 
       - name: Set up Windows FFmpeg build tools
+        timeout-minutes: 20
         shell: pwsh
         run: .\scripts\setup_windows_ffmpeg_tools.ps1
 
