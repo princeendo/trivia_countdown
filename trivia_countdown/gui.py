@@ -49,8 +49,9 @@ def validate_tk_runtime() -> None:
 
 
 class QuestionTable(ttk.Frame):
-    """Scrollable question grid with an individually highlighted correct answer."""
+    """Paginated question grid with a bounded number of native widgets."""
 
+    PAGE_SIZE = 25
     headings = ("#", "Question", "Answer 1", "Answer 2", "Answer 3", "Answer 4", "Correct")
     widths = (5, 40, 22, 22, 22, 22, 9)
 
@@ -58,6 +59,8 @@ class QuestionTable(ttk.Frame):
         super().__init__(parent)
         self._on_select = on_select
         self._selected_index: Optional[int] = None
+        self._questions: list[TriviaQuestion] = []
+        self._page = 0
         self._row_widgets: list[list[tk.Label]] = []
         self._row_colors: list[list[tuple[str, str]]] = []
         self._canvas = tk.Canvas(self, highlightthickness=0)
@@ -73,8 +76,17 @@ class QuestionTable(ttk.Frame):
         self._canvas.grid(row=0, column=0, sticky="nsew")
         vertical_scrollbar.grid(row=0, column=1, sticky="ns")
         horizontal_scrollbar.grid(row=1, column=0, sticky="ew")
+        navigation = ttk.Frame(self)
+        navigation.grid(row=2, column=0, columnspan=2, sticky="ew", pady=(8, 0))
+        self._previous_button = ttk.Button(navigation, text="Previous", command=lambda: self._change_page(-1))
+        self._previous_button.pack(side="left")
+        self._page_status = tk.StringVar()
+        ttk.Label(navigation, textvariable=self._page_status, anchor="center").pack(side="left", fill="x", expand=True)
+        self._next_button = ttk.Button(navigation, text="Next", command=lambda: self._change_page(1))
+        self._next_button.pack(side="right")
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
+        self.set_questions([])
 
     def _update_scroll_region(self, _event: tk.Event) -> None:
         self._canvas.configure(scrollregion=self._canvas.bbox("all"))
@@ -103,6 +115,19 @@ class QuestionTable(ttk.Frame):
         return "break"
 
     def set_questions(self, questions: list[TriviaQuestion]) -> None:
+        self._questions = questions
+        self._page = 0
+        self._selected_index = None
+        self._render_page()
+
+    def _change_page(self, direction: int) -> None:
+        page_count = max(1, (len(self._questions) + self.PAGE_SIZE - 1) // self.PAGE_SIZE)
+        page = min(max(0, self._page + direction), page_count - 1)
+        if page != self._page:
+            self._page = page
+            self._render_page()
+
+    def _render_page(self) -> None:
         for child in self._content.winfo_children():
             child.destroy()
         self._row_widgets = []
@@ -120,8 +145,11 @@ class QuestionTable(ttk.Frame):
                 width=width,
             )
             label.grid(row=0, column=column, sticky="nsew", padx=1, pady=1)
-        for row, question in enumerate(questions, start=1):
-            values = (str(row), question.question, *question.answers, str(question.correct_answer))
+        start = self._page * self.PAGE_SIZE
+        end = min(start + self.PAGE_SIZE, len(self._questions))
+        for row, question in enumerate(self._questions[start:end], start=1):
+            index = start + row - 1
+            values = (str(index + 1), question.question, *question.answers, str(question.correct_answer))
             row_widgets: list[tk.Label] = []
             row_colors: list[tuple[str, str]] = []
             for column, (value, width) in enumerate(zip(values, self.widths)):
@@ -142,21 +170,42 @@ class QuestionTable(ttk.Frame):
                     cursor="hand2",
                 )
                 label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
-                label.bind("<Button-1>", lambda _event, index=row - 1: self.select(index))
+                label.bind("<Button-1>", lambda _event, index=index: self.select(index))
                 row_widgets.append(label)
                 row_colors.append((background, foreground))
             self._row_widgets.append(row_widgets)
             self._row_colors.append(row_colors)
-        self._selected_index = None
+        page_count = max(1, (len(self._questions) + self.PAGE_SIZE - 1) // self.PAGE_SIZE)
+        self._page_status.set(
+            f"Questions {start + 1}-{end} of {len(self._questions)} | Page {self._page + 1} of {page_count}"
+            if self._questions else "No questions loaded"
+        )
+        self._previous_button.configure(state="normal" if self._page else "disabled")
+        self._next_button.configure(state="normal" if end < len(self._questions) else "disabled")
+        self._canvas.xview_moveto(0)
+        self._canvas.yview_moveto(0)
+        self._highlight_selection()
 
     def select(self, index: int) -> None:
+        if not 0 <= index < len(self._questions):
+            return
+        self._selected_index = index
+        if index // self.PAGE_SIZE != self._page:
+            self._page = index // self.PAGE_SIZE
+            self._render_page()
+        else:
+            self._highlight_selection()
+        self._on_select(index)
+
+    def _highlight_selection(self) -> None:
         for row_widgets, row_colors in zip(self._row_widgets, self._row_colors):
             for label, (background, foreground) in zip(row_widgets, row_colors):
                 label.configure(background=background, foreground=foreground, highlightthickness=0)
-        for label in self._row_widgets[index]:
-            label.configure(background="#d9f2df", foreground="#123b23", highlightthickness=0)
-        self._selected_index = index
-        self._on_select(index)
+        if self._selected_index is not None:
+            row = self._selected_index - self._page * self.PAGE_SIZE
+            if 0 <= row < len(self._row_widgets):
+                for label in self._row_widgets[row]:
+                    label.configure(background="#d9f2df", foreground="#123b23", highlightthickness=0)
 
 
 class TriviaCountdownApp(ttk.Frame):
@@ -409,13 +458,13 @@ class TriviaCountdownApp(ttk.Frame):
         path = filedialog.askopenfilename(title="Choose a source video")
         if path:
             self._output_is_automatic = True
-            self.video_path.set(path)
+            self.video_path.set(os.path.normpath(path))
             self._start_preview()
 
     def _choose_trivia(self) -> None:
         path = filedialog.askopenfilename(title="Choose trivia CSV", filetypes=(("CSV files", "*.csv"), ("All files", "*")))
         if path:
-            self.trivia_path.set(path)
+            self.trivia_path.set(os.path.normpath(path))
             self._questions_changed()
 
     def _choose_output(self) -> None:
@@ -426,7 +475,7 @@ class TriviaCountdownApp(ttk.Frame):
         )
         if path:
             self._output_is_automatic = False
-            self.output_path.set(path)
+            self.output_path.set(os.path.normpath(path))
 
     def _output_changed(self, *_args: object) -> None:
         expected = default_output_path(Path(self.video_path.get())) if self.video_path.get() else None
@@ -452,7 +501,7 @@ class TriviaCountdownApp(ttk.Frame):
     def _choose_overlay_directory(self) -> None:
         path = filedialog.askdirectory(title="Choose overlay PNG directory")
         if path:
-            self.overlay_directory.set(path)
+            self.overlay_directory.set(os.path.normpath(path))
             self.keep_overlays.set(True)
             self._update_overlay_directory_state()
 
@@ -475,6 +524,9 @@ class TriviaCountdownApp(ttk.Frame):
         output_path = self.output_path.get().strip()
         if not video_path or not trivia_path or not output_path:
             return "Choose a source video, trivia CSV, and output path to generate the command."
+        video_path, trivia_path, output_path = (
+            os.path.normpath(path) for path in (video_path, trivia_path, output_path)
+        )
         try:
             options = self._render_options()
         except ValueError as exc:
@@ -511,7 +563,8 @@ class TriviaCountdownApp(ttk.Frame):
                 command.extend((option_name, f"{value:g}"))
         if options.overlay_dir is not None:
             command.extend(("--overlay-dir", str(options.overlay_dir)))
-        return " ".join(quote_cli_argument(part) for part in command)
+        prefix = "& " if sys.platform == "win32" else ""
+        return prefix + " ".join(quote_cli_argument(part) for part in command)
 
     def _copy_cli_command(self) -> None:
         command = self._build_cli_command()
@@ -762,9 +815,19 @@ def main() -> int:
         print(f"error: Could not start the desktop interface: {exc}", file=sys.stderr)
         return 1
     TriviaCountdownApp(root)
-    if os.environ.get("TRIVIA_COUNTDOWN_SMOKE_TEST") == "1":
-        root.update_idletasks()
-        root.destroy()
-        return 0
+    smoke_mode = os.environ.get("TRIVIA_COUNTDOWN_SMOKE_TEST")
+    if smoke_mode in {"1", "render"}:
+        try:
+            root.update_idletasks()
+            if smoke_mode == "render":
+                from .package_smoke import run_package_smoke_test
+
+                report_path = os.environ.get("TRIVIA_COUNTDOWN_SMOKE_REPORT")
+                if not report_path or not Path(report_path).is_absolute():
+                    return 1
+                return run_package_smoke_test(Path(report_path))
+            return 0
+        finally:
+            root.destroy()
     root.mainloop()
     return 0

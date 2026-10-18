@@ -37,8 +37,8 @@ The app bundle is also left at `dist/Trivia Countdown.app` for local testing. Bu
 Run the normal checks and inspect the app signature:
 
 ```sh
-uv run python -m py_compile make_trivia_countdown.py make_trivia_countdown_gui.py trivia_countdown/*.py trivia_countdown/lib/*.py
-uv run python -m unittest tests.test_app
+uv run python -m compileall -q make_trivia_countdown.py make_trivia_countdown_gui.py trivia_countdown
+uv run python -m unittest discover -s tests
 uv run python make_trivia_countdown.py --help
 codesign --verify --deep --strict --verbose=2 "dist/Trivia Countdown.app"
 hdiutil verify "dist/Trivia-Countdown-0.1.0-macOS-arm64.dmg"
@@ -74,20 +74,61 @@ The release workflow is retry-safe while a release remains a draft: a rerun repl
 
 ## Windows Preview Build
 
-The Windows preview targets Windows 10 22H2 and Windows 11 on x64 hardware. It uses a per-user, unsigned Inno Setup 7.1.0 installer and bundles a PyInstaller GUI application, Noto Sans fonts, and pinned Gyan FFmpeg 9.0.1 Essentials executables.
+The Windows preview targets Windows 10 22H2 and Windows 11 on x64 hardware. It uses a per-user, unsigned Inno Setup 7.1.0 installer and bundles a PyInstaller GUI application, Noto Sans fonts, and FFmpeg 9.0.1 executables built from pinned FFmpeg, x264, and zlib sources. End users do not install FFmpeg separately. External-library autodetection is disabled, avoiding the former supplier bundle's large dependency/source closure. Built-in input decoders/demuxers remain enabled; optional external codecs such as libaom/libdav1d AV1 decoding are not included.
 
-Build it on Windows in PowerShell after installing Python with Tcl/Tk, uv, and Inno Setup 7.1.0:
+Build it on Windows in PowerShell after installing Python with Tcl/Tk, uv, Git, and Inno Setup 7.1.0. Use a checkout path without spaces or apostrophes for the native compiler work tree (rendered video paths have no such restriction). Set up the isolated MSYS2 UCRT64 compiler tools once, then build:
 
 ```powershell
+.\scripts\setup_windows_ffmpeg_tools.ps1
 .\scripts\build_windows_installer.ps1
 ```
 
-The build downloads and SHA-256-verifies the pinned FFmpeg archive, creates the multi-resolution icon, collects runtime license files, builds `dist\Trivia Countdown\`, and writes these release candidates:
+The setup helper downloads and hash-verifies a pinned MSYS2 self-extracting base into `build\tools\msys64`, updates that isolated installation, and installs its compiler/build tools without changing system `PATH`. It uses the upstream CI self-extractor because Windows Server 2022's `tar.exe` stalled on the equivalent `.tar.xz` archive. The installer build fetches exact Git commits, compiles FFmpeg/x264/zlib, audits native x64 executable imports against a Windows-system-DLL allowlist, creates the multi-resolution icon, collects runtime license files, builds `dist\Trivia Countdown\`, verifies the frozen application's preview and render paths, and writes these release candidates:
 
 - `Trivia-Countdown-<version>-Windows-x64-Setup.exe`
+- `Trivia-Countdown-FFmpeg-9.0.1-Windows-x64-sources.tar.gz`
 - `Trivia-Countdown-<version>-Windows-x64-SHA256SUMS.txt`
 
-The **Build unsigned Windows installer** workflow first runs the Windows source checks, then repeats the build, checks the bundled GUI smoke mode and both FFmpeg executables, verifies the checksum, and publishes GitHub build provenance. The GUI smoke mode starts the packaged application and exits immediately after its interface has been constructed; it verifies that the frozen application can find its bundled runtime resources. The icon check is a manual confirmation that the installed application and shortcut show the packaged icon in Explorer and on the taskbar. Its Inno Setup installer hash is published in the immutable [Inno Setup 7.1.0 release](https://github.com/jrsoftware/issrc/releases/tag/is-7_1_0).
+Toolchain setup logs download, checksum, extraction, initial shell setup, and
+package-update phases separately. The base download has a five-minute timeout;
+CI limits the complete setup step to 20 minutes. If setup stalls, use the last
+logged phase to diagnose it before retrying. Initial shell setup initializes
+the MSYS2 keyring before package updates, following the
+[MSYS2 CI instructions](https://www.msys2.org/docs/ci/#other-systems).
+
+To build just FFmpeg and its source archive, run `.\scripts\build_ffmpeg_windows.ps1`. The source trees and compile script are archived together with revision URLs, configuration and DLL-import reports, toolchain package versions, and licenses. Hash-verified binaries and sources can be reused while their build inputs are unchanged; pass `-Force` to rebuild. A custom MSYS2 installation can be selected with `-Msys2Root 'C:\msys64'` on the FFmpeg build, installer build, or path verifier. `fetch_windows_ffmpeg.ps1` is retained only as a compatibility entry point to the source build; it no longer downloads Gyan binaries. The source archive includes [rebuild instructions](../packaging/FFMPEG_WINDOWS_SOURCE_README.md). These builds are source-pinned, not promised byte-for-byte reproducible across toolchain updates.
+
+The **Build unsigned Windows installer** workflow first runs source compilation, all discovered tests under `tests/`, and CLI help, then sets up the compiler, repeats the build, verifies checksums for both the installer and source archive, and publishes GitHub build provenance for the installer, source archive, and checksum file. Native-command failures stop the build instead of allowing stale artifacts to pass. The Inno Setup installer hash is published in the immutable [Inno Setup 7.1.0 release](https://github.com/jrsoftware/issrc/releases/tag/is-7_1_0).
+
+After building, the workflow reruns the full test suite with the newly bundled FFmpeg tools on `PATH`, including a real execution of the source GUI's generated PowerShell command. UNC and long-path cases still require the dedicated configured path verifier below. macOS package CI also discovers the full suite before and after building its media tools.
+
+The installer rejects older Windows releases and non-x64 operating systems, uses the multi-resolution application icon, and installs `Sample Trivia Questions.csv` beside the executable. Application runtime resources and third-party notices remain under `_internal/`.
+
+### Prepare the Windows draft prerelease
+
+A manual workflow run from a branch produces verified workflow artifacts, **not** a release. After qualification, update the project version and lockfile, commit/push, and create a new matching `v`-prefixed tag. A tag run creates or updates a **draft prerelease** containing the three Windows release files. Windows and macOS draft updates are serialized for the tag so simultaneous builds do not race to create the release. Reruns replace only their platform's draft assets; both workflows refuse to change any published release. Do not reuse the already published `v0.1.0` tag.
+
+GitHub wraps the `trivia-countdown-windows-x64` workflow artifact in a ZIP for
+download. Testers must extract it and launch the included
+`Trivia-Countdown-<version>-Windows-x64-Setup.exe` installer. Do not distribute
+the intermediate `dist\Trivia Countdown\` directory as an installer; its
+`Trivia Countdown.exe` launches the app directly. Published release assets
+provide the **Setup.exe** as a direct download after qualification.
+
+Before publishing, complete and retain the [Windows preview qualification checklist](../tasks/windows_preview_qualification.md). This includes human source/license approval, separate-machine testing, every DPI setting, a version-changing upgrade, and browser-download verification. CI completion never publishes a Windows release automatically. If a separate test system is unavailable, keep the candidate unpublished and the checklist pending.
+
+### Verify the frozen Windows application
+
+The installer build automatically runs this check before invoking Inno Setup. To repeat it against an existing PyInstaller build or an installed application:
+
+```powershell
+.\scripts\verify_windows_package.ps1
+.\scripts\verify_windows_package.ps1 -ApplicationDirectory 'C:\Users\YourName\AppData\Local\Programs\Trivia Countdown'
+```
+
+The verifier removes Python and FFmpeg from the child process's `PATH`, clears `PYTHONHOME` and `PYTHONPATH`, launches the windowed application from outside the source directory, and explicitly waits for its exit code. It constructs the GUI, checks bundled tool versions, extracts previews, and performs two short renders (with and without audio) using paths with spaces, Unicode, and apostrophes. It checks H.264 video, 640x360 dimensions, three-second duration, optional AAC audio, and complete output decoding. Synthetic videos are deleted after the check; timestamped JSON reports remain under `build\verification\WIN-405-*.json`. The workflow uploads these as `windows-package-verification`, including failure reports when available. The default timeout is 180 seconds; use `-TimeoutSeconds` to adjust it up to 3600 on slower machines.
+
+Internally, `TRIVIA_COUNTDOWN_SMOKE_TEST=render` selects these checks and requires an absolute `TRIVIA_COUNTDOWN_SMOKE_REPORT` path whose parent directory exists. The existing `TRIVIA_COUNTDOWN_SMOKE_TEST=1` startup-only mode remains available and unchanged. Neither mode replaces manual confirmation of child-console behavior, installed icons and shortcuts, DPI layout, cancellation, or installer qualification.
 
 ### Verify the Windows path matrix
 
@@ -97,9 +138,11 @@ Before qualifying the source render path, run the WIN-302 verifier from a Window
 .\scripts\verify_win302.ps1 -UncTestRoot '\\server\share\trivia-countdown-win302' -LongPathTestRoot 'C:\trivia-countdown-win302'
 ```
 
-The script fetches the pinned FFmpeg build, requires all configured path tests to execute rather than skip, and writes a timestamped report under `build\verification\`. Retain that report with the Windows version and test-root details as WIN-302 verification evidence.
+The script builds or verifies the cached source-built FFmpeg tools, requires all configured path tests to execute rather than skip, and writes a timestamped report under `build\verification\`. It restores the caller's `PATH`, temporary-directory variables, and test-root variables on exit, including failure. Set up the compiler first if no verified build is available. Run source sync/checks and package builds sequentially: source-only `uv sync --frozen` removes the build dependencies from the shared environment. Retain the report with the Windows version and test-root details as WIN-302 verification evidence. Earlier Gyan-build qualification does not qualify these replacement executables.
 
-Before publishing, attach the corresponding-source archive for FFmpeg, x264, and every other GPL-covered static component. Then install the release candidate on a separate live Windows 10 22H2 or Windows 11 x64 system and complete the install, launch, render, playback, upgrade, uninstall, and icon checks. VM images and pristine-system qualification are not required. Document Microsoft Defender SmartScreen accurately: it may warn because the installer is unsigned and has little reputation. Direct users to verify the release checksum and provenance; never advise disabling SmartScreen or Windows security controls.
+Before publishing, review and attach the matching Windows source archive with its build script, instructions, licenses, and notices. The self-built Windows media executables use GPLv2-or-later; the former supplier's GPLv3 build and the macOS source archive are not substitutes. Verify the installer and source archive checksums and run `gh attestation verify <artifact> --repo princeendo/trivia_countdown` for each artifact after CI. A local source build does not establish CI provenance or complete release qualification.
+
+Then install the release candidate on a separate live Windows 10 22H2 or Windows 11 x64 system and complete the install, launch, render, playback, upgrade, uninstall, and icon checks. VM images and pristine-system qualification are not required. Document Microsoft Defender SmartScreen accurately: it may warn because the installer is unsigned and has little reputation. Direct users to verify the release checksum and provenance; never advise disabling SmartScreen or Windows security controls.
 
 ## Future Signed Releases
 

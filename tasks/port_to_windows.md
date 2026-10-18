@@ -23,13 +23,15 @@ the verification and release gates below before a Windows installer is shipped.
 
 The most important confirmed incompatibilities are:
 
-- FFconcat rendering passed the selected bundled FFmpeg path matrix on Windows
-  for drive-letter, spaces, Unicode, apostrophes, relative overlays, UNC, and
-  long paths.
-- Frozen application, installer, GUI DPI, and live-installation behavior remain
-  unverified on a separate supported Windows system.
-- The static GPL FFmpeg redistribution is approved; its corresponding-source
-  archive still needs to be produced and attached to a Windows release.
+- FFconcat rendering passed the Windows path matrix again with the source-built
+  replacement, including UNC and long paths.
+- Local frozen application preview and render checks pass on Windows 11 x64.
+  Local automated install/render/uninstall checks also pass for the downloaded
+  CI candidate. Interactive installer, GUI DPI, and separate live-installation
+  behavior remain unverified.
+- The approved path now builds FFmpeg/x264/zlib from pinned sources, bundles the
+  executables, and generates the matching source archive. Source/license review,
+  provenance, and live-system qualification remain release gates.
 
 ## Status Definitions
 
@@ -63,7 +65,7 @@ test is not sufficient.
 | DEC-001 | Support Windows 10 and Windows 11 on x64 | `VERIFIED` | Product scope decision; runtime qualification is tracked separately. |
 | DEC-002 | Deliver a packaged GUI and retain the source CLI | `VERIFIED` | A separate packaged CLI executable is out of scope for the first milestone. |
 | DEC-003 | Distribute the application with an EXE installer | `VERIFIED` | Inno Setup 7.1.0 x64 is selected; implementation qualification is tracked separately. |
-| DEC-004 | Bundle pinned FFmpeg and ffprobe binaries | `VERIFIED` | Gyan FFmpeg 9.0.1 Essentials is pinned and approved for redistribution; corresponding-source delivery is tracked by WIN-402. |
+| DEC-004 | Bundle pinned FFmpeg and ffprobe binaries | `VERIFIED` | Self-build FFmpeg 9.0.1, x264, and zlib from exact commits; ship both executables in the installer and the matching source archive beside it. User approved this path on 2026-10-17. |
 | DEC-005 | Publish the first Windows build as an unsigned preview | `VERIFIED` | Document SmartScreen warnings; do not advise users to disable security controls. |
 | DEC-006 | Use PowerShell for Windows source instructions | `VERIFIED` | CMD-specific instructions are not required for the first milestone. |
 
@@ -72,7 +74,7 @@ test is not sufficient.
 | ID | Decision | Priority | Status | Blocker | Completion Criteria |
 | --- | --- | --- | --- | --- | --- |
 | DEC-101 | Select the installer implementation | `P0` | `VERIFIED` | None | Inno Setup 7.1.0 x64 is selected. |
-| DEC-102 | Select a Windows FFmpeg binary supplier and pinned version | `P0` | `VERIFIED` | None | Gyan FFmpeg 9.0.1 Essentials and its archive hash are pinned and approved for redistribution. |
+| DEC-102 | Select a Windows FFmpeg build and pinned version | `P0` | `VERIFIED` | None | Build FFmpeg 9.0.1, x264, and zlib from the commits in `scripts/build_ffmpeg_windows.sh`; disable external-library autodetection and retain matching sources/build instructions. Replaces Gyan Essentials. |
 | DEC-103 | Select a redistributable regular and bold font | `P0` | `VERIFIED` | None | Noto Sans Regular and Bold from `notofonts/noto-fonts` revision `20bc5918912503bc1537a407a694738c33c048aa`, SIL OFL 1.1. |
 | DEC-104 | Define the minimum supported Windows 10 release | `P1` | `VERIFIED` | None | Windows 10 22H2 x64. |
 | DEC-105 | Define the live installer qualification environment | `P1` | `VERIFIED` | None | Install and test on a separate live Windows 10 22H2 or Windows 11 x64 system. VM images and pristine-system checks are not required. |
@@ -81,44 +83,45 @@ test is not sufficient.
 
 | ID | Blocker | Type | Status | Blocks | Resolution |
 | --- | --- | --- | --- | --- | --- |
-| BLK-001 | Windows FFmpeg corresponding-source archive is not yet produced | License/dependency | `OPEN` | WIN-402, WIN-503, WIN-505, release | Produce and attach the matching source archive for FFmpeg, x264, and other GPL-covered static components. |
+| BLK-001 | Windows FFmpeg corresponding-source archive is not yet produced | License/dependency | `RESOLVED` | None | Replaced the opaque supplier bundle with a source-pinned FFmpeg/x264/zlib build that generates matching sources, build instructions, configurations, and licenses. Release review, attachment, and provenance remain WIN-402/WIN-503 gates. |
 | BLK-002 | No approved portable font or bundled font license | License/dependency | `RESOLVED` | WIN-402, release | Noto Sans Regular and Bold, plus the SIL OFL 1.1 license, are included under `assets/fonts/`. |
 | BLK-003 | Installer implementation has not been selected | Decision | `RESOLVED` | None | Inno Setup 7.1.0 x64 is selected. |
 | BLK-005 | Windows FFconcat behavior for UNC paths and long paths is unverified | Technical | `RESOLVED` | WIN-103 | The selected bundled FFmpeg build passed the UNC and long-path render matrix on Windows. |
 | BLK-006 | Authenticode certificate is unavailable | Signing | `ACCEPTED` | Production release only | Does not block the unsigned preview; revisit after preview qualification. |
+| BLK-007 | Separate live Windows qualification system is unavailable | Test environment | `OPEN` | WIN-304, WIN-504, WIN-505, release | User confirmed on 2026-10-17 that another live Windows x64 machine is not available. Keep the candidate unpublished; complete [the qualification checklist](windows_preview_qualification.md) when a system is available. |
 
 ## Phase 1: Runtime Portability
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| WIN-101 | Resolve bundled Windows executable names | `P0` | `IN_REVIEW` | None | None | Frozen builds find `bin/ffmpeg.exe` and `bin/ffprobe.exe`; source mode continues to use `PATH`; macOS behavior is preserved. | Unit tests on Windows and macOS; frozen smoke test. |
-| WIN-102 | Bundle and load portable fonts | `P0` | `IN_REVIEW` | None | DEC-103 | Regular and bold fonts load through `resource_path`; requested sizes are honored in source and frozen builds; font and license are packaged. | Font unit tests, image inspection, packaged smoke test. |
-| WIN-103 | Make FFconcat path handling portable | `P0` | `IN_REVIEW` | BLK-005 | None | Manifest paths are absolute and valid for spaces, Unicode, apostrophes, drive-letter paths, relative overlay directories, and supported UNC paths. | Unit tests plus real FFmpeg path-matrix renders on Windows. |
+| WIN-101 | Resolve bundled Windows executable names | `P0` | `VERIFIED` | None | None | Frozen builds find `bin/ffmpeg.exe` and `bin/ffprobe.exe`; source mode continues to use `PATH`; macOS behavior is preserved. | Windows source/frozen renders and macOS source/package CI passed on 2026-10-17. |
+| WIN-102 | Bundle and load portable fonts | `P0` | `VERIFIED` | None | DEC-103 | Regular and bold fonts load through `resource_path`; requested sizes are honored in source and frozen builds; font and license are packaged. | Requested-size tests, regular/bold and accented-text image inspection, installed font/license inspection, and frozen preview/render checks passed locally on Windows. |
+| WIN-103 | Make FFconcat path handling portable | `P0` | `VERIFIED` | None | None | Manifest paths are absolute and valid for spaces, Unicode, apostrophes, drive-letter paths, relative overlay directories, and supported UNC paths. | Unit tests plus real FFmpeg path-matrix renders on Windows; source-built bundle requalified on 2026-10-17. |
 | WIN-104 | Add Windows-safe subprocess behavior | `P1` | `IN_REVIEW` | None | WIN-101 | Packaged GUI renders do not open child console windows; ffprobe and FFmpeg diagnostics decode safely under Windows code pages; CLI behavior remains visible. | Source and frozen GUI tests on Windows. |
-| WIN-105 | Report Windows filesystem and process failures cleanly | `P1` | `IN_REVIEW` | None | None | CLI converts expected `OSError` and `PermissionError` failures into actionable `error:` messages without tracebacks; GUI retains actionable messages. | Unit tests for locked output, denied output directory, and missing executables. |
-| WIN-106 | Make terminal progress Windows-safe | `P2` | `IN_REVIEW` | None | None | ANSI erase sequences are used only on a capable interactive terminal; redirected output contains newline-delimited text without control sequences; `--no-progress` remains unchanged. | Unit tests and PowerShell redirection test. |
-| WIN-107 | Handle missing Windows Tkinter cleanly | `P2` | `IN_REVIEW` | None | None | Missing `tkinter` or `_tkinter` produces the documented friendly launcher error. | Mocked launcher tests. |
+| WIN-105 | Report Windows filesystem and process failures cleanly | `P1` | `VERIFIED` | None | None | CLI converts expected `OSError` and `PermissionError` failures into actionable `error:` messages without tracebacks; GUI retains actionable messages. | Windows unit tests cover CLI preparation/render errors, missing executable errors, and locked-output preservation. |
+| WIN-106 | Make terminal progress Windows-safe | `P2` | `VERIFIED` | None | None | ANSI erase sequences are used only on a capable interactive terminal; redirected output contains newline-delimited text without control sequences; `--no-progress` remains unchanged. | Windows unit tests and real PowerShell command render with redirected progress passed on 2026-10-17. |
+| WIN-107 | Handle missing Windows Tkinter cleanly | `P2` | `VERIFIED` | None | None | Missing `tkinter` or `_tkinter` produces the documented friendly launcher error. | Mocked launcher tests passed on Windows for both missing modules and unrelated import-error propagation. |
 | WIN-108 | Generate PowerShell CLI commands in the source GUI | `P1` | `IN_REVIEW` | None | DEC-006 | Generated commands safely quote Windows paths, spaces, apostrophes, and optional arguments and can be executed in PowerShell. | Unit tests and manual copy/run test. |
-| WIN-109 | Verify Windows replacement and cleanup behavior | `P1` | `IN_REVIEW` | None | WIN-105 | A failed or cancelled render does not replace an existing output; partial files and temporary overlays are removed when possible; file-lock errors are actionable. | Integration tests for cancellation, overwrite, and locked files. |
+| WIN-109 | Verify Windows replacement and cleanup behavior | `P1` | `VERIFIED` | None | WIN-105 | A failed or cancelled render does not replace an existing output; partial files and temporary overlays are removed when possible; file-lock errors are actionable. | Real Windows FFmpeg cancellation, locked-handle failure, successful overwrite/retry, and temporary-file cleanup tests passed; unit tests cover failed composition and cancellation at FFmpeg exit. |
 
 ## Phase 2: Windows Source Workflow
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| WIN-201 | Define the PowerShell setup workflow | `P1` | `IN_REVIEW` | None | DEC-006 | A clean checkout can be prepared with `uv sync --frozen` without activation; GUI, CLI, and tests have documented PowerShell commands. | Follow instructions from a clean Windows checkout. |
-| WIN-202 | Decide whether a PowerShell setup helper is needed | `P2` | `IN_REVIEW` | None | WIN-201 | Either add a small `setup_venv.ps1` with tests or document why direct `uv` commands are the supported workflow. | Clean-checkout setup test. |
-| WIN-203 | Make maintainer checks shell-neutral | `P1` | `IN_REVIEW` | None | None | Verification does not rely on POSIX wildcard expansion; the same commands work in PowerShell and CI. | Run compile, unit-test, and `--help` checks on Windows and macOS. |
-| WIN-204 | Add cross-platform repository text rules | `P2` | `IN_REVIEW` | None | None | `.gitattributes` protects shell scripts from CRLF conversion while allowing Windows-native scripts to use appropriate line endings; Windows build artifacts remain ignored. | Fresh Windows checkout and repository status check. |
+| WIN-201 | Define the PowerShell setup workflow | `P1` | `VERIFIED` | None | DEC-006 | A clean checkout can be prepared with `uv sync --frozen` without activation; GUI, CLI, and tests have documented PowerShell commands. | Fresh local Windows clone passed sync, Tkinter check, compilation, all 40 then-current tests without skips, GUI startup, and CLI help on 2026-10-17. |
+| WIN-202 | Decide whether a PowerShell setup helper is needed | `P2` | `VERIFIED` | None | WIN-201 | Either add a small `setup_venv.ps1` with tests or document why direct `uv` commands are the supported workflow. | Documented direct locked `uv` setup without activation or execution-policy changes; verified in a fresh Windows clone. |
+| WIN-203 | Make maintainer checks shell-neutral | `P1` | `VERIFIED` | None | None | Verification does not rely on POSIX wildcard expansion; the same commands work in PowerShell and CI. | Compile, full test discovery, and CLI help passed in Windows and macOS CI plus a fresh local Windows clone. |
+| WIN-204 | Add cross-platform repository text rules | `P2` | `VERIFIED` | None | None | `.gitattributes` protects shell scripts from CRLF conversion while allowing Windows-native scripts to use appropriate line endings; Windows build artifacts remain ignored. | Fresh Windows clone retained LF shell scripts and a clean working tree after setup/GUI/tests on 2026-10-17. |
 
 ## Phase 3: Tests and Continuous Integration
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| WIN-301 | Remove Unix-only assumptions from unit tests | `P1` | `IN_REVIEW` | None | WIN-101, WIN-108 | Tests use portable temporary paths and assert platform-appropriate executable and command behavior. | Unit suite passes on Windows and macOS. |
+| WIN-301 | Remove Unix-only assumptions from unit tests | `P1` | `VERIFIED` | None | WIN-101, WIN-108 | Tests use portable temporary paths and assert platform-appropriate executable and command behavior. | Full discovery passed on Windows and macOS, with only platform/tool-availability skips in CI; all configured local Windows cases passed. |
 | WIN-302 | Add a Windows path and filesystem test matrix | `P0` | `VERIFIED` | None | WIN-103, WIN-109 | Tests cover spaces, Unicode, apostrophes, relative paths, drive-letter paths, supported UNC paths, long paths, locked outputs, and overwrite safety. | Unit and FFmpeg integration suite on Windows. |
 | WIN-303 | Add Windows source CI | `P0` | `VERIFIED` | None | WIN-203, WIN-301 | A pinned `windows-2022` job installs with `uv`, compiles sources, runs tests, and checks CLI help; failures block release packaging. | Successful GitHub Actions run. |
-| WIN-304 | Qualify GUI layout and DPI behavior | `P1` | `IN_REVIEW` | None | WIN-102, WIN-104 | Main workflows remain usable at 100%, 125%, 150%, and 200% display scaling; preview and progress controls are visible; icon rendering is acceptable. | Manual live-system GUI checklist with recorded results. |
-| WIN-305 | Preserve macOS behavior during the port | `P0` | `IN_REVIEW` | None | All runtime changes | Existing macOS source tests and package workflow continue to pass; Windows conditionals do not replace macOS behavior. | Existing macOS CI and targeted regression tests. |
+| WIN-304 | Qualify GUI layout and DPI behavior | `P1` | `BLOCKED` | BLK-007 | WIN-102, WIN-104 | Main workflows remain usable at 100%, 125%, 150%, and 200% display scaling; preview and progress controls are visible; icon rendering is acceptable. | Manual live-system GUI checklist with recorded results. |
+| WIN-305 | Preserve macOS behavior during the port | `P0` | `VERIFIED` | None | All runtime changes | Existing macOS source tests and package workflow continue to pass; Windows conditionals do not replace macOS behavior. | macOS source/bundled-tool tests, app/DMG build, frozen smoke, codesign, checksums, and provenance passed on 2026-10-17. |
 
 ### WIN-305 macOS Verification Evidence
 
@@ -126,7 +129,18 @@ test is not sufficient.
 - 2026-08-29 on Apple Silicon macOS: rebuilt pinned FFmpeg n8.0.1/x264 with `scripts/build_ffmpeg_macos.sh`, then built `Trivia-Countdown-0.1.0-macOS-arm64.dmg` with `scripts/build_macos_dmg.sh`.
 - 2026-08-29 on Apple Silicon macOS: the app signature and DMG verified, and the bundled `ffmpeg` and `ffprobe` binaries reported FFmpeg n8.0.1 with `--enable-libx264`.
 
-This task remains `IN_REVIEW`: the tracker requires Windows evidence before an implementation task may be marked `VERIFIED`.
+The earlier macOS-only evidence was insufficient by itself. Windows source and
+frozen renders now pass too. On 2026-10-17,
+[macOS run 39094570423](https://github.com/princeendo/trivia_countdown/actions/runs/39094570423)
+passed at `bce7b8b298d9ce870dd922b820b23cf9eee5f73e`: 40 discovered tests before
+and after building the pinned media tools (eight initial availability/platform
+skips; five Windows-only skips with bundled tools), app/DMG construction,
+frozen startup, media-tool versions, signature/DMG verification, and checksums.
+Downloaded all three macOS artifacts and independently verified checksums and
+GitHub provenance constrained to this repository, workflow, commit, branch,
+and GitHub-hosted runners. Evidence is under
+`build/verification/ci-macos-39094570423/` and
+`build/verification/macOS-39094570423-*-attestation.json`. No release was created.
 
 ### WIN-302 Windows Verification Evidence
 
@@ -153,9 +167,9 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| WIN-401 | Acquire and verify pinned FFmpeg binaries | `P0` | `VERIFIED` | None | DEC-102 | `ffmpeg.exe` and `ffprobe.exe` are x64, pinned, hash-verified, free of unexpected runtime DLL dependencies, and provide `libx264` and AAC support. | Version/configuration checks and a real render. |
-| WIN-402 | Package third-party licenses and corresponding sources | `P0` | `BLOCKED` | BLK-001 | WIN-102, WIN-401 | Installer includes applicable Python, Tcl/Tk, Pillow, PyInstaller, font, FFmpeg, and x264 notices; matching FFmpeg/x264 source is published with the release when required. | License review and installed-file inspection. |
-| WIN-403 | Create a Windows PyInstaller specification | `P0` | `IN_REVIEW` | None | WIN-101, WIN-102, WIN-401 | Build produces a windowed x64 GUI application containing Python, Tcl/Tk, Pillow, fonts, licenses, `ffmpeg.exe`, and `ffprobe.exe`; the app runs without system Python or FFmpeg. | PyInstaller build and frozen smoke test. |
+| WIN-401 | Build and verify source-pinned FFmpeg binaries | `P0` | `VERIFIED` | None | DEC-102 | `ffmpeg.exe` and `ffprobe.exe` are x64, source-pinned, hash-verified on cache reuse, free of unexpected runtime DLL dependencies, and provide `libx264` and AAC support. | Version/configuration checks and a real render. |
+| WIN-402 | Package third-party licenses and corresponding sources | `P0` | `IN_REVIEW` | None | WIN-102, WIN-401 | Installer includes applicable Python, Tcl/Tk, Pillow, PyInstaller, font, FFmpeg, x264, zlib, and compiler-runtime notices; matching sources/build instructions are published with the release. | License review and installed-file inspection. |
+| WIN-403 | Create a Windows PyInstaller specification | `P0` | `VERIFIED` | None | WIN-101, WIN-102, WIN-401 | Build produces a windowed x64 GUI application containing Python, Tcl/Tk, Pillow, fonts, licenses, `ffmpeg.exe`, and `ffprobe.exe`; the app runs without system Python or FFmpeg. | PyInstaller build and frozen smoke test. |
 | WIN-404 | Create a Windows application icon | `P2` | `IN_REVIEW` | None | None | A multi-resolution `.ico` derived from `assets/app_icon.png` is embedded in the executable and installer. | Explorer, taskbar, and installed shortcut inspection. |
 | WIN-405 | Add packaged-application smoke tests | `P0` | `IN_REVIEW` | None | WIN-403 | Smoke mode launches; bundled executables run; a short sample render succeeds with system FFmpeg removed from `PATH`; no child console flashes. | Automated package test plus manual GUI render. |
 
@@ -164,10 +178,10 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | WIN-501 | Build the EXE installer | `P0` | `IN_REVIEW` | None | DEC-101, WIN-402, WIN-403, WIN-404 | Installer uses per-user installation unless elevation is justified, creates expected shortcuts, includes notices, supports clean uninstall, and has deterministic artifact naming. | Install, upgrade, and uninstall tests on a live supported Windows system. |
-| WIN-502 | Add Windows package CI | `P0` | `VERIFIED` | None | WIN-303, WIN-401, WIN-405, WIN-501 | A pinned Windows runner builds the application and installer, verifies hashes and bundled tools, smoke-tests the result, and uploads the complete artifact set. | Successful workflow artifact build. |
-| WIN-503 | Add checksums and build provenance | `P1` | `BLOCKED` | BLK-001 | WIN-502 | Release output includes SHA-256 checksums and GitHub build provenance for the installer and corresponding source archive. | Checksum verification and `gh attestation verify`. |
-| WIN-504 | Qualify the unsigned preview by live installation | `P0` | `IN_REVIEW` | None | WIN-501, WIN-502, WIN-503 | Installer, first launch, render, output playback, upgrade, and uninstall pass on a separate live Windows 10 22H2 or Windows 11 x64 system. | Signed-off live-installation checklist. |
-| WIN-505 | Publish an unsigned Windows prerelease | `P0` | `READY` | None | WIN-504, WIN-601 | Draft prerelease includes installer, checksums, FFmpeg corresponding source, provenance, release notes, support caveats, and accurate SmartScreen guidance. | Download artifacts through a browser and repeat the live-installation smoke test. |
+| WIN-502 | Add Windows package CI | `P0` | `VERIFIED` | None | WIN-303, WIN-401, WIN-405, WIN-501 | A pinned Windows runner builds the application and installer, verifies hashes and bundled tools, smoke-tests the result, and uploads the complete artifact set including matching sources. | Source-built package run 39159147579 passed on 2026-10-18; downloaded artifacts, frozen reports, and local installed checks verified. |
+| WIN-503 | Add checksums and build provenance | `P1` | `VERIFIED` | None | WIN-502 | Release output includes SHA-256 checksums and GitHub build provenance for the installer and corresponding source archive. | Both downloaded checksum entries and all three workflow/commit/ref/hosted-runner-constrained attestations passed for run 39159147579. |
+| WIN-504 | Qualify the unsigned preview by live installation | `P0` | `BLOCKED` | BLK-007 | WIN-501, WIN-502, WIN-503 | Installer, first launch, render, output playback, upgrade, and uninstall pass on a separate live Windows 10 22H2 or Windows 11 x64 system. | Signed-off live-installation checklist. |
+| WIN-505 | Publish an unsigned Windows prerelease | `P0` | `BLOCKED` | BLK-007 | WIN-504, WIN-601 | Draft prerelease includes installer, checksums, FFmpeg corresponding source, provenance, release notes, support caveats, and accurate SmartScreen guidance. | Download artifacts through a browser and repeat the live-installation smoke test. |
 | WIN-506 | Define the signed-release follow-up | `P2` | `DEFERRED` | BLK-006 | Preview feedback | Document certificate ownership, secret storage, timestamping, signing order, and verification before promoting Windows builds beyond preview status. | Approved signing design and verified signed artifact. |
 
 ### WIN-401 Windows Verification Evidence
@@ -195,13 +209,262 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
   `Trivia-Countdown-0.1.0-Windows-x64-SHA256SUMS.txt`, and
   `gh attestation verify` passed for the installer and checksum file.
 
+### WIN-403 / WIN-405 Local Frozen-Application Evidence
+
+- 2026-10-17 on Windows 11 Pro x64, build 26200: built the windowed application
+  with Python 3.12.14, PyInstaller 6.22.2, and the hash-verified pinned Gyan
+  FFmpeg 9.0.1 Essentials tools. Runtime licenses and fonts were collected into
+  the package. This local Python version differs from CI's 3.12.10 pin.
+- `scripts/verify_windows_package.ps1` passed with system Python and FFmpeg
+  unavailable on the child process's `PATH` and Python environment overrides
+  cleared. The application launched from outside the source directory,
+  constructed its GUI, extracted preview frames, and rendered both silent
+  and AAC-audio inputs using spaces, Unicode, and apostrophes in paths.
+- Both three-second outputs had 640x360 H.264 video, the expected audio stream
+  presence, nonzero size, and passed full FFmpeg decoding. Report:
+  `build/verification/WIN-405-20261017-165229-4da529d453834b63a8b494da77ce1a37.json`.
+- Repeated the checks after copying the complete package into a temporary
+  application location containing Unicode, spaces, and an apostrophe. Report:
+  `build/verification/WIN-405-20261017-165243-f63223f96fb64cde9bd68c065c130839.json`.
+  The copied application and synthetic videos were removed after verification.
+- Source compilation, CLI help, and test discovery passed: 33 tests ran, with
+  only the unconfigured UNC and long-path cases skipped. Their earlier WIN-302
+  qualification is retained above; those two cases were not requalified here.
+- A negative check temporarily removed only the locally generated package's
+  `ffprobe.exe`; verification failed with `Required bundled executable not
+  found`, and the binary and caller's `PATH` were restored afterward.
+- The installer build now runs these checks before Inno Setup and stops on
+  native build-command failures. Windows CI discovers the full test suite and
+  uploads package-verification JSON reports. These workflow changes have not
+  yet been run on GitHub Actions.
+- WIN-405 remains `IN_REVIEW`: manual child-console, interactive GUI render,
+  and separate live-system checks have not been completed. At this earlier
+  stage Inno Setup was not installed locally; the subsequent source-build and
+  local installer checks are recorded below.
+
+### Source-Built Bundle and Local Installer Evidence (2026-10-17)
+
+- Built FFmpeg 9.0.1, x264, and zlib 1.3.2 from the pinned commits with the
+  isolated MSYS2 UCRT64 toolchain (GCC 16.2.0). Both executables passed the x64
+  PE/system-DLL audit. They identify themselves as `9.0.1-trivia-countdown`;
+  exported source snapshots are fenced off from the parent application's Git
+  repository so upstream version scripts cannot inherit the app's version tag.
+- All 34 discovered tests passed with the source-built tools, including UNC
+  and long-path renders (no skips). The dedicated WIN-302 verifier also passed
+  all required individual cases with long paths enabled. Report:
+  `build/verification/WIN-302-20261017-175440.log`.
+- Built `dist/Trivia-Countdown-0.1.0-Windows-x64-Setup.exe` with Inno Setup
+  7.1.0 after the frozen preview, audio/silent render, and decode checks passed.
+  Report:
+  `build/verification/WIN-405-20261017-175454-b00277de67da47d1bf2701ee2c50a716.json`.
+- Installer SHA-256:
+  `a17ecc717d0f713faeb97a07020769e8751e134d41670ce4a11900c53df5715d`.
+  The source archive SHA-256 is
+  `b2f79c0efd8f29d439556b36fbdaec6452cf5694acbdb3a19c7d6d87fb1b0cfb`.
+  Both match `dist/Trivia-Countdown-0.1.0-Windows-x64-SHA256SUMS.txt`.
+- Compared every archived source file with a fresh `git archive` of its pinned
+  commit (Git CRLF conversion disabled): 10,422 FFmpeg files, 270 x264 files,
+  and 262 zlib files matched, with no missing or extra source files. The actual
+  compile script, rebuild README, configuration reports, toolchain inventory,
+  and required license/exception files were present. Report:
+  `build/verification/Windows-source-archive-review-20261017.json`.
+- Installed the candidate into an isolated local path containing Unicode,
+  spaces, and an apostrophe, after guarding against an existing installation.
+  Installed preview/render checks passed without system Python/FFmpeg on
+  `PATH`; repeated after a same-version reinstall. Reports:
+  `build/verification/WIN-405-20261017-175714-8218ad90db8d4bf9b168a302e51c88c1.json`
+  and `build/verification/WIN-405-20261017-175723-098cd533be3c487aaa3bbff79be4c2f5.json`.
+  Uninstall removed the test installation and its registration. No existing
+  installation was overwritten and no test application was left installed.
+- This was local automation on the development Windows 11 system, with icons
+  suppressed. It is not separate live-system qualification, a version-changing
+  upgrade test, visual icon/DPI approval, or human playback inspection. WIN-405,
+  WIN-501, and WIN-504 remain `IN_REVIEW`. The updated source/archive provenance
+  workflow has not yet run on GitHub Actions; WIN-502/WIN-503 remain `IN_REVIEW`.
+- Run source environment sync/checks and package builds sequentially: an exact
+  source-only `uv sync --frozen` prunes build dependencies and can conflict with
+  a running PyInstaller process. The initial parallel verification attempt hit
+  that environment conflict; the recorded successful verifier/build ran in
+  sequence after restoring the locked build environment.
+
+### BLK-001 Corresponding-Source Investigation and Replacement
+
+- 2026-10-17, before the source-build decision: confirmed the supplier release links FFmpeg commit
+  `bf1b838f2ab88b4f8fd83443325c782ea0e0f7fa` but does not attach the complete
+  static dependency sources and build scripts. That former supplier executable
+  uses `--enable-version3` and its supplied license is GPLv3.
+- The supplier requested official-email contact in an existing source-manifest
+  issue for another version. No request has been sent on the maintainer's
+  behalf. The approved replacement avoids needing that supplier's materials:
+  pinned FFmpeg 9.0.1, x264, and zlib 1.3.2 are built directly with external
+  autodetection disabled, and both executables are installed with the GUI.
+- The build generated
+  `dist/Trivia-Countdown-FFmpeg-9.0.1-Windows-x64-sources.tar.gz` with clean
+  source trees, exact revisions/URLs, the actual compile script, configurations,
+  DLL-import reports, toolchain versions, and FFmpeg/x264/zlib/runtime notices.
+  It does not reuse the former Gyan or macOS source archives. See
+  [the source and rebuild guide](../packaging/FFMPEG_WINDOWS_SOURCE_README.md).
+- BLK-001 is resolved by source availability. WIN-402, WIN-503, and WIN-603 are
+  `IN_REVIEW`, not verified: source/license review, installed-file inspection,
+  release attachment, and GitHub provenance remain outstanding. Nothing has
+  been published.
+
+### Final Automation and Qualification Handoff (2026-10-17)
+
+- All 42 discovered tests passed locally with the source-built FFmpeg bundle,
+  including UNC and long paths, without skips. Compilation and CLI help passed.
+  New tests cover missing Tkinter, actionable CLI filesystem/process errors,
+  cancellation at FFmpeg exit, a real GUI-generated PowerShell command, actual
+  FFmpeg cancellation/cleanup, Windows locked-handle overwrite safety, and
+  offline execution of both workflows' draft-release safety guards.
+- Fixed the source GUI command to include PowerShell's `&` call operator before
+  its quoted executable. Added a final cancellation check before output
+  replacement, preserving an existing output when cancellation arrives as
+  FFmpeg exits.
+- Repeated the dedicated path verifier, then checked that all five caller
+  environment variables were restored. Report:
+  `build/verification/WIN-302-20261017-223713.log`.
+- The installer now enforces Windows 10 22H2/native x64, embeds the application
+  icon, and installs a sample CSV. A fresh local Inno Setup build and frozen
+  preview/audio/silent/decode checks passed after these changes.
+- Installed that rebuilt candidate into a guarded, isolated local path with
+  spaces, Unicode, and an apostrophe. Verified the sample CSV and installed
+  runtime/font/media/compiler-license resources, reran the frozen render checks,
+  and uninstalled it. Application and registration removal passed. Reports:
+  `build/verification/WIN-501-local-20261017-224316.json` and
+  `build/verification/WIN-405-20261017-224324-c88a77c701e549d09df74d33cf3123f7.json`.
+  This does not approve separate-system, visual, DPI, playback, or upgrade checks.
+- A fresh local clone of `bce7b8b298d9ce870dd922b820b23cf9eee5f73e` passed
+  documented source setup, Tcl/Tk 8.6, compile, all 40 then-current tests with
+  configured UNC/long-path roots, GUI startup, and CLI help. Shell scripts kept
+  LF line endings; the clone's working tree remained clean and the temporary
+  checkout was removed. Report:
+  `build/verification/Windows-fresh-source-20261017-224449.json`.
+- Added draft-only Windows prerelease automation, serialized with macOS draft
+  updates, with published-release replacement forbidden. Branch runs intentionally
+  produce artifacts only. Workflow syntax passed actionlint 1.7.12.
+- [Windows source run 39094563703](https://github.com/princeendo/trivia_countdown/actions/runs/39094563703)
+  passed at `bce7b8b298d9ce870dd922b820b23cf9eee5f73e`: 40 tests ran, with six
+  media-dependent cases skipped because system FFmpeg is absent in that job.
+  The package job reruns the suite with the source-built tools. The initial
+  CI attempt exposed PowerShell 7's inherited module path in Windows PowerShell
+  5.1 test children; the tests now let each child initialize its own module path.
+- The latest macOS regression build passed; its downloaded checksums and
+  workflow/commit/ref provenance checks passed as recorded under WIN-305.
+  Windows package CI is pending. Its source-pinned FFmpeg CI/provenance gates
+  remain open until the new artifacts are built, downloaded, and verified.
+- Separate-system human approval cannot proceed: the user confirmed that a
+  second live Windows system is unavailable. BLK-007 records this blocker.
+  [The qualification checklist](windows_preview_qualification.md) covers all
+  remaining manual, source/license, DPI, playback, and upgrade approvals.
+  No new release or version tag has been created; published `v0.1.0` is unchanged.
+
+### Resumed Toolchain CI Investigation (2026-10-18)
+
+- The final Windows source run at `3dec99042d50f479a63b152148c4b5536f436819`
+  [passed](https://github.com/princeendo/trivia_countdown/actions/runs/39095043379).
+- The source-built Windows package run
+  [39094570428](https://github.com/princeendo/trivia_countdown/actions/runs/39094570428)
+  was cancelled at GitHub's six-hour job limit while setting up MSYS2. It
+  produced no phase diagnostics and no installer artifacts, so it does not
+  qualify WIN-502 or WIN-503. The logs do not establish which setup operation
+  stalled.
+- Added explicit download/checksum/extraction/shell/update logging, a
+  five-minute base-download timeout, and a 20-minute CI setup-step timeout.
+  First-run keyring initialization is separate from package updates, following
+  the upstream MSYS2 CI procedure. Offline Windows tests exercise rejected
+  archive hashes, command order, native failures, and environment restoration.
+- Retained and completed the interrupted documentation edits advising Windows
+  testers to copy the installed sample CSV to Documents before editing it.
+  Installer upgrades and uninstall can replace or remove the bundled sample.
+- Fresh local MSYS2 extraction, keyring initialization, both update passes,
+  and compiler/package installation completed successfully. All 45 discovered
+  local tests passed with the bundled media tools and configured UNC/long-path
+  roots, without skips; report:
+  `build/verification/Windows-resumed-tests-20261018.log`. Source compilation,
+  CLI help, and all 58 local links in README and `docs/` passed validation.
+  Frozen preview/audio/silent/full-decode checks passed again; report:
+  `build/verification/WIN-405-20261018-142317-49ae921942664c34bf8e81087211bc87.json`.
+- Inspected `build/verification/WIN-102-font-inspection.png`: normal and
+  answer-reveal panels have readable regular/bold text, accented characters,
+  and the correct highlight without clipping. Together with requested-size
+  tests, previous installed resource inspection, and the repeated frozen
+  preview/render checks, this verifies WIN-102 locally. Separate-system DPI
+  qualification remains WIN-304.
+- [macOS regression run 39158497902](https://github.com/princeendo/trivia_countdown/actions/runs/39158497902)
+  passed at `277f674e9169fdaf53ea8e0f3a07af97be7c29d3`. Downloaded the DMG,
+  matching media sources, and checksums into
+  `build/verification/ci-macos-39158497902/`; both checksum entries passed.
+  All three GitHub attestations passed with repository, workflow, source
+  commit, branch ref, and hosted-runner constraints. The exact verified
+  attestation JSON files are retained beside the downloaded artifacts.
+- The instrumented Windows run
+  [39158435184](https://github.com/princeendo/trivia_countdown/actions/runs/39158435184)
+  downloaded and hash-verified the base in under a second, then stalled in
+  Windows Server 2022's `tar.exe` extraction. Cancelled the diagnostic run to
+  retrieve its logs. Replaced that extraction with upstream's CI self-extracting
+  base from the same pinned 2026-09-27 release, enforcing its SHA-256
+  `ad336cccfda47758b5e15cda993fbba421115cb0b126697daef1ee4dfe37209f`.
+  Extraction runs hidden, checks its exit code, and requires the expected Bash
+  executable before updates. Added failure-path tests for both checks.
+- Repeated setup locally from the pinned self-extractor in a fresh directory;
+  extraction, initialization, updates, and compiler installation passed. The
+  replacement also passed the hosted Windows setup step in 54 seconds in
+  [run 39159147579](https://github.com/princeendo/trivia_countdown/actions/runs/39159147579).
+  [Windows source CI](https://github.com/princeendo/trivia_countdown/actions/runs/39159147390)
+  passed at `95a649a69707e01ff722cd1edf8f83808d2f9816`.
+- [macOS run 39159190987](https://github.com/princeendo/trivia_countdown/actions/runs/39159190987)
+  passed on the same code commit. Downloaded its three artifacts into
+  `build/verification/ci-macos-39159190987/`; both checksums and all three
+  repository/workflow/commit/ref/hosted-runner-constrained attestations passed.
+  One source-archive attestation attempt hit a verifier-initialization error;
+  a separate retry passed without changing the artifact or verification policy.
+- The source-built Windows package
+  [run 39159147579](https://github.com/princeendo/trivia_countdown/actions/runs/39159147579)
+  passed at `95a649a69707e01ff722cd1edf8f83808d2f9816`: the compiler/source
+  build, PE import audit, PyInstaller/Inno build, frozen preview/audio/silent
+  renders/full decode, checksums, provenance, and artifact upload all passed.
+  It ran 45 tests before building tools (eight availability skips) and after
+  building tools (only the two unconfigured UNC/long-path cases skipped).
+  The downloaded CI frozen report also records its audio and silent render
+  cases as passed.
+- Downloaded the installer, matching Windows sources, checksums, and frozen
+  report into `build/verification/ci-windows-39159147579/`. Both checksum
+  entries and all three attestations passed with repository, workflow, source
+  commit, branch ref, and hosted-runner constraints. Installer SHA-256:
+  `9bc943fcff3d72bc451e79fd373fb21f61369b637d0205928840679373a8d70d`;
+  corresponding-source SHA-256:
+  `bb694839193d7a399e2798bc8979a013fbe527b1f70b1dc601be8931ebe72714`.
+- Compared all 10,422 FFmpeg, 270 x264, and 262 zlib source entries with the
+  pinned Git archives: exact matches with no missing or extra source files.
+  The compile script matched exactly. Build instructions differed from the
+  local checkout only by CRLF/LF line endings; their normalized text matched.
+  Configuration, package/compiler records, PE/version reports, and required
+  license/exception texts were present. Report: `source-archive-audit.json`
+  in the downloaded artifact directory. This is technical archive verification,
+  not human source/license approval.
+- Installed that exact CI candidate into an isolated local Windows 11 path
+  containing spaces, Unicode, and an apostrophe, after guarding against any
+  existing installation. Installed sample, runtime/font/media/compiler notices,
+  frozen previews, audio/silent renders, and full decoding passed. All seven
+  integration tests passed against its installed FFmpeg build without skips,
+  requalifying spaces/Unicode/apostrophes, relative overlay paths, UNC, long
+  paths, generated PowerShell commands, cancellation, and locked outputs.
+  Uninstall removed the application and registration. Reports:
+  `build/verification/ci-windows-39159147579/local-installed-qualification.json`,
+  its `installed-media-integration.log`, and
+  `build/verification/WIN-405-20261018-144917-d4d4f5b716194682ac4fd9638d8a9068.json`.
+  WIN-502/WIN-503 are verified; WIN-504/WIN-505 remain blocked by BLK-007.
+- The separate-system, DPI, icon, playback, upgrade, and human source/license
+  approvals remain pending. No publication approval is inferred from automation.
+
 ## Phase 6: Documentation
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | WIN-601 | Update the README and user documentation | `P0` | `IN_REVIEW` | None | Finalized setup, packaging, and release behavior | `README.md` and every file under `docs/` accurately cover Windows installation, PowerShell usage, paths, SmartScreen, troubleshooting, supported systems, privacy, and release procedures without making macOS instructions ambiguous. | Follow all Windows instructions from a clean system; check every link and duplicated command. |
-| WIN-602 | Update maintainer guidance | `P1` | `IN_REVIEW` | None | WIN-203, WIN-502 | `AGENTS.md` contains platform-neutral setup and verification commands and the Windows package/release checks. | Execute documented commands in PowerShell and macOS CI. |
-| WIN-603 | Update third-party and source notices | `P0` | `BLOCKED` | BLK-001, BLK-002 | WIN-402 | `THIRD_PARTY_NOTICES.md` and packaging documentation describe both macOS and Windows artifacts, native Pillow libraries, bundled fonts, FFmpeg provenance, and corresponding source locations. | License review and artifact inspection. |
+| WIN-602 | Update maintainer guidance | `P1` | `VERIFIED` | None | WIN-203, WIN-502 | `AGENTS.md` contains platform-neutral setup and verification commands and the Windows package/release checks. | Documented source checks passed on Windows/macOS; fresh Windows setup, local/CI package builds, path verification, and frozen checks passed. Human publication gates remain explicit. |
+| WIN-603 | Update third-party and source notices | `P0` | `IN_REVIEW` | None | WIN-402 | `THIRD_PARTY_NOTICES.md` and packaging documentation describe both macOS and Windows artifacts, native Pillow libraries, bundled fonts, FFmpeg provenance, and corresponding source locations. | License review and artifact inspection. |
 
 ## Verification Gates
 
@@ -288,12 +551,12 @@ The Windows preview is complete when:
 | Confirmed decisions | 11 |
 | Open or in-progress decisions | 0 |
 | Open or accepted blockers | 2 |
-| `READY` tasks | 1 |
+| `READY` tasks | 0 |
 | `IN_PROGRESS` tasks | 0 |
-| `IN_REVIEW` tasks | 23 |
+| `IN_REVIEW` tasks | 8 |
 | `BLOCKED` tasks | 3 |
 | `DEFERRED` tasks | 1 |
-| `VERIFIED` implementation tasks | 4 |
+| `VERIFIED` implementation tasks | 20 |
 
 Update this summary whenever task statuses change. Do not mark implementation
 tasks `VERIFIED` until their listed Windows verification has passed.

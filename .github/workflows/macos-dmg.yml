@@ -42,7 +42,7 @@ jobs:
         run: |
           uv sync --group build --frozen
           uv run python -m compileall -q make_trivia_countdown.py make_trivia_countdown_gui.py trivia_countdown
-          uv run python -m unittest tests.test_app
+          uv run python -m unittest discover -s tests
           uv run python make_trivia_countdown.py --help
 
       - name: Cache FFmpeg build
@@ -55,7 +55,7 @@ jobs:
         run: scripts/build_ffmpeg_macos.sh
 
       - name: Test bundled FFmpeg
-        run: PATH="$PWD/build/vendor/bin:$PATH" uv run python -m unittest tests.test_app
+        run: PATH="$PWD/build/vendor/bin:$PATH" uv run python -m unittest discover -s tests
 
       - name: Build and verify DMG
         run: scripts/build_macos_dmg.sh
@@ -92,6 +92,9 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs: build
     runs-on: ubuntu-latest
+    concurrency:
+      group: draft-release-${{ github.ref }}
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
@@ -105,8 +108,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            if [[ $(gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft) != "true" ]]; then
+          set -euo pipefail
+          releases=$(gh api "repos/$GITHUB_REPOSITORY/releases" --paginate --jq ".[] | select(.tag_name == \"$GITHUB_REF_NAME\") | .draft")
+          if [[ -n "$releases" ]]; then
+            if [[ "$releases" != "true" ]]; then
               echo "error: refusing to replace assets on a published release" >&2
               exit 1
             fi
@@ -115,6 +120,7 @@ jobs:
             gh release create "$GITHUB_REF_NAME" \
               dist/* \
               --repo "$GITHUB_REPOSITORY" \
+              --verify-tag \
               --draft \
               --prerelease \
               --generate-notes \

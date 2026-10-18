@@ -10,9 +10,11 @@ If you are using the Mac app, start with [Installation](01-installation.md) and 
 
 Open **Trivia Countdown** from the Applications folder. If this is the first launch of the ad-hoc-signed preview, complete the [Mac app installation steps](01-installation.md#install-the-mac-app) first.
 
-On the **Main** tab, choose a source video and trivia CSV. The output path initially defaults to `<source-name>_trivia_countdown.mp4` beside the source video, and can be changed with **Output**. The preview is a static frame extracted near the selected question's calculated position, composited with the normal or answer-reveal overlay; it is not video playback.
+On the **Main** tab, choose a source video and trivia CSV. The output path initially defaults to `<source-name>_trivia_countdown.mp4` beside the source video, and can be changed with **Output**. File-dialog selections use native path separators: backslashes on Windows and forward slashes on macOS/Linux. The preview is a static frame extracted near the selected question's calculated position, composited with the normal or answer-reveal overlay; it is not video playback.
 
-The **Advanced** tab groups settings into Question Order, Overlay Output, Timing, and Reveal and Transition Effects. It exposes the same defaults as the command line. Settings are reset to their defaults when the app is reopened. **Keep generated overlay PNGs** is off by default. When enabled, use **Browse** to select a directory, type one directly, or let the GUI create `<output-name>_overlays` beside the output MP4. The **Questions** tab is a read-only, scrollable view of all validated rows; its correct answer cells are highlighted, selected rows turn light green, and selecting a row updates the Main preview. Only the first rows that fit the video's capacity are used in the final render. Use the mouse wheel while hovering over the table to scroll it.
+The **Advanced** tab groups settings into Question Order, Overlay Output, Timing, and Reveal and Transition Effects. It exposes the same defaults as the command line. Settings are reset to their defaults when the app is reopened. **Keep generated overlay PNGs** is off by default. When enabled, use **Browse** to select a directory, type one directly, or let the GUI create `<output-name>_overlays` beside the output MP4.
+
+The **Questions** tab is a read-only table showing at most 25 rows at a time. Use **Previous** and **Next** to browse pages; the footer shows the visible range, total question count, and current page. Only the current page has table widgets, keeping native widget usage bounded for large collections. Correct answer cells are highlighted, selected rows turn light green, and selecting a row updates the Main preview using its question number across the full collection. Changing pages keeps the current preview and restores the selection highlight when you return. Loading another CSV or changing question order returns to page 1. Only the first rows that fit the video's capacity are used in the final render; pagination does not limit the render. Use the mouse wheel while hovering over the table to scroll the current page.
 
 When launched from a source checkout, the GUI also has a **CLI** tab with the exact command-line equivalent of the current selections. It includes explicit timing parameters by default. Clear **Include parameters using default values** to omit Advanced values that still match their defaults. The packaged Mac app omits this developer-only tab because DMG users do not have the source command installed. If **Randomize question order** is enabled, use a seed to make the displayed order and final render reproducible; without one, the order may be regenerated differently when rendering.
 
@@ -37,6 +39,8 @@ In PowerShell, use single quotes around paths. A single quote within a path is r
 ```powershell
 uv run python make_trivia_countdown.py 'C:\Videos\Trivia''s Source.mp4' 'C:\Trivia\questions.csv'
 ```
+
+The source GUI quotes every argument and prefixes the generated PowerShell command with `&`, PowerShell's call operator. Keep that prefix when copying the command; a quoted executable name alone is a string, not a command. Multiline examples below use POSIX backslash continuation; in PowerShell, put the command on one line or copy the GUI-generated command.
 
 The command validates the inputs, reports how many questions fit, renders the trivia panels, and composes the final video. By default, the output is created beside the source video as `<source-name>_trivia_countdown.mp4`.
 

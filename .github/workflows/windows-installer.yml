@@ -32,15 +32,17 @@ jobs:
       - name: Run source checks
         shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference = $true
           uv sync --frozen
           uv run python -m compileall -q make_trivia_countdown.py make_trivia_countdown_gui.py trivia_countdown
-          uv run python -m unittest tests.test_app
+          uv run python -m unittest discover -s tests
           uv run python make_trivia_countdown.py --help
 
       - name: Validate release version
         if: startsWith(github.ref, 'refs/tags/')
         shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference = $true
           $version = uv run --frozen python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])"
           if ($env:GITHUB_REF_NAME -ne "v$version") { throw "Tag $env:GITHUB_REF_NAME does not match project version $version." }
 
@@ -51,16 +53,21 @@ jobs:
           Invoke-WebRequest -Uri "https://github.com/jrsoftware/issrc/releases/download/is-7_1_0/innosetup-7.1.0-x64.exe" -OutFile $installer
           $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $installer).Hash.ToLowerInvariant()
           if ($hash -ne "0362a383ed217d4c4239b5933866dd96d3eb2102737da92f80f6057a4b40df2f") { throw "Inno Setup installer hash mismatch." }
-          Start-Process -FilePath $installer -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait
+          $process = Start-Process -FilePath $installer -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw "Inno Setup installation failed with exit code $($process.ExitCode)." }
+
+      - name: Set up Windows FFmpeg build tools
+        timeout-minutes: 20
+        shell: pwsh
+        run: .\scripts\setup_windows_ffmpeg_tools.ps1
 
       - name: Build and smoke-test installer
         shell: pwsh
         run: |
           .\scripts\build_windows_installer.ps1
-          $env:TRIVIA_COUNTDOWN_SMOKE_TEST = "1"
-          & ".\dist\Trivia Countdown\Trivia Countdown.exe"
-          & ".\dist\Trivia Countdown\_internal\bin\ffmpeg.exe" -version
-          & ".\dist\Trivia Countdown\_internal\bin\ffprobe.exe" -version
+          $PSNativeCommandUseErrorActionPreference = $true
+          $env:PATH = "$PWD\build\vendor\windows\bin;$env:PATH"
+          uv run python -m unittest discover -s tests -v
           $checksumFile = Get-ChildItem -LiteralPath dist -Filter "Trivia-Countdown-*-Windows-x64-SHA256SUMS.txt"
           if ($null -eq $checksumFile) { throw "Windows checksum file was not created." }
           Get-Content -LiteralPath $checksumFile.FullName | ForEach-Object {
@@ -68,11 +75,20 @@ jobs:
             if ((Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path dist $name)).Hash.ToLowerInvariant() -ne $hash) { throw "Checksum verification failed for $name." }
           }
 
+      - name: Upload package verification reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-package-verification
+          path: build/verification/WIN-405-*.json
+          if-no-files-found: warn
+
       - name: Attest release artifacts
         uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
         with:
           subject-path: |
             dist/*-Windows-x64-Setup.exe
+            dist/*-Windows-x64-sources.tar.gz
             dist/*-Windows-x64-SHA256SUMS.txt
 
       - name: Upload build artifacts
@@ -81,6 +97,47 @@ jobs:
           name: trivia-countdown-windows-x64
           path: |
             dist/*-Windows-x64-Setup.exe
+            dist/*-Windows-x64-sources.tar.gz
             dist/*-Windows-x64-SHA256SUMS.txt
           if-no-files-found: error
           overwrite: true
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    concurrency:
+      group: draft-release-${{ github.ref }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - name: Download verified artifacts
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          name: trivia-countdown-windows-x64
+          path: dist
+
+      - name: Create or update draft prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Distinguish a missing release from authentication/network failures.
+          releases=$(gh api "repos/$GITHUB_REPOSITORY/releases" --paginate --jq ".[] | select(.tag_name == \"$GITHUB_REF_NAME\") | .draft")
+          if [[ -n "$releases" ]]; then
+            if [[ "$releases" != "true" ]]; then
+              echo "error: refusing to replace assets on a published release" >&2
+              exit 1
+            fi
+            gh release upload "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              dist/* \
+              --repo "$GITHUB_REPOSITORY" \
+              --verify-tag \
+              --draft \
+              --prerelease \
+              --generate-notes \
+              --title "Trivia Countdown $GITHUB_REF_NAME"
+          fi

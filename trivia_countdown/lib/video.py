@@ -485,6 +485,7 @@ def compose_video(
             if return_code != 0:
                 message = "".join(stderr_lines).strip() or "ffmpeg failed while composing the output video"
                 raise RuntimeError(message)
+            check_cancelled(cancel_check)
             try:
                 partial_output.replace(output_file)
             except PermissionError as exc:

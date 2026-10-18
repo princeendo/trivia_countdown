@@ -12,6 +12,32 @@ If macOS reports that the app is damaged rather than identifying it as an unveri
 
 The current download requires an Apple Silicon Mac running macOS 14 Sonoma or later. Choose **Apple menu > About This Mac** to check the chip and macOS version. Intel Macs are not supported by this prototype.
 
+## The Windows Download Is a ZIP or Only Launches the App
+
+GitHub Actions downloads build artifacts as ZIP files. Select
+**trivia-countdown-windows-x64** from a successful **Build unsigned Windows installer**
+run, extract it, and run `Trivia-Countdown-<version>-Windows-x64-Setup.exe`.
+That executable installs the app and creates its Start menu shortcut. A raw
+`Trivia Countdown.exe` beside an `_internal` folder is the app launcher.
+See [Windows candidate installation](01-installation.md#windows-preview-candidates).
+
+## Windows Blocks a Preview Installer
+
+The Windows candidate is unsigned and still under qualification; it is not yet
+a published download. SmartScreen can warn about its unverified publisher or
+low reputation. Follow the [candidate verification instructions](01-installation.md#windows-preview-candidates)
+before deciding whether to run it. Do not disable Windows security features.
+Report a verified candidate that fails to launch, including the Windows version,
+installer hash, and exact message. ARM64 and Windows releases older than
+Windows 10 22H2 are not supported.
+
+## The Generated PowerShell Command Is Not Executed
+
+Copy the entire command from the source GUI's CLI tab, including the leading
+`&` call operator. Keep single-quoted arguments intact; apostrophes inside a
+quoted path must be doubled. Run it from the repository folder in PowerShell,
+not Command Prompt. See [command-line usage](03-usage-and-reference.md#command-line).
+
 ## `brew: command not found`
 
 Homebrew is only required for a source installation. Normal DMG users should follow the [Mac app installation instructions](01-installation.md#install-the-mac-app). Source users can install Homebrew from [brew.sh](https://brew.sh/) and then run `brew install uv ffmpeg` again.
@@ -24,13 +50,22 @@ On Windows source installations, install uv using the [official Windows instruct
 
 ## `Required executable not found: ffmpeg` or `ffprobe`
 
-This message should only occur in a source installation because the Mac app bundles both tools. macOS source users can run `brew install ffmpeg`. Windows source users must install an FFmpeg build that provides `ffmpeg.exe` and `ffprobe.exe` on `PATH`, then open a new PowerShell window. If the packaged app reports a missing bundled executable, reinstall it from a verified DMG and open an issue if the problem remains.
+This message should only occur in a source installation because the Mac app and Windows candidate bundle both tools. macOS source users can run `brew install ffmpeg`. Windows source users must install an FFmpeg build that provides `ffmpeg.exe` and `ffprobe.exe` on `PATH`, then open a new PowerShell window. If the packaged app reports a missing bundled executable, reinstall it from a verified DMG or installer and open an issue if the problem remains.
 
 ## The Desktop Interface Does Not Open
 
 DMG users should first follow the [Mac app installation instructions](01-installation.md#install-the-mac-app) above. Source users can launch it from the project folder with `uv run python make_trivia_countdown_gui.py`.
 
 If a macOS source launch opens a blank or black window, it is using an unsupported Tcl/Tk runtime. Run `. ./setup_venv.sh` to recreate the environment with the repository's Python 3.12 pin, then confirm `uv run python -c 'import tkinter; print(tkinter.TkVersion)'` prints `8.6` or newer. If setup reports that Tkinter is unavailable or too old, install a current Python distribution with Tcl/Tk 8.6 or later, remove `.venv`, and run the setup command again.
+
+## A Large CSV Makes the Questions Tab Unresponsive
+
+Use a build with the paginated Questions tab. It displays at most 25 questions
+per page with **Previous** and **Next** controls, avoiding thousands of native
+widgets for a large CSV. The entire CSV is still read and validated in memory;
+pagination bounds the table widgets, not the size of the input data. If a large
+file still fails, include its row count, approximate file size, app version,
+and any error message in your report.
 
 ## The Preview Is Unavailable or Looks Different From the Video
 

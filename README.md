@@ -19,7 +19,7 @@ The downloadable app is the recommended way for non-technical users to create a 
 
 The preview build is ad-hoc signed, but it is not signed with an Apple Developer ID or notarized by Apple. macOS may therefore block the first launch of the downloaded app. Only use **Open Anyway** for a DMG downloaded from this repository's Releases page. Do not disable Gatekeeper globally. See the [Installation Guide](docs/01-installation.md) for complete steps and checksum verification.
 
-The Main tab shows a static source-video frame with the selected trivia overlay and separate progress bars for overlay generation and video composition. Use **Advanced** to change timing defaults and **Questions** to inspect the CSV and select the previewed question. The GUI confirms before replacing an existing file, supports cancellation, and replaces the selected output only after a successful render.
+The Main tab shows a static source-video frame with the selected trivia overlay and separate progress bars for overlay generation and video composition. Use **Advanced** to change timing defaults and **Questions** to inspect the CSV, 25 questions per page, and select the previewed question. **Previous** and **Next** browse the full collection while keeping the table's widget count bounded. The GUI confirms before replacing an existing file, supports cancellation, and replaces the selected output only after a successful render.
 
 ## For Developers
 
@@ -45,7 +45,9 @@ Use [Installation](docs/01-installation.md#install-from-source) for setup and [U
 
 ### Maintainers
 
-Use [Building and Releasing](docs/06-building-and-releasing.md) for unsigned DMG artifacts and GitHub prereleases.
+Use [Building and Releasing](docs/06-building-and-releasing.md) for unsigned DMG artifacts, Windows installer candidates and frozen-render checks, and GitHub prereleases. The Windows installer bundles source-built FFmpeg and ffprobe; end users will not install them separately. The build also generates the matching source archive. Windows publication remains gated on source/license review, build provenance, and the [separate live-installation qualification checklist](tasks/windows_preview_qualification.md). Branch builds do not publish releases; matching new version tags prepare draft prereleases only.
+
+Windows candidate testers: GitHub Actions downloads the `trivia-countdown-windows-x64` artifact as a ZIP. Extract it and run `Trivia-Countdown-<version>-Windows-x64-Setup.exe`, the installer. The inner `Trivia Countdown.exe` in a raw application folder launches the app directly. See [Windows candidate installation](docs/01-installation.md#windows-preview-candidates).
 
 For a concise list of every command-line option, source users can run:
 
