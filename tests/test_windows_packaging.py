@@ -10,6 +10,13 @@ from tempfile import TemporaryDirectory
 import unittest
 
 
+def windows_powershell_environment():
+    # CI invokes Python from PowerShell 7. Its module path is incompatible with
+    # the Windows PowerShell 5.1 children used here (even Get-FileHash can fail).
+    # Let each child initialize its own default module search path.
+    return {name: value for name, value in os.environ.items() if name.upper() != "PSMODULEPATH"}
+
+
 @unittest.skipUnless(os.name == "nt", "Windows PowerShell packaging checks")
 class WindowsPackagingTests(unittest.TestCase):
     def test_source_build_cache_verifies_binaries_and_source_archive(self):
@@ -46,7 +53,7 @@ class WindowsPackagingTests(unittest.TestCase):
             def invoke():
                 return subprocess.run(
                     ["powershell.exe", "-NoProfile", "-NonInteractive", "-File", str(scripts / names[2])],
-                    capture_output=True, text=True, timeout=30,
+                    env=windows_powershell_environment(), capture_output=True, text=True, timeout=30,
                 )
 
             result = invoke()
@@ -91,7 +98,7 @@ if ((Get-Location).Path -ne $before) {{ throw 'Working directory was not restore
 """
             result = subprocess.run(
                 ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", command],
-                capture_output=True, text=True, timeout=30,
+                env=windows_powershell_environment(), capture_output=True, text=True, timeout=30,
             )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
