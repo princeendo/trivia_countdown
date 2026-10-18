@@ -92,7 +92,7 @@ test is not sufficient.
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| WIN-101 | Resolve bundled Windows executable names | `P0` | `IN_REVIEW` | None | None | Frozen builds find `bin/ffmpeg.exe` and `bin/ffprobe.exe`; source mode continues to use `PATH`; macOS behavior is preserved. | Unit tests on Windows and macOS; frozen smoke test. |
+| WIN-101 | Resolve bundled Windows executable names | `P0` | `VERIFIED` | None | None | Frozen builds find `bin/ffmpeg.exe` and `bin/ffprobe.exe`; source mode continues to use `PATH`; macOS behavior is preserved. | Windows source/frozen renders and macOS source/package CI passed on 2026-10-17. |
 | WIN-102 | Bundle and load portable fonts | `P0` | `IN_REVIEW` | None | DEC-103 | Regular and bold fonts load through `resource_path`; requested sizes are honored in source and frozen builds; font and license are packaged. | Font unit tests, image inspection, packaged smoke test. |
 | WIN-103 | Make FFconcat path handling portable | `P0` | `VERIFIED` | None | None | Manifest paths are absolute and valid for spaces, Unicode, apostrophes, drive-letter paths, relative overlay directories, and supported UNC paths. | Unit tests plus real FFmpeg path-matrix renders on Windows; source-built bundle requalified on 2026-10-17. |
 | WIN-104 | Add Windows-safe subprocess behavior | `P1` | `IN_REVIEW` | None | WIN-101 | Packaged GUI renders do not open child console windows; ffprobe and FFmpeg diagnostics decode safely under Windows code pages; CLI behavior remains visible. | Source and frozen GUI tests on Windows. |
@@ -100,26 +100,26 @@ test is not sufficient.
 | WIN-106 | Make terminal progress Windows-safe | `P2` | `VERIFIED` | None | None | ANSI erase sequences are used only on a capable interactive terminal; redirected output contains newline-delimited text without control sequences; `--no-progress` remains unchanged. | Windows unit tests and real PowerShell command render with redirected progress passed on 2026-10-17. |
 | WIN-107 | Handle missing Windows Tkinter cleanly | `P2` | `VERIFIED` | None | None | Missing `tkinter` or `_tkinter` produces the documented friendly launcher error. | Mocked launcher tests passed on Windows for both missing modules and unrelated import-error propagation. |
 | WIN-108 | Generate PowerShell CLI commands in the source GUI | `P1` | `IN_REVIEW` | None | DEC-006 | Generated commands safely quote Windows paths, spaces, apostrophes, and optional arguments and can be executed in PowerShell. | Unit tests and manual copy/run test. |
-| WIN-109 | Verify Windows replacement and cleanup behavior | `P1` | `IN_REVIEW` | None | WIN-105 | A failed or cancelled render does not replace an existing output; partial files and temporary overlays are removed when possible; file-lock errors are actionable. | Integration tests for cancellation, overwrite, and locked files. |
+| WIN-109 | Verify Windows replacement and cleanup behavior | `P1` | `VERIFIED` | None | WIN-105 | A failed or cancelled render does not replace an existing output; partial files and temporary overlays are removed when possible; file-lock errors are actionable. | Real Windows FFmpeg cancellation, locked-handle failure, successful overwrite/retry, and temporary-file cleanup tests passed; unit tests cover failed composition and cancellation at FFmpeg exit. |
 
 ## Phase 2: Windows Source Workflow
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| WIN-201 | Define the PowerShell setup workflow | `P1` | `IN_REVIEW` | None | DEC-006 | A clean checkout can be prepared with `uv sync --frozen` without activation; GUI, CLI, and tests have documented PowerShell commands. | Follow instructions from a clean Windows checkout. |
-| WIN-202 | Decide whether a PowerShell setup helper is needed | `P2` | `IN_REVIEW` | None | WIN-201 | Either add a small `setup_venv.ps1` with tests or document why direct `uv` commands are the supported workflow. | Clean-checkout setup test. |
-| WIN-203 | Make maintainer checks shell-neutral | `P1` | `IN_REVIEW` | None | None | Verification does not rely on POSIX wildcard expansion; the same commands work in PowerShell and CI. | Run compile, unit-test, and `--help` checks on Windows and macOS. |
-| WIN-204 | Add cross-platform repository text rules | `P2` | `IN_REVIEW` | None | None | `.gitattributes` protects shell scripts from CRLF conversion while allowing Windows-native scripts to use appropriate line endings; Windows build artifacts remain ignored. | Fresh Windows checkout and repository status check. |
+| WIN-201 | Define the PowerShell setup workflow | `P1` | `VERIFIED` | None | DEC-006 | A clean checkout can be prepared with `uv sync --frozen` without activation; GUI, CLI, and tests have documented PowerShell commands. | Fresh local Windows clone passed sync, Tkinter check, compilation, all 40 then-current tests without skips, GUI startup, and CLI help on 2026-10-17. |
+| WIN-202 | Decide whether a PowerShell setup helper is needed | `P2` | `VERIFIED` | None | WIN-201 | Either add a small `setup_venv.ps1` with tests or document why direct `uv` commands are the supported workflow. | Documented direct locked `uv` setup without activation or execution-policy changes; verified in a fresh Windows clone. |
+| WIN-203 | Make maintainer checks shell-neutral | `P1` | `VERIFIED` | None | None | Verification does not rely on POSIX wildcard expansion; the same commands work in PowerShell and CI. | Compile, full test discovery, and CLI help passed in Windows and macOS CI plus a fresh local Windows clone. |
+| WIN-204 | Add cross-platform repository text rules | `P2` | `VERIFIED` | None | None | `.gitattributes` protects shell scripts from CRLF conversion while allowing Windows-native scripts to use appropriate line endings; Windows build artifacts remain ignored. | Fresh Windows clone retained LF shell scripts and a clean working tree after setup/GUI/tests on 2026-10-17. |
 
 ## Phase 3: Tests and Continuous Integration
 
 | ID | Task | Priority | Status | Blocker | Dependencies | Acceptance Criteria | Verification |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| WIN-301 | Remove Unix-only assumptions from unit tests | `P1` | `IN_REVIEW` | None | WIN-101, WIN-108 | Tests use portable temporary paths and assert platform-appropriate executable and command behavior. | Unit suite passes on Windows and macOS. |
+| WIN-301 | Remove Unix-only assumptions from unit tests | `P1` | `VERIFIED` | None | WIN-101, WIN-108 | Tests use portable temporary paths and assert platform-appropriate executable and command behavior. | Full discovery passed on Windows and macOS, with only platform/tool-availability skips in CI; all configured local Windows cases passed. |
 | WIN-302 | Add a Windows path and filesystem test matrix | `P0` | `VERIFIED` | None | WIN-103, WIN-109 | Tests cover spaces, Unicode, apostrophes, relative paths, drive-letter paths, supported UNC paths, long paths, locked outputs, and overwrite safety. | Unit and FFmpeg integration suite on Windows. |
 | WIN-303 | Add Windows source CI | `P0` | `VERIFIED` | None | WIN-203, WIN-301 | A pinned `windows-2022` job installs with `uv`, compiles sources, runs tests, and checks CLI help; failures block release packaging. | Successful GitHub Actions run. |
 | WIN-304 | Qualify GUI layout and DPI behavior | `P1` | `BLOCKED` | BLK-007 | WIN-102, WIN-104 | Main workflows remain usable at 100%, 125%, 150%, and 200% display scaling; preview and progress controls are visible; icon rendering is acceptable. | Manual live-system GUI checklist with recorded results. |
-| WIN-305 | Preserve macOS behavior during the port | `P0` | `IN_REVIEW` | None | All runtime changes | Existing macOS source tests and package workflow continue to pass; Windows conditionals do not replace macOS behavior. | Existing macOS CI and targeted regression tests. |
+| WIN-305 | Preserve macOS behavior during the port | `P0` | `VERIFIED` | None | All runtime changes | Existing macOS source tests and package workflow continue to pass; Windows conditionals do not replace macOS behavior. | macOS source/bundled-tool tests, app/DMG build, frozen smoke, codesign, checksums, and provenance passed on 2026-10-17. |
 
 ### WIN-305 macOS Verification Evidence
 
@@ -127,7 +127,18 @@ test is not sufficient.
 - 2026-08-29 on Apple Silicon macOS: rebuilt pinned FFmpeg n8.0.1/x264 with `scripts/build_ffmpeg_macos.sh`, then built `Trivia-Countdown-0.1.0-macOS-arm64.dmg` with `scripts/build_macos_dmg.sh`.
 - 2026-08-29 on Apple Silicon macOS: the app signature and DMG verified, and the bundled `ffmpeg` and `ffprobe` binaries reported FFmpeg n8.0.1 with `--enable-libx264`.
 
-This task remains `IN_REVIEW`: the tracker requires Windows evidence before an implementation task may be marked `VERIFIED`.
+The earlier macOS-only evidence was insufficient by itself. Windows source and
+frozen renders now pass too. On 2026-10-17,
+[macOS run 39094570423](https://github.com/princeendo/trivia_countdown/actions/runs/39094570423)
+passed at `bce7b8b298d9ce870dd922b820b23cf9eee5f73e`: 40 discovered tests before
+and after building the pinned media tools (eight initial availability/platform
+skips; five Windows-only skips with bundled tools), app/DMG construction,
+frozen startup, media-tool versions, signature/DMG verification, and checksums.
+Downloaded all three macOS artifacts and independently verified checksums and
+GitHub provenance constrained to this repository, workflow, commit, branch,
+and GitHub-hosted runners. Evidence is under
+`build/verification/ci-macos-39094570423/` and
+`build/verification/macOS-39094570423-*-attestation.json`. No release was created.
 
 ### WIN-302 Windows Verification Evidence
 
@@ -298,10 +309,12 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
 
 ### Final Automation and Qualification Handoff (2026-10-17)
 
-- All 39 discovered tests passed locally with the source-built FFmpeg bundle,
+- All 42 discovered tests passed locally with the source-built FFmpeg bundle,
   including UNC and long paths, without skips. Compilation and CLI help passed.
   New tests cover missing Tkinter, actionable CLI filesystem/process errors,
-  cancellation at FFmpeg exit, and a real GUI-generated PowerShell command.
+  cancellation at FFmpeg exit, a real GUI-generated PowerShell command, actual
+  FFmpeg cancellation/cleanup, Windows locked-handle overwrite safety, and
+  offline execution of both workflows' draft-release safety guards.
 - Fixed the source GUI command to include PowerShell's `&` call operator before
   its quoted executable. Added a final cancellation check before output
   replacement, preserving an existing output when cancellation arrives as
@@ -312,12 +325,32 @@ This task remains `IN_REVIEW`: the tracker requires Windows evidence before an i
 - The installer now enforces Windows 10 22H2/native x64, embeds the application
   icon, and installs a sample CSV. A fresh local Inno Setup build and frozen
   preview/audio/silent/decode checks passed after these changes.
+- Installed that rebuilt candidate into a guarded, isolated local path with
+  spaces, Unicode, and an apostrophe. Verified the sample CSV and installed
+  runtime/font/media/compiler-license resources, reran the frozen render checks,
+  and uninstalled it. Application and registration removal passed. Reports:
+  `build/verification/WIN-501-local-20261017-224316.json` and
+  `build/verification/WIN-405-20261017-224324-c88a77c701e549d09df74d33cf3123f7.json`.
+  This does not approve separate-system, visual, DPI, playback, or upgrade checks.
+- A fresh local clone of `bce7b8b298d9ce870dd922b820b23cf9eee5f73e` passed
+  documented source setup, Tcl/Tk 8.6, compile, all 40 then-current tests with
+  configured UNC/long-path roots, GUI startup, and CLI help. Shell scripts kept
+  LF line endings; the clone's working tree remained clean and the temporary
+  checkout was removed. Report:
+  `build/verification/Windows-fresh-source-20261017-224449.json`.
 - Added draft-only Windows prerelease automation, serialized with macOS draft
   updates, with published-release replacement forbidden. Branch runs intentionally
   produce artifacts only. Workflow syntax passed actionlint 1.7.12.
-- GitHub Windows source/package and macOS regression runs for these changes
-  are pending. The source-pinned FFmpeg CI/provenance gates remain open until
-  the new artifacts are built, downloaded, and verified.
+- [Windows source run 39094563703](https://github.com/princeendo/trivia_countdown/actions/runs/39094563703)
+  passed at `bce7b8b298d9ce870dd922b820b23cf9eee5f73e`: 40 tests ran, with six
+  media-dependent cases skipped because system FFmpeg is absent in that job.
+  The package job reruns the suite with the source-built tools. The initial
+  CI attempt exposed PowerShell 7's inherited module path in Windows PowerShell
+  5.1 test children; the tests now let each child initialize its own module path.
+- The latest macOS regression build passed; its downloaded checksums and
+  workflow/commit/ref provenance checks passed as recorded under WIN-305.
+  Windows package CI is pending. Its source-pinned FFmpeg CI/provenance gates
+  remain open until the new artifacts are built, downloaded, and verified.
 - Separate-system human approval cannot proceed: the user confirmed that a
   second live Windows system is unavailable. BLK-007 records this blocker.
   [The qualification checklist](windows_preview_qualification.md) covers all
@@ -419,10 +452,10 @@ The Windows preview is complete when:
 | Open or accepted blockers | 2 |
 | `READY` tasks | 0 |
 | `IN_PROGRESS` tasks | 0 |
-| `IN_REVIEW` tasks | 20 |
+| `IN_REVIEW` tasks | 12 |
 | `BLOCKED` tasks | 3 |
 | `DEFERRED` tasks | 1 |
-| `VERIFIED` implementation tasks | 8 |
+| `VERIFIED` implementation tasks | 16 |
 
 Update this summary whenever task statuses change. Do not mark implementation
 tasks `VERIFIED` until their listed Windows verification has passed.

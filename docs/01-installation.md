@@ -146,6 +146,10 @@ The Windows source workflow targets Windows 10 22H2 and Windows 11 on x64 hardwa
 uv sync --frozen
 ```
 
+No PowerShell setup/activation helper is needed: `uv sync --frozen` creates the
+locked `.venv`, and `uv run` selects it directly without activating a script or
+changing PowerShell's execution policy.
+
 4. Confirm Tkinter is available:
 
 ```powershell

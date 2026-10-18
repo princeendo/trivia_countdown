@@ -336,6 +336,62 @@ class VideoIntegrationTests(unittest.TestCase):
             check=True,
         )
 
+    def prepare_overwrite_render(self, root: Path):
+        source = root / "source.mp4"
+        trivia = root / "trivia.csv"
+        output = root / "result.mp4"
+        self.create_source_video(source)
+        trivia.write_text(CSV_CONTENT, encoding="utf-8")
+        output.write_bytes(b"existing output")
+        return prepare_render(RenderRequest(
+            source, trivia, output,
+            RenderOptions(
+                question_duration=0.5, answer_duration=0.3,
+                answer_flash_duration=0, answer_flash_interval=0,
+                start_delay=0, end_early=0, fade_in_time=0,
+                fade_out_time=0, mid_question_fade=0,
+            ),
+        ))
+
+    def test_real_composition_cancellation_preserves_output_and_cleans_temporary_files(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepared = self.prepare_overwrite_render(root)
+            token = CancellationToken()
+
+            def cancel_composition(event):
+                if event.phase == "Composing video":
+                    token.cancel()
+
+            def temporary_directory(**kwargs):
+                return TemporaryDirectory(dir=root, **kwargs)
+
+            with patch("trivia_countdown.lib.pipeline.TemporaryDirectory", side_effect=temporary_directory), patch(
+                "trivia_countdown.lib.video.TemporaryDirectory", side_effect=temporary_directory
+            ):
+                with self.assertRaises(RenderCancelled):
+                    run_render(prepared, progress_callback=cancel_composition, cancellation_token=token)
+                self.assertTrue(token.cancelled(), "Cancellation must occur during real FFmpeg progress")
+                self.assertEqual(prepared.request.output_file.read_bytes(), b"existing output")
+                self.assertEqual({path.name for path in root.iterdir()}, {"source.mp4", "trivia.csv", "result.mp4"})
+                run_render(prepared)
+                self.assertNotEqual(prepared.request.output_file.read_bytes(), b"existing output")
+                self.assertEqual({path.name for path in root.iterdir()}, {"source.mp4", "trivia.csv", "result.mp4"})
+
+    @unittest.skipUnless(os.name == "nt", "Windows file handles deny output replacement")
+    def test_real_windows_locked_output_is_preserved_and_retry_succeeds(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepared = self.prepare_overwrite_render(root)
+            with prepared.request.output_file.open("rb"):
+                with self.assertRaisesRegex(RuntimeError, "Close any application using the file"):
+                    run_render(prepared)
+            self.assertEqual(prepared.request.output_file.read_bytes(), b"existing output")
+            self.assertEqual(list(root.glob(".result.*.mp4")), [])
+            run_render(prepared)
+            self.assertNotEqual(prepared.request.output_file.read_bytes(), b"existing output")
+            self.assertEqual(list(root.glob(".result.*.mp4")), [])
+
     def test_preview_and_short_render(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)
