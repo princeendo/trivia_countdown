@@ -51,6 +51,14 @@ Use [Building and Releasing](docs/06-building-and-releasing.md) for unsigned DMG
 
 Windows candidate testers: GitHub Actions downloads the `trivia-countdown-windows-x64` artifact as a ZIP. Extract it and run `Trivia-Countdown-<version>-Windows-x64-Setup.exe`, the installer. The inner `Trivia Countdown.exe` in a raw application folder launches the app directly. See [Windows candidate installation](docs/01-installation.md#windows-preview-candidates).
 
+The next app candidate is **0.1.1**, with an independently versioned **1.0.1.0**
+Microsoft Store package. Windows CI is configured to also produce
+`trivia-countdown-windows-store-x64`, containing an unsigned Store-upload MSIX,
+matching FFmpeg sources, and checksums. This packaging path awaits its first
+Windows build and installed-package qualification; there is no published Store
+download yet. See [MSIX build and test instructions](docs/06-building-and-releasing.md#microsoft-store-msix-candidate)
+and the [Store qualification checklist](tasks/windows_store_qualification.md).
+
 For a concise list of every command-line option, source users can run:
 
 ```sh

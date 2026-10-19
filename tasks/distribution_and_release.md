@@ -20,20 +20,25 @@ the separate Windows EXE installer remains unsigned under this roadmap.
 
 - The requested release baseline is `master` at
   `c793d0f9a4e7598d8a93b1b49e36ad1298f8abe2`. The project version and existing tag
-  are `0.1.0` / `v0.1.0`. Select a new version; do not replace published assets
-  or reuse the published tag. Release preparation may add version/documentation
-  changes; unrelated feature work should not silently change this baseline.
+  were `0.1.0` / `v0.1.0`. The maintainer approved app `0.1.1` and independent
+  Store package `1.0.1.0` for the next candidate. Do not replace published assets
+  or reuse the published tag. Store packaging, verification, Windows sample
+  export, and required metadata/documentation changes are approved candidate
+  scope; the exact candidate commit remains to record.
 - macOS currently produces an ad-hoc-signed Apple Silicon DMG for macOS 14+.
   Homebrew must not be described as removing its first-launch restrictions.
 - Windows currently produces an unsigned Inno Setup x64 installer containing a
-  PyInstaller application and bundled FFmpeg tools. MSIX packaging does not yet
-  exist.
+  PyInstaller application and bundled FFmpeg tools. MSIX packaging and CI
+  artifact generation are implemented for the next candidate; their first
+  Windows run and installed-package qualification remain pending.
 - The maintainer has created the `Trivia Countdown` MSIX/PWA product and its
   package identity in Partner Center, created and associated the
   `TriviaCountdown.onmicrosoft.com` Entra tenant, registered a Store automation
   application, and granted it the `Manager (Windows)` role. The four expected
-  GitHub Actions secrets are configured. Account verification/submission access
-  and authenticated CLI read access still need verification. The first Store
+  GitHub Actions secrets are configured. Authenticated CLI read access to the
+  product is verified. User screenshots now show `Submission 1: In draft`
+  with the expected submission sections and no visible account blocker;
+  final account-verification status remains to confirm. The first Store
   submission must be made through Partner Center; the CLI is for updates after
   the app is published.
 - [Windows preview qualification](windows_preview_qualification.md) still says
@@ -64,13 +69,16 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 
 ### REL-001 — Select the release version and channel
 
-- [ ] **Status: READY. Dependencies: none.**
+- [ ] **Status: IN_PROGRESS. Dependencies: none.**
 - Choose the next version and whether this release is a preview/prerelease or
   stable. Reconcile that choice with the current preview-only release guidance.
 - Record the baseline and exact release commit. Explain any changes beyond
   version metadata, documentation, and necessary qualification fixes.
 - **Done when:** version, release designation, scope, and candidate commit are
   recorded; `v0.1.0` remains unchanged.
+- **Decision:** app `0.1.1` / eventual `v0.1.1`, Store package `1.0.1.0`, still
+  a qualification candidate rather than an approved stable publication. This
+  work focuses on Windows/Partner Center. Exact candidate commit is pending.
 
 ### REL-002 — Complete the outstanding publication qualification
 
@@ -85,13 +93,17 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 
 ### REL-003 — Prepare version metadata, release notes, and documentation
 
-- [ ] **Status: PLANNED. Dependencies: REL-001.**
+- [ ] **Status: IN_REVIEW. Dependencies: REL-001.**
 - Update `pyproject.toml`, regenerate `uv.lock`, and describe changes since
   `v0.1.0`, including the Windows build and paginated question browser.
 - Reconcile README, every file in `docs/`, and notices against actual platform
   support, unsigned-installation behavior, and the selected release channel.
 - **Done when:** version/lockfile agree and reviewed notes and instructions
   describe the candidate without advertising unfinished channels.
+- **Preparation:** project/lockfile now select `0.1.1`, the Store pairing is
+  `1.0.1.0`, and `CHANGELOG.md` records unreleased candidate notes. Documentation
+  distinguishes MSIX structure/staged checks from installed qualification and
+  publication. Windows evidence and final release review remain pending.
 
 ### REL-004 — Build and verify the release artifacts
 
@@ -174,11 +186,15 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 - **Done when:** the product exists and its exact non-secret identity values
   are available for packaging; account verification and submission access are
   confirmed. Product creation and identity capture are complete; account access
-  confirmation remains open. Do not put credentials in the repository.
+  confirmation remains open. A user screenshot confirms a draft submission can
+  be created, and the identity screenshot matches Store ID `9PBDS94C8XD0` used
+  in the verified connection workflow. Manifest identity/publisher values are
+  recorded in `packaging/windows-store/AppxManifest.xml`; compare against the
+  current page before upload. Do not put credentials in the repository.
 
 ### STORE-002 — Add MSIX packaging for the existing desktop application
 
-- [ ] **Status: PLANNED. Dependencies: STORE-001.**
+- [ ] **Status: IN_REVIEW. Dependencies: STORE-001.**
 - Package the existing PyInstaller output with a manifest, Store visual assets,
   x64/Windows requirements, valid version mapping, and necessary desktop
   capabilities. Include bundled tools, fonts, notices, and sample CSV access.
@@ -187,6 +203,19 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 - **Done when:** a repeatable Windows command produces a Partner Center-ready
   MSIX with the correct identity, without purchasing a public signing certificate
   for Store submission. Record the separate local-test installation method.
+- **Implementation:** `scripts/build_windows_msix.ps1` reuses the frozen app,
+  checks source/binary pairing, stages base visual assets and the Store manifest,
+  runs staged frozen rendering, builds with MakeAppx validation enabled, and
+  compares archive payloads. Versions are explicitly paired in `pyproject.toml`.
+  The Windows GUI exports an editable sample CSV. Windows build success and
+  Partner Center upload validation are not yet observed. See
+  [build/signing instructions](../docs/06-building-and-releasing.md#microsoft-store-msix-candidate).
+- **Local supporting checks:** 57 tests ran on macOS, with 11 Windows-only skips;
+  all remaining tests passed, including real FFmpeg smoke renders and a
+  PowerShell build-failure/stale-output cleanup check. Compilation, CLI help,
+  lockfile validation, actionlint 1.7.12, PowerShell 7.5.4 syntax parsing, and
+  92 local documentation links passed. These do not qualify MakeAppx, Windows
+  PowerShell 5.1 installed execution, WACK, or Partner Center acceptance.
 
 ### STORE-003 — Qualify the installed MSIX
 
@@ -198,6 +227,9 @@ Store approval. `RECORDED` above means a product decision, not tested software.
   subprocesses and preservation of user inputs/outputs through updates/removal.
 - **Done when:** automated and live-system MSIX results are recorded and
   package-specific failures are resolved; EXE results alone are insufficient.
+- **Preparation:** installed identity-aware smoke verification is implemented in
+  `scripts/verify_windows_msix.ps1`. All live checks and WACK remain pending in
+  [the MSIX qualification checklist](windows_store_qualification.md).
 
 ### STORE-004 — Prepare the Store listing and distribution materials
 
@@ -218,6 +250,10 @@ Store approval. `RECORDED` above means a product decision, not tested software.
   Partner Center; check identity and validation results before certification.
 - **Done when:** a submission references the exact tested CI package and its
   corresponding-source materials, with build URL, hash, and submission ID recorded.
+- **CI preparation:** the existing Windows build is configured to upload a
+  separate `trivia-countdown-windows-store-x64` artifact with MSIX, matching media
+  sources, checksums, and provenance. Structure/staged checks do not install or
+  certify the package. First CI evidence and manual upload remain pending.
 
 ### STORE-006 — Complete certification and verify Store installation
 
@@ -230,7 +266,7 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 
 ### STORE-007 — Verify GitHub Actions authentication and product read access
 
-- [ ] **Status: IN_REVIEW. Dependencies: STORE-001.**
+- [x] **Status: VERIFIED. Dependencies: STORE-001.**
 - Configure the Microsoft Store CLI in a manually triggered GitHub Actions
   workflow using the Entra tenant/client IDs, client secret, and Partner Center
   Seller ID stored as repository secrets. The workflow checks secret presence,
@@ -241,6 +277,11 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 - **Done when:** the workflow run proves authentication and read access to the
   intended product, or records a documented Microsoft first-publication limit;
   no secrets appear in source or logs.
+- **Evidence:** [GitHub Actions run 39179255985](https://github.com/princeendo/trivia_countdown/actions/runs/39179255985)
+  succeeded on commit `846873940e7ed9f2f9e22dbb3e31312f480b3010`; the workflow
+  configured credentials and read the reserved product. GitHub reported a
+  non-blocking warning that the setup action targets Node.js 20 and ran under
+  Node.js 24. Revisit the action runtime when Microsoft updates the action.
 
 ### STORE-008 — Automate subsequent Partner Center submissions
 

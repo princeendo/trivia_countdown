@@ -62,6 +62,12 @@ uninstall may replace or remove the installed copy. The candidate remains
 [under qualification](01-installation.md#windows-preview-candidates), not a
 published Windows download.
 
+New packaged Windows builds also provide **Save sample CSV...** on Main to save
+and select an editable copy. This is the sample-access path for the MSIX
+candidate, whose installation directory is protected. Canceling the dialog
+leaves the current CSV selection unchanged. See
+[MSIX candidate status](01-installation.md#microsoft-store-msix-candidates).
+
 The source checkout also includes a curated Bible and church-trivia collection:
 
 - [`sample_objects/master_trivia.csv`](../sample_objects/master_trivia.csv): 895 questions, including 100 new additions reviewed against the original batches.

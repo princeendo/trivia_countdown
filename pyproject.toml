@@ -1,6 +1,6 @@
 [project]
 name = "trivia-countdown"
-version = "0.1.0"
+version = "0.1.1"
 description = "Generate trivia countdown videos from a source video and CSV questions."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -10,6 +10,12 @@ dependencies = [
 
 [tool.uv]
 package = false
+
+# Store installation versions are independent of the app's pre-1.0 versions.
+# Update both values explicitly when preparing a new Store package.
+[tool.trivia-countdown.windows-store]
+app-version = "0.1.1"
+package-version = "1.0.1.0"
 
 [dependency-groups]
 build = [

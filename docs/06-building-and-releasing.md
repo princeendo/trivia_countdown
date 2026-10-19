@@ -41,7 +41,7 @@ uv run python -m compileall -q make_trivia_countdown.py make_trivia_countdown_gu
 uv run python -m unittest discover -s tests
 uv run python make_trivia_countdown.py --help
 codesign --verify --deep --strict --verbose=2 "dist/Trivia Countdown.app"
-hdiutil verify "dist/Trivia-Countdown-0.1.0-macOS-arm64.dmg"
+hdiutil verify "dist/Trivia-Countdown-0.1.1-macOS-arm64.dmg"
 git diff --check
 ```
 
@@ -66,7 +66,7 @@ Store CLI submission automation is for updates after first publication.
 
 1. Update the version in `pyproject.toml` and regenerate `uv.lock` with `uv lock`.
 2. Commit and push the release changes.
-3. Create and push a `v`-prefixed tag that exactly matches the project version, such as `v0.1.0` for version `0.1.0`.
+3. Create and push a new `v`-prefixed tag that exactly matches the project version, such as `v0.1.1` for version `0.1.1`. Do not reuse published `v0.1.0`.
 4. Wait for **Build unsigned macOS DMG** to finish.
 5. Open **Releases** on GitHub and inspect the draft prerelease created by the workflow.
 6. Download and test the attached DMG, source archive, and checksums.
@@ -75,8 +75,8 @@ Store CLI submission automation is for updates after first publication.
 Example tag commands:
 
 ```sh
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
 Do not publish a DMG without its matching FFmpeg/x264 source archive and `SHA256SUMS` file.
@@ -154,6 +154,159 @@ The script builds or verifies the cached source-built FFmpeg tools, requires all
 Before publishing, review and attach the matching Windows source archive with its build script, instructions, licenses, and notices. The self-built Windows media executables use GPLv2-or-later; the former supplier's GPLv3 build and the macOS source archive are not substitutes. Verify the installer and source archive checksums and run `gh attestation verify <artifact> --repo princeendo/trivia_countdown` for each artifact after CI. A local source build does not establish CI provenance or complete release qualification.
 
 Then install the release candidate on a separate live Windows 10 22H2 or Windows 11 x64 system and complete the install, launch, render, playback, upgrade, uninstall, and icon checks. VM images and pristine-system qualification are not required. Document Microsoft Defender SmartScreen accurately: it may warn because the installer is unsigned and has little reputation. Direct users to verify the release checksum and provenance; never advise disabling SmartScreen or Windows security controls.
+
+## Microsoft Store MSIX Candidate
+
+The selected candidate is app **0.1.1**, Git tag **v0.1.1** when ready, and Store
+package **1.0.1.0**. No new tag or publication is implied by this configuration.
+The Store product is `9PBDS94C8XD0`; its manifest uses
+`ColinWhite.TriviaCountdown`, publisher
+`CN=49A512EA-D5D6-441A-8499-B44017F81C7D`, and publisher display name `Colin White`.
+These were supplied from Partner Center; compare against the current Product
+Identity page before uploading.
+
+### Version policy
+
+`[project].version` remains the app/release version. The
+`[tool.trivia-countdown.windows-store]` table in `pyproject.toml` explicitly pairs
+`app-version` with an independent, increasing `package-version`. The packager
+rejects a stale pairing. Microsoft requires four integer components, a nonzero
+first component, and a fourth component of zero reserved for Store use; thus
+`0.1.1.0` is not the chosen Store version. A Store package starting with `1` does
+not promote the app to stable 1.0.
+
+For each Store update, choose a package version greater than every previously
+distributed package for this identity/architecture, update the app-version
+pairing, and regenerate `uv.lock` when the app version changes. Increment one of
+the first three Store components for a changed candidate used in upgrade tests;
+do not use the fourth component as a CI build counter. Unpublished builds can
+be rebuilt, but retain the exact hash/commit for every tested/submitted candidate.
+
+### Build and inspect the MSIX
+
+Use Windows x64 with Python 3.12, the existing Windows build prerequisites, and
+the Windows 10/11 SDK's x64 **MakeAppx.exe**. The Windows CI image supplies the SDK;
+the script selects the newest installed version numerically, or accepts an
+explicit `-MakeAppxPath`. Its selected executable path appears in build output;
+retain the SDK version with qualification evidence.
+
+```powershell
+.\scripts\setup_windows_ffmpeg_tools.ps1
+.\scripts\build_windows_installer.ps1
+.\scripts\build_windows_msix.ps1
+```
+
+The last command reuses the current frozen app; it does not invoke Inno Setup.
+Rebuild that app after changing code, notices, samples, or version metadata. The
+packager checks embedded project metadata and pairs the bundled FFmpeg/ffprobe
+and source archive hashes against the native build manifest. It stages the app
+under `build\windows\msix\app`, adds the manifest and generated base-size PNGs,
+and reruns the frozen preview/audio/silent-render checks there. MakeAppx schema
+and semantic validation remain enabled. A Python inspection compares every
+staged payload byte against the MSIX and writes
+`build\verification\STORE-002-msix.json`. This is structure/payload evidence,
+not an installed-package or certification result.
+
+Generated Store artifacts are:
+
+- `Trivia-Countdown-1.0.1.0-Windows-x64.msix` (unsigned for Store upload)
+- `Trivia-Countdown-1.0.1.0-Windows-x64-MSIX-SHA256SUMS.txt`
+- The same matching `Trivia-Countdown-FFmpeg-9.0.1-Windows-x64-sources.tar.gz`
+  used for the EXE candidate
+
+The **Build unsigned Windows installer** workflow is configured to upload these
+as **trivia-countdown-windows-store-x64**, separately from the EXE artifact.
+It attests the MSIX and MSIX checksum file; the existing Windows attestation
+covers the shared source archive. **windows-msix-verification** contains
+structure and staged frozen reports. The first Windows run of this new path
+remains pending until recorded in the tracker. The MSIX remains a workflow
+artifact: the tag release job downloads only the EXE artifact, and does not
+publish the MSIX or submit anything to Partner Center. CI does not install the
+MSIX or run WACK on its Windows Server runner.
+
+### Local MSIX installation and verification
+
+Use a supported Windows 10 22H2 or Windows 11 x64 test machine and an account
+with no existing Trivia Countdown MSIX. Keep the original unsigned MSIX and its
+checksums unchanged for Partner Center. On the test machine, copy it into an
+ignored `build\msix-local-test` directory, then sign **the copy** with a temporary
+self-signed code-signing certificate. In Windows PowerShell 5.1, from the repo:
+
+```powershell
+$testRoot = New-Item -ItemType Directory -Force 'build\msix-local-test'
+$testPackage = Join-Path $testRoot.FullName 'Trivia-Countdown-local-test.msix'
+Copy-Item -LiteralPath 'dist\Trivia-Countdown-1.0.1.0-Windows-x64.msix' -Destination $testPackage
+$cert = New-SelfSignedCertificate -Type Custom -Subject 'CN=49A512EA-D5D6-441A-8499-B44017F81C7D' -FriendlyName 'Trivia Countdown local MSIX test' -CertStoreLocation 'Cert:\CurrentUser\My' -KeyUsage DigitalSignature -KeyAlgorithm RSA -KeyLength 2048 -HashAlgorithm SHA256 -NotAfter (Get-Date).AddDays(7) -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3', '2.5.29.19={text}')
+$cerPath = Join-Path $testRoot.FullName 'TriviaCountdown-local-test.cer'
+Export-Certificate -Cert $cert -FilePath $cerPath
+# Replace this path with the installed SDK version used for the package build.
+$signTool = 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe'
+& $signTool sign /fd SHA256 /s My /sha1 $cert.Thumbprint $testPackage
+if ($LASTEXITCODE -ne 0) { throw 'Test package signing failed.' }
+$cert.Thumbprint
+$cerPath
+```
+
+Record the thumbprint. In a separate **elevated** Windows PowerShell window,
+import **that exact exported public certificate** into LocalMachine TrustedPeople
+on the test machine (substitute its absolute path). This is explicit temporary
+test-certificate trust, not a public signing setup:
+
+```powershell
+Import-Certificate -FilePath 'C:\path\to\build\msix-local-test\TriviaCountdown-local-test.cer' -CertStoreLocation 'Cert:\LocalMachine\TrustedPeople'
+```
+
+Return to the original, normal-user Windows PowerShell window:
+
+```powershell
+Add-AppxPackage -Path $testPackage
+.\scripts\verify_windows_msix.ps1
+```
+
+The installed verifier launches the timed frozen render check through
+`Invoke-CommandInDesktopPackage`, isolates system Python/FFmpeg from PATH, and
+requires the application to report the exact installed MSIX identity via the
+Windows package API. It leaves `STORE-003-*.json/.log` and `WIN-405-*.json` reports
+under `build\verification\`, deleting synthetic videos. Its debugging activation
+is supporting smoke evidence: also launch from **Start** and perform real GUI
+checks, file dialogs, sample export, cancellation/overwrite/locked-output checks,
+playback, DPI/icons, a version-changing update, and uninstall. Confirm your
+Documents videos/CSVs/outputs survive update and uninstall. See the
+[complete MSIX qualification checklist](../tasks/windows_store_qualification.md).
+
+Uninstall the test package through Settings (or
+`Get-AppxPackage -Name 'ColinWhite.TriviaCountdown' | Remove-AppxPackage`). After
+testing, remove only the recorded temporary certificate thumbprint from
+`Cert:\CurrentUser\My`; remove it from `Cert:\LocalMachine\TrustedPeople` in the
+elevated window. Delete the local test-copy directory. No private key export,
+repository secret, purchased certificate, or global security-control changes
+are needed for this procedure. An expired test certificate requires a fresh
+test-signed copy; do not upload the test-signed copy as the verified CI artifact.
+
+### Certification and the first submission
+
+Run the Windows App Certification Kit on the test-signed package on supported
+Windows 10/11. Record its SDK/WACK version and full results, including any
+desktop-app-specific warnings or certification follow-up. Passing MakeAppx or
+the smoke verifier is not WACK approval.
+
+Before certification submission, complete the shared source/license and
+separate-machine approvals from the Windows preview qualification, plus the
+MSIX-specific checklist. Publish durable matching FFmpeg sources/build
+instructions for **every Store package version**, retaining older archives if
+later builds change. A private workflow artifact or GitHub's automatic source
+ZIP is insufficient for Store users. Record public source URL/hash alongside
+each package version and provide source/license access in the listing materials.
+
+In Partner Center, use existing **Submission 1**, complete pricing/availability,
+properties (explain `runFullTrust` for the Python desktop GUI and bundled FFmpeg
+subprocesses), age ratings, Store listings/screenshots, and privacy/support URLs.
+Upload the original unsigned, verified CI MSIX under **Packages**. Record the
+CI run, commit, hashes, source URLs, and submission ID. Microsoft signs the
+distributed MSIX after certification; a public signing certificate is not
+required for this Store route. Upload validation and certification are separate
+results. The first submission remains manual; existing CLI automation checks
+are read-only, and automated updates follow first publication.
 
 ## Future Signed Releases
 

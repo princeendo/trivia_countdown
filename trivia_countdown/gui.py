@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 from queue import Empty, Queue
 import shlex
+import shutil
 import sys
 from threading import Thread
 import time
@@ -309,6 +310,10 @@ class TriviaCountdownApp(ttk.Frame):
         ttk.Label(controls, textvariable=self.status_text, wraplength=290, justify="left").grid(
             row=8, column=0, columnspan=2, sticky="ew", pady=(12, 0)
         )
+        if is_frozen() and sys.platform == "win32":
+            ttk.Button(controls, text="Save sample CSV...", command=self._save_sample_csv).grid(
+                row=9, column=0, columnspan=2, sticky="ew", pady=(12, 0)
+            )
 
         self.preview_label = ttk.Label(preview, anchor="center", justify="center")
         self.preview_label.grid(row=0, column=0, sticky="nsew")
@@ -460,6 +465,23 @@ class TriviaCountdownApp(ttk.Frame):
             self._output_is_automatic = True
             self.video_path.set(os.path.normpath(path))
             self._start_preview()
+
+    def _save_sample_csv(self) -> None:
+        path = filedialog.asksaveasfilename(
+            title="Save sample trivia CSV",
+            initialfile="Sample Trivia Questions.csv",
+            defaultextension=".csv",
+            filetypes=(("CSV files", "*.csv"),),
+        )
+        if not path:
+            return
+        try:
+            shutil.copyfile(resource_path("sample_objects", "sample_of_5_trivia_questions.csv"), path)
+        except OSError as exc:
+            messagebox.showerror("Could not save sample CSV", str(exc))
+            return
+        self.trivia_path.set(os.path.normpath(path))
+        self._questions_changed()
 
     def _choose_trivia(self) -> None:
         path = filedialog.askopenfilename(title="Choose trivia CSV", filetypes=(("CSV files", "*.csv"), ("All files", "*")))

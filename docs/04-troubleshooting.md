@@ -31,6 +31,22 @@ Report a verified candidate that fails to launch, including the Windows version,
 installer hash, and exact message. ARM64 and Windows releases older than
 Windows 10 22H2 are not supported.
 
+## Windows Will Not Install an MSIX Candidate
+
+The CI MSIX is intentionally unsigned for Store upload. Windows normally requires
+a signed, trusted package for local installation; extracting or renaming the
+MSIX does not install it. Maintainers should use the separate test-copy procedure
+in [Building and Releasing](06-building-and-releasing.md#local-msix-installation-and-verification).
+The installed-package verifier must run in **Windows PowerShell 5.1**, not
+PowerShell 7, because it uses the Windows Appx module. Build/structure checks on
+the CI server do not establish installed-package qualification.
+
+If an older local test installation prevents installing a Store-signed copy,
+remove the local test app through Settings first; keep user files in Documents
+or another folder outside the app. Report the deployment error and package
+version rather than changing security controls. For sample access, use
+**Save sample CSV...** rather than trying to edit files under WindowsApps.
+
 ## The Generated PowerShell Command Is Not Executed
 
 Copy the entire command from the source GUI's CLI tab, including the leading

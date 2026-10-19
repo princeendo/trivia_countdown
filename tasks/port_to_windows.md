@@ -13,7 +13,10 @@ Deliver a Windows version of Trivia Countdown that supports:
 
 The first Windows milestone does not include Windows ARM64, a separately
 packaged CLI executable, Microsoft Store distribution, or Authenticode signing.
-Those items may be reconsidered after the preview release is qualified.
+Store packaging is now tracked separately in
+[the distribution roadmap](distribution_and_release.md#3-microsoft-partner-center-and-store-distribution)
+and [MSIX qualification](windows_store_qualification.md). This does not close
+the EXE preview's outstanding live-system approvals.
 
 ## Current State
 

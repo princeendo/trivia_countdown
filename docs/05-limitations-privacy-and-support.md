@@ -3,6 +3,7 @@
 ## Current Limitations
 
 - The downloadable app supports Apple Silicon Macs running macOS 14 or later. A Windows x64 installer preview is under qualification for Windows 10 22H2 and Windows 11; it is not yet a published download.
+- A separately versioned Microsoft Store MSIX candidate is being prepared for the same Windows x64 targets. Packaging implementation does not establish installed-MSIX qualification, certification, or Store availability. See the [Store qualification checklist](../tasks/windows_store_qualification.md).
 - The Windows candidate bundles source-built FFmpeg/x264/zlib. Its built-in input codecs remain enabled, but optional external decoders such as libaom/libdav1d for AV1 are not included. Source users can use a different FFmpeg installation when an unsupported input codec is needed.
 - The current downloadable preview is ad-hoc signed, but is not signed with an Apple Developer ID or notarized, so macOS may require its per-app **Open Anyway** override on first launch.
 - The panel colors, typography, and lower-screen layout are fixed and are not configurable from either the desktop interface or command line.
@@ -27,6 +28,7 @@ Do not share private videos or trivia files when requesting help unless you are 
 When asking the project maintainer or community for help, open a report on the project's [GitHub Issues page](https://github.com/princeendo/trivia_countdown/issues) and provide:
 
 - Whether you installed the GitHub DMG, are testing a Windows installer candidate, or launched `make_trivia_countdown_gui.py` from source
+- For MSIX candidates, the app version and four-part package version, installation method, and deployment/verification report; distinguish a local test-signed copy from a Store installation
 - The complete error message
 - Your operating system version/build
 - Your processor architecture (Apple Silicon/Intel on Mac, native x64 on Windows)

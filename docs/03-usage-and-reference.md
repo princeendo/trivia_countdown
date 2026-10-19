@@ -12,6 +12,12 @@ Open **Trivia Countdown** from the Applications folder. If this is the first lau
 
 On the **Main** tab, choose a source video and trivia CSV. The output path initially defaults to `<source-name>_trivia_countdown.mp4` beside the source video, and can be changed with **Output**. File-dialog selections use native path separators: backslashes on Windows and forward slashes on macOS/Linux. The preview is a static frame extracted near the selected question's calculated position, composited with the normal or answer-reveal overlay; it is not video playback.
 
+Windows candidate testers launch the installed app from Start. New packaged
+Windows builds have **Save sample CSV...** on Main; it saves a copy at the chosen
+location and loads that copy into Questions. Save inputs, outputs, and retained
+overlays in your own writable folders, not the protected MSIX installation
+directory. The MSIX candidate is [not yet a Store download](01-installation.md#microsoft-store-msix-candidates).
+
 The **Advanced** tab groups settings into Question Order, Overlay Output, Timing, and Reveal and Transition Effects. It exposes the same defaults as the command line. Settings are reset to their defaults when the app is reopened. **Keep generated overlay PNGs** is off by default. When enabled, use **Browse** to select a directory, type one directly, or let the GUI create `<output-name>_overlays` beside the output MP4.
 
 The **Questions** tab is a read-only table showing at most 25 rows at a time. Use **Previous** and **Next** to browse pages; the footer shows the visible range, total question count, and current page. Only the current page has table widgets, keeping native widget usage bounded for large collections. Correct answer cells are highlighted, selected rows turn light green, and selecting a row updates the Main preview using its question number across the full collection. Changing pages keeps the current preview and restores the selection highlight when you return. Loading another CSV or changing question order returns to page 1. Only the first rows that fit the video's capacity are used in the final render; pagination does not limit the render. Use the mouse wheel while hovering over the table to scroll the current page.

@@ -83,6 +83,37 @@ jobs:
           path: build/verification/WIN-405-*.json
           if-no-files-found: warn
 
+      - name: Build and validate Microsoft Store MSIX
+        shell: pwsh
+        run: .\scripts\build_windows_msix.ps1
+
+      - name: Upload MSIX verification reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-msix-verification
+          path: |
+            build/verification/STORE-002-*.json
+            build/verification/WIN-405-*.json
+          if-no-files-found: warn
+
+      - name: Attest Microsoft Store artifacts
+        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+        with:
+          subject-path: |
+            dist/*-Windows-x64.msix
+            dist/*-Windows-x64-MSIX-SHA256SUMS.txt
+
+      - name: Upload Microsoft Store artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivia-countdown-windows-store-x64
+          path: |
+            dist/*-Windows-x64.msix
+            dist/*-Windows-x64-MSIX-SHA256SUMS.txt
+            dist/*-Windows-x64-sources.tar.gz
+          if-no-files-found: error
+
       - name: Attest release artifacts
         uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
         with:

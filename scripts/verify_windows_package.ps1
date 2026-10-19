@@ -1,7 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$ApplicationDirectory = (Join-Path $PSScriptRoot '..\dist\Trivia Countdown'),
-    [int]$TimeoutSeconds = 180
+    [int]$TimeoutSeconds = 180,
+    [string]$ExpectedPackageFullName
 )
 
 $ErrorActionPreference = 'Stop'
@@ -49,6 +50,9 @@ try {
     }
     if ($process.ExitCode -ne 0 -or $report.status -ne 'passed' -or -not $report.frozen -or @($report.cases).Count -ne 2) {
         throw "Packaged render verification failed. See $reportPath"
+    }
+    if ($ExpectedPackageFullName -and $report.windows_package_full_name -cne $ExpectedPackageFullName) {
+        throw "Application did not run with the expected installed MSIX identity. See $reportPath"
     }
     foreach ($name in @('ffmpeg', 'ffprobe')) {
         if ($report.tools.$name.version -notmatch "^$name version [0-9]+\.[0-9]+\.[0-9]+-trivia-countdown ") {

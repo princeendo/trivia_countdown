@@ -43,6 +43,14 @@ The exact corresponding sources, including the build script used for this
 application, must be published beside each DMG or Windows installer on the project's GitHub
 Releases page: https://github.com/princeendo/trivia_countdown/releases
 
+Microsoft Store MSIX candidates use the same Windows media build and include
+these notices and license texts under `app/_internal/` in the package. The
+package's `StoreBuild.json` records the app/Store versions and corresponding
+Windows source archive filename and SHA-256. Before a Store version is
+distributed, provide its exact source archive and rebuild instructions at a
+durable public URL in the listing/support materials. Retain those materials
+after later updates; private CI artifacts are not public source distribution.
+
 Windows source archives contain FFmpeg, x264, zlib, and their build materials.
 Windows applications also include zlib, MinGW-w64 runtime notices, and GCC
 runtime license/exception texts in their third-party licenses directory. See

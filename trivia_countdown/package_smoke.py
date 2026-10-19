@@ -13,7 +13,7 @@ import traceback
 
 from .app import RenderOptions, RenderRequest, prepare_render, run_render
 from .lib.video import extract_video_still, windows_subprocess_kwargs
-from .resources import executable_path, is_frozen
+from .resources import executable_path, is_frozen, windows_package_full_name
 
 
 def _run_tool(name: str, *arguments: str) -> str:
@@ -105,6 +105,7 @@ def run_package_smoke_test(report_path: Path) -> int:
     try:
         if not is_frozen():
             raise RuntimeError("Package verification must run from the frozen application")
+        report["windows_package_full_name"] = windows_package_full_name()
         report["tools"] = {
             name: {"path": str(executable_path(name)), "version": _run_tool(name, "-version")}
             for name in ("ffmpeg", "ffprobe")

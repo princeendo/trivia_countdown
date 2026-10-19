@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+         xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+         xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+         IgnorableNamespaces="uap uap10 rescap">
+  <Identity Name="ColinWhite.TriviaCountdown"
+            Publisher="CN=49A512EA-D5D6-441A-8499-B44017F81C7D"
+            Version="__PACKAGE_VERSION__" ProcessorArchitecture="x64" />
+  <Properties>
+    <DisplayName>Trivia Countdown</DisplayName>
+    <PublisherDisplayName>Colin White</PublisherDisplayName>
+    <Description>Create trivia countdown videos from your own video and CSV questions.</Description>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19045.0" MaxVersionTested="10.0.19045.0" />
+  </Dependencies>
+  <Applications>
+    <Application Id="TriviaCountdown" Executable="app\Trivia Countdown.exe"
+                 uap10:RuntimeBehavior="packagedClassicApp" uap10:TrustLevel="mediumIL">
+      <uap:VisualElements DisplayName="Trivia Countdown"
+                          Description="Create trivia countdown videos from your own video and CSV questions."
+                          Square150x150Logo="Assets\Square150x150Logo.png"
+                          Square44x44Logo="Assets\Square44x44Logo.png"
+                          BackgroundColor="transparent" />
+    </Application>
+  </Applications>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

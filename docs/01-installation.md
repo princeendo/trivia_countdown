@@ -110,6 +110,25 @@ and output on Main, then select **Create Video**. Uninstall through Windows
 Settings > Apps. The [qualification checklist](../tasks/windows_preview_qualification.md)
 records the remaining checks; installing a candidate is not release approval.
 
+## Microsoft Store MSIX Candidates
+
+**The Microsoft Store app is not published yet.** Maintainers are preparing app
+`0.1.1` as Store package `1.0.1.0`. The separate
+`trivia-countdown-windows-store-x64` workflow artifact contains the unsigned MSIX,
+matching FFmpeg source archive, and an MSIX-specific checksum file. It is a Store
+upload artifact, not a double-click-installable public download. Do not use the
+EXE install steps above for this package.
+
+For local candidate testing, follow the maintainer's
+[MSIX signing and installation procedure](06-building-and-releasing.md#local-msix-installation-and-verification).
+The eventual Store version will be signed by Microsoft. Both Windows packages
+bundle Python and FFmpeg and target Windows 10 22H2 / Windows 11 x64.
+
+The packaged Windows app has a **Save sample CSV...** button on Main. Use it to
+save an editable copy in Documents, then choose your own source video and output.
+This avoids browsing or editing the protected MSIX installation directory. User
+inputs, outputs, and retained overlays should live outside the app installation.
+
 ## Install From Source
 
 This is an advanced alternative for developers who want the command-line interface, want to modify the project, or cannot use the packaged Apple Silicon app. The repository's `.python-version` pins uv to Python 3.12. It also requires Tcl/Tk support and FFmpeg; macOS source GUI use requires Tcl/Tk 8.6 or later. The downloadable app remains Mac-only until the Windows preview passes its separate qualification process. That Windows installer will include its own FFmpeg and ffprobe executables; the manual FFmpeg setup below applies only to source users.

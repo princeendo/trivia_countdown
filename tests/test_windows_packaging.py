@@ -19,6 +19,33 @@ def windows_powershell_environment():
 
 @unittest.skipUnless(os.name == "nt", "Windows PowerShell packaging checks")
 class WindowsPackagingTests(unittest.TestCase):
+    def test_msix_scripts_parse_and_missing_sdk_fails_before_build(self):
+        repository = Path(__file__).resolve().parents[1]
+        script = str(repository / "scripts/build_windows_msix.ps1").replace("'", "''")
+        verifier = str(repository / "scripts/verify_windows_msix.ps1").replace("'", "''")
+        command = rf"""
+$ErrorActionPreference = 'Stop'
+foreach ($path in @('{script}', '{verifier}')) {{
+    $parseErrors = $null
+    [System.Management.Automation.Language.Parser]::ParseFile($path, [ref]$null, [ref]$parseErrors) | Out-Null
+    if ($parseErrors.Count) {{ throw ($parseErrors | Out-String) }}
+}}
+function global:uv {{ throw 'Must not reach native build without MakeAppx' }}
+$before = (Get-Location).Path
+try {{
+    & '{script}' -MakeAppxPath 'Z:\missing-sdk\makeappx.exe'
+    throw 'Build unexpectedly succeeded'
+}} catch {{
+    if ($_.Exception.Message -notlike 'Windows SDK x64 MakeAppx.exe was not found*') {{ throw }}
+}}
+if ((Get-Location).Path -ne $before) {{ throw 'Working directory changed' }}
+"""
+        result = subprocess.run(
+            ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", command],
+            env=windows_powershell_environment(), capture_output=True, text=True, timeout=30,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_toolchain_setup_bounds_download_and_rejects_bad_hash_before_extraction(self):
         script = Path(__file__).resolve().parents[1] / "scripts/setup_windows_ffmpeg_tools.ps1"
         with TemporaryDirectory() as directory:

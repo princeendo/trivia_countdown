@@ -5,6 +5,10 @@ not currently available. Local automation and CI do not replace the checks below
 Keep the existing published `v0.1.0` release unchanged; use a new project version
 and matching tag for the eventual Windows preview.
 
+The selected next app candidate is `0.1.1`. Its independently versioned Store
+MSIX is `1.0.1.0`; retain [MSIX-specific results](windows_store_qualification.md)
+separately. Neither packaging path is approved by changing the version.
+
 Copy this checklist into a qualification report and retain the completed report
 with the release evidence. Do not tick a box without observing its result.
 Use a separate live Windows 10 22H2 or Windows 11 x64 system; a VM or pristine

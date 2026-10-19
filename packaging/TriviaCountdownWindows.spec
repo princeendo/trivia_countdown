@@ -18,6 +18,8 @@ a = Analysis(
         (str(ROOT / "LICENSE"), "."),
         (str(ROOT / "THIRD_PARTY_NOTICES.md"), "."),
         (str(ROOT / "build" / "vendor" / "licenses"), "licenses"),
+        (str(ROOT / "sample_objects" / "sample_of_5_trivia_questions.csv"), "sample_objects"),
+        (str(ROOT / "pyproject.toml"), "build_metadata"),
     ],
     hiddenimports=[],
     hookspath=[],

@@ -97,6 +97,16 @@ temporary. Run all repository tests with:
 uv run python -m unittest discover -s tests
 ```
 
+Microsoft Store packaging reuses the frozen Windows app. After the installer
+build, run `scripts\build_windows_msix.ps1` on Windows x64 with the Windows SDK.
+The app version is `0.1.1`; the independently tracked MSIX version is `1.0.1.0`
+under `[tool.trivia-countdown.windows-store]` in `pyproject.toml`. Keep the original
+unsigned Store-upload artifact separate from test-signed copies. Installed
+checks use `scripts\verify_windows_msix.ps1` in Windows PowerShell 5.1; retain
+`tasks/windows_store_qualification.md` results. CI structure/staged-render checks
+do not qualify installation, WACK, certification, or publication. See the full
+local signing/source-retention procedure in `docs/06-building-and-releasing.md`.
+
 The Windows build compiles pinned FFmpeg, x264, and zlib sources, bundles both
 executables in the installer, and generates a matching source archive with
 build instructions. See `packaging/FFMPEG_WINDOWS_SOURCE_README.md`; do not
