@@ -51,6 +51,17 @@ Before publishing, download the DMG through a browser and test it on a clean mac
 
 Open the repository's **Actions** tab, select **Build unsigned macOS DMG**, and choose **Run workflow**. A successful run provides a `trivia-countdown-macos-arm64` workflow artifact containing the DMG, corresponding GPL sources, and checksums. The workflow also publishes GitHub build provenance attestations. A manual run from a branch does not create a GitHub release; one dispatched from a matching `v`-prefixed tag creates or updates that tag's draft prerelease.
 
+### Verify the Microsoft Store automation connection
+
+The manually triggered **Verify Microsoft Store connection** workflow checks
+that the Store credentials are configured in GitHub Actions and makes a
+read-only request for the reserved Trivia Countdown product. It does not upload,
+submit, or publish an app. Configure the repository secrets
+`AZURE_AD_APPLICATION_CLIENT_ID`, `AZURE_AD_APPLICATION_SECRET`,
+`AZURE_AD_TENANT_ID`, and `SELLER_ID` before running it. The first Store
+submission must still be created and published through Partner Center; Microsoft
+Store CLI submission automation is for updates after first publication.
+
 ## Prepare a macOS GitHub Release
 
 1. Update the version in `pyproject.toml` and regenerate `uv.lock` with `uv lock`.

@@ -45,7 +45,7 @@ Use [Installation](docs/01-installation.md#install-from-source) for setup and [U
 
 ### Maintainers
 
-The [Distribution and Release Roadmap](tasks/distribution_and_release.md) tracks the next release from `master`, optional Homebrew installation, Microsoft Store packaging/submissions, and an installation website. Mac Developer ID signing and notarization are deferred; the roadmap records planned channels, not additional downloads already available.
+The [Distribution and Release Roadmap](tasks/distribution_and_release.md) tracks the next release from `master`, optional Homebrew installation, Microsoft Store packaging/submissions, and an installation website. Its manually triggered Microsoft Store connection check is read-only and does not submit or publish an app. Mac Developer ID signing and notarization are deferred; the roadmap records planned channels, not additional downloads already available.
 
 Use [Building and Releasing](docs/06-building-and-releasing.md) for unsigned DMG artifacts, Windows installer candidates and frozen-render checks, and GitHub prereleases. The Windows installer bundles source-built FFmpeg and ffprobe; end users will not install them separately. The build also generates the matching source archive. Windows publication remains gated on source/license review, build provenance, and the [separate live-installation qualification checklist](tasks/windows_preview_qualification.md). Branch builds do not publish releases; matching new version tags prepare draft prereleases only.
 

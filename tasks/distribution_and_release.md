@@ -28,9 +28,14 @@ the separate Windows EXE installer remains unsigned under this roadmap.
 - Windows currently produces an unsigned Inno Setup x64 installer containing a
   PyInstaller application and bundled FFmpeg tools. MSIX packaging does not yet
   exist.
-- The maintainer has set up a Microsoft developer account. Product reservation,
-  package identity, account verification status, and submission access still
-  need confirmation in Partner Center.
+- The maintainer has created the `Trivia Countdown` MSIX/PWA product and its
+  package identity in Partner Center, created and associated the
+  `TriviaCountdown.onmicrosoft.com` Entra tenant, registered a Store automation
+  application, and granted it the `Manager (Windows)` role. The four expected
+  GitHub Actions secrets are configured. Account verification/submission access
+  and authenticated CLI read access still need verification. The first Store
+  submission must be made through Partner Center; the CLI is for updates after
+  the app is published.
 - [Windows preview qualification](windows_preview_qualification.md) still says
   **NOT APPROVED FOR PUBLICATION**. Separate-system testing, DPI/icon/playback,
   version-changing upgrade, and human source/license approvals remain pending.
@@ -162,12 +167,14 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 
 ### STORE-001 — Confirm account access and reserve the product
 
-- [ ] **Status: READY. Dependencies: none.**
+- [ ] **Status: IN_REVIEW. Dependencies: none.**
 - Confirm the independent developer account can submit Windows apps. Reserve
   the product name and record Store product ID, package identity name,
   publisher identity, and publisher display name from Partner Center.
 - **Done when:** the product exists and its exact non-secret identity values
-  are available for packaging. Do not put credentials in the repository.
+  are available for packaging; account verification and submission access are
+  confirmed. Product creation and identity capture are complete; account access
+  confirmation remains open. Do not put credentials in the repository.
 
 ### STORE-002 — Add MSIX packaging for the existing desktop application
 
@@ -221,15 +228,27 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 - **Done when:** certification and public listing are confirmed, a Store-installed
   render passes, and the public product URL and tested version are recorded.
 
-### STORE-007 — Automate subsequent Partner Center submissions
+### STORE-007 — Verify GitHub Actions authentication and product read access
 
-- [ ] **Status: PLANNED. Dependencies: STORE-006.**
-- Configure supported Microsoft Store CLI/GitHub Actions authentication with
-  Microsoft Entra and Partner Center permissions; store credentials in GitHub
-  secrets. Document renewal and required account configuration.
-- Submit tested versioned MSIX updates from the release workflow with an
-  explicit maintainer-controlled submission step. Track certification separately
-  from upload success.
+- [ ] **Status: IN_REVIEW. Dependencies: STORE-001.**
+- Configure the Microsoft Store CLI in a manually triggered GitHub Actions
+  workflow using the Entra tenant/client IDs, client secret, and Partner Center
+  Seller ID stored as repository secrets. The workflow checks secret presence,
+  authenticates, and makes a read-only request for the reserved Store product.
+- Do not print secrets or product response data. A reserved, unpublished product
+  may not be accessible through CLI APIs; record authentication and product-access
+  outcomes separately and interpret any pre-publication limitation accordingly.
+- **Done when:** the workflow run proves authentication and read access to the
+  intended product, or records a documented Microsoft first-publication limit;
+  no secrets appear in source or logs.
+
+### STORE-008 — Automate subsequent Partner Center submissions
+
+- [ ] **Status: PLANNED. Dependencies: STORE-006, STORE-007.**
+- Use the supported Microsoft Store CLI/GitHub Actions authentication to submit
+  tested, versioned MSIX updates, with an explicit maintainer-controlled
+  submission step. Document credential renewal and required account configuration.
+  Track certification separately from upload success.
 - **Done when:** a later release is submitted through Actions and its Store
   update is verified; no secrets appear in source or logs.
 
@@ -290,7 +309,7 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 
 ### WEB-006 — Document ongoing release and website maintenance
 
-- [ ] **Status: PLANNED. Dependencies: WEB-005, BREW-004, STORE-007.**
+- [ ] **Status: PLANNED. Dependencies: WEB-005, BREW-004, STORE-008.**
 - Document the sequence for GitHub artifacts/sources, cask changes, Store
   submission/certification, and website links, including partial publication
   failures and retaining older versions' required source materials.
@@ -307,7 +326,10 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 3. Complete Homebrew and MSIX packaging/testing. These tracks can proceed
    independently once their prerequisites are available.
 4. Publish each installation path on the website only after its verification.
-5. Finish Store update automation and the shared maintenance procedure.
+5. Configure and verify the Store automation identity and GitHub Actions read
+   access early (STORE-007); defer Store update automation until after the app's
+   first manual Partner Center publication (STORE-008).
+6. Finish the shared release and website maintenance procedure.
 
 ## References
 
@@ -320,3 +342,4 @@ Store approval. `RECORDED` above means a product decision, not tested software.
 - [Microsoft Store MSIX package requirements](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/app-package-requirements)
 - [Microsoft Store EXE/MSI requirements](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msi/app-package-requirements)
 - [Microsoft Store updates with GitHub Actions](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/github-actions)
+- [Microsoft Store Developer CLI (MSIX)](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/overview)
